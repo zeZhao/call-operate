@@ -56,8 +56,16 @@ export default {
       return path;
     },
     routeList() {
-      console.log(constRouterList, "====");
-      return constRouterList[1].children.filter((v) => !v.hidden);
+      let newRouterList =  constRouterList.filter((v) => !v.hidden);
+      let arr = []
+      newRouterList.forEach(item=>{
+        if(item.parent){
+          arr.push(...item.children)
+        }else{
+          arr.push(item)
+        }
+      })
+      return arr
     },
   },
   mounted() {},
@@ -72,6 +80,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+$sidebarBackColor: #0964ff;
 .Sidebar {
   width: 175px;
   height: calc(100vh - 50px);
@@ -81,6 +90,10 @@ export default {
     .menu_icon {
       display: inline-block;
       margin-right: 8px;
+      vertical-align: baseline;
+    }
+    .el-menu-item.is-active{
+      background-color: $sidebarBackColor !important;
     }
     .el-menu-item,
     .el-submenu__title {
@@ -89,12 +102,12 @@ export default {
       padding: 0 16px 0 12px !important;
       text-align: left;
       &:hover {
-        background-color: #0964ff !important;
+        background-color: $sidebarBackColor !important;
       }
     }
     ::v-deep .el-submenu {
       &:hover {
-        background-color: #0964ff !important;
+        background-color: $sidebarBackColor !important;
       }
       .el-submenu__icon-arrow {
         font-size: 15px;
@@ -106,7 +119,7 @@ export default {
         padding: 0 16px 0 12px !important;
         text-align: left;
         &:hover {
-          background-color: #0964ff !important;
+          background-color: $sidebarBackColor !important;
         }
       }
       .el-menu {

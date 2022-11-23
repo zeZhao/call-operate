@@ -127,8 +127,8 @@ export default {
     }
     .nav_conent_handle {
       float: right;
-      height: 64px;
-      line-height: 64px;
+      height: 50px;
+      line-height: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -151,11 +151,11 @@ export default {
         }
       }
       ::v-deep .el-dropdown {
-        height: 64px;
+        height: 50px;
       }
 
       ::v-deep .el-dropdown-link {
-        height: 64px;
+        height: 50px;
         display: inline-block;
         border-top: 0 red solid;
       }
