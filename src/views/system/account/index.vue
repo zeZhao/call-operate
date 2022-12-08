@@ -1,5 +1,6 @@
 <template>
-  <div class="user">
+<!-- 账户管理 -->
+  <div class="account">
     <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
@@ -12,19 +13,12 @@
       style="width: 100%"
       :height="tableHeight"
     >
-      <el-table-column type="index" label="序号" align="center" />
-      <el-table-column prop="corpId" label="公司名称" />
-      <el-table-column prop="corpId" label="账户名称" />
-      <el-table-column prop="corpId" label="费率" />
-      <el-table-column prop="corpId" label="账户余额（元）" />
-      <el-table-column prop="corpId" label="透支额度（元" />
-      <el-table-column prop="corpId" label="已定购套餐" />
-      <el-table-column prop="corpId" label="套餐时长（秒）" />
-      <el-table-column prop="corpId" label="短信条数" />
-      <el-table-column prop="corpId" label="录音上限(个）" />
-      <el-table-column prop="corpId" label="代理商" />
-      <el-table-column prop="corpId" label="账户状态" />
-      <el-table-column prop="corpId" label="开户时间" />
+      <el-table-column label="序号" type="index" align="center" />
+      <el-table-column prop="corpId" label="账号" />
+      <el-table-column prop="corpId" label="姓名" />
+      <el-table-column prop="corpId" label="对应角色" />
+      <el-table-column prop="corpId" label="创建时间" />
+      <el-table-column prop="corpId" label="状态" />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
@@ -32,6 +26,12 @@
             type="text"
             size="small"
             >修改</el-button
+          >
+          <el-button
+            @click="_mxEdit(scope.row, 'templateId')"
+            type="text"
+            size="small"
+            >密码重置</el-button
           >
           <el-button
             @click="
@@ -77,16 +77,32 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         { type: "input", label: "公司名称", key: "corpName" },
-        { type: "input", label: "账户名称", key: "corpName" },
-        { type: "input", label: "费率", key: "corpName" },
-        { type: "input", label: "定购套餐", key: "corpName" },
-        { type: "select", label: "账户状态", key: "sign",optionData:[{key:'1',value:"有效"},{key:'2',value:"无效"},] },
-        // { type: "select", label: "类别", key: "signs",optionData:[{key:'1',value:"商家"},{key:'2',value:"代理商"},{key:'3',value:"供应商"},] },
+        { type: "input", label: "联系人", key: "corpNames" },
+        { type: "inputNum", label: "联系电话", key: "userId" },
+        {
+          type: "select",
+          label: "签名",
+          key: "sign",
+          optionData: [
+            { key: "1", value: "有效" },
+            { key: "2", value: "无效" },
+          ],
+        },
+        {
+          type: "select",
+          label: "类别",
+          key: "signs",
+          optionData: [
+            { key: "1", value: "商家" },
+            { key: "2", value: "代理商" },
+            { key: "3", value: "供应商" },
+          ],
+        },
         {
           type: "daterange",
           label: "开户时间",
-          key: ["", "submitStartTime", "submitEndTime"]
-        }
+          key: ["", "submitStartTime", "submitEndTime"],
+        },
       ],
       //搜索框数据
       searchParam: {},
@@ -94,12 +110,12 @@ export default {
       searchAPI: {
         namespace: "smslongnum",
         list: "list",
-        detele: "delete"
+        detele: "delete",
       },
       // 列表参数
       namespace: "configs",
       namespaceType: "Array",
-       // 表单配置
+      // 表单配置
       formConfig: [
         {
           type: "input",
@@ -110,16 +126,16 @@ export default {
             {
               required: true,
               message: "请输入必填项",
-              trigger: ["blur", "change"]
-            }
-          ]
+              trigger: ["blur", "change"],
+            },
+          ],
         },
         {
           type: "textarea",
           label: "长号码",
           key: "smsLongNum",
           defaultValue: "",
-          maxlength: 4000
+          maxlength: 4000,
           // rules: [
           //   {
           //     required: true,
@@ -127,13 +143,12 @@ export default {
           //     trigger: ['blur', 'change']
           //   }
           // ]
-        }
+        },
       ],
       id: "",
     };
   },
-  created() {
-  },
+  created() {},
   mounted() {},
   computed: {},
   methods: {},

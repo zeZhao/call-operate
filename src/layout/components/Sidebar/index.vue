@@ -20,7 +20,7 @@
               <span>{{ item.meta.title }}</span>
             </template>
             <el-menu-item-group v-for="el in item.children" :key="el.path">
-              <el-menu-item :index="el.path">{{ el.meta.title }}</el-menu-item>
+              <el-menu-item :index="el.path" v-if="!el.hidden">{{ el.meta.title }}</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </div>

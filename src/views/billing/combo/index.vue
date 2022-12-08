@@ -1,9 +1,9 @@
 <template>
-  <div class="supplier">
+  <div class="agent">
     <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
-      @create="_mxCreate"
+      :add="false"
     ></Search>
     <el-table
       :data="listData"
@@ -12,17 +12,15 @@
       style="width: 100%"
       :height="tableHeight"
     >
-      <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="公司名称" />
-      <el-table-column prop="corpId" label="账户名称" /> 
-      <el-table-column prop="corpId" label="计费费率" />
-      <el-table-column prop="corpId" label="账户余额（元）" />
-      <el-table-column prop="corpId" label="透支额度（元）" />
+      <el-table-column label="序号" type="index" align="center"/>
       <el-table-column prop="corpId" label="套餐名称" />
-      <el-table-column prop="corpId" label="套餐剩余时长（秒）" />
-      <el-table-column prop="corpId" label="账户状态" />
-      <el-table-column prop="corpId" label="有效时间" />
-      <el-table-column prop="corpId" label="开户时间" />
+      <el-table-column prop="corpId" label="租用周期" />
+      <el-table-column prop="corpId" label="租金（元）" />
+      <el-table-column prop="corpId" label="套餐时长（秒）" />
+      <el-table-column prop="corpId" label="状态" />
+      <el-table-column prop="corpId" label="创建时间" />
+      <el-table-column prop="corpId" label="创建人类别" />
+      <el-table-column prop="corpId" label="创建人" />
       <el-table-column prop="corpId" label="备注" />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
@@ -48,21 +46,6 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     ></Page>
-    <el-dialog
-      :title="formTit"
-      :visible.sync="addChannel"
-      :close-on-click-modal="false"
-      top="45px"
-    >
-      <FormItem
-        ref="formItem"
-        :formConfig="formConfig"
-        :btnTxt="formTit"
-        @submit="_mxHandleSubmit"
-        @cancel="_mxCancel"
-        @choose="choose"
-      ></FormItem>
-    </el-dialog>
   </div>
 </template>
 
@@ -90,49 +73,7 @@ export default {
           label: "开户时间",
           key: ["", "submitStartTime1", "submitEndTime1"]
         },
-      ],
-      //搜索框数据
-      searchParam: {},
-      //接口地址
-      searchAPI: {
-        namespace: "smslongnum",
-        list: "list",
-        detele: "delete"
-      },
-      // 列表参数
-      namespace: "configs",
-      namespaceType: "Array",
-       // 表单配置
-      formConfig: [
-        {
-          type: "input",
-          label: "账户编号",
-          key: "userId",
-          defaultValue: "",
-          rules: [
-            {
-              required: true,
-              message: "请输入必填项",
-              trigger: ["blur", "change"]
-            }
-          ]
-        },
-        {
-          type: "textarea",
-          label: "长号码",
-          key: "smsLongNum",
-          defaultValue: "",
-          maxlength: 4000
-          // rules: [
-          //   {
-          //     required: true,
-          //     message: "请输入必填项",
-          //     trigger: ['blur', 'change']
-          //   }
-          // ]
-        }
-      ],
-      id: "",
+      ]
     };
   },
   created() {},

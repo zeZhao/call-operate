@@ -1,5 +1,6 @@
 <template>
-  <div class="company">
+<!-- 线路对接 -->
+  <div class="lineDocking">
     <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
@@ -13,15 +14,18 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="公司名称" />
-      <el-table-column prop="corpId" label="类别" />
-      <el-table-column prop="corpId" label="联系人" />
-      <el-table-column prop="corpId" label="联系电话" />
-      <el-table-column prop="corpId" label="邮箱" />
-      <el-table-column prop="corpId" label="银行账户" />
-      <el-table-column prop="corpId" label="地址" />
-      <el-table-column prop="corpId" label="状态" />
-      <el-table-column prop="corpId" label="开户时间" />
+      <el-table-column prop="corpId" label="线路名称" />
+      <el-table-column prop="corpId" label="供应商名称" />
+      <el-table-column prop="corpId" label="供应商账户" />
+      <el-table-column prop="corpId" label="对接方式" />
+      <el-table-column prop="corpId" label="线路并发数" />
+      <el-table-column prop="corpId" label="IP地址" />
+      <el-table-column prop="corpId" label="端口" />
+      <el-table-column prop="corpId" label="注册账号" />
+      <el-table-column prop="corpId" label="可用状态" />
+      <el-table-column prop="corpId" label="落地省份" />
+      <el-table-column prop="corpId" label="归属运营商" />
+      <el-table-column prop="corpId" label="线路类型" />
       <el-table-column prop="corpId" label="备注" />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
@@ -74,32 +78,38 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "公司名称", key: "corpName" },
-        { type: "input", label: "联系人", key: "corpNames" },
-        { type: "inputNum", label: "联系电话", key: "userId" },
+        { type: "input", label: "商家账号", key: "corpName" },
+        { type: "input", label: "座席名称", key: "corpNames" },
+        { type: "inputNum", label: "工号", key: "userId" },
         {
           type: "select",
-          label: "签名",
+          label: "角色",
           key: "sign",
           optionData: [
-            { key: "1", value: "有效" },
-            { key: "2", value: "无效" },
+            { key: "1", value: "全部" },
+            { key: "2", value: "普通坐席" },
+            { key: "3", value: "企业管理员" },
           ],
         },
         {
           type: "select",
-          label: "类别",
+          label: "归属技能组",
           key: "signs",
           optionData: [
-            { key: "1", value: "商家" },
-            { key: "2", value: "代理商" },
-            { key: "3", value: "供应商" },
+            { key: "1", value: "全部" },
+            { key: "2", value: "技能组A" },
+            { key: "3", value: "技能组B" },
           ],
         },
         {
-          type: "daterange",
-          label: "开户时间",
-          key: ["", "submitStartTime", "submitEndTime"],
+          type: "select",
+          label: "状态",
+          key: "signs",
+          optionData: [
+            { key: "1", value: "全部" },
+            { key: "2", value: "停用" },
+            { key: "3", value: "有效" },
+          ],
         },
       ],
       //搜索框数据
@@ -117,7 +127,7 @@ export default {
       formConfig: [
         {
           type: "input",
-          label: "账户编号",
+          label: "商家名称",
           key: "userId",
           defaultValue: "",
           rules: [
@@ -129,18 +139,42 @@ export default {
           ],
         },
         {
-          type: "textarea",
-          label: "长号码",
-          key: "smsLongNum",
+          type: "input",
+          label: "座席姓名",
+          key: "userId",
           defaultValue: "",
-          maxlength: 4000,
-          // rules: [
-          //   {
-          //     required: true,
-          //     message: "请输入必填项",
-          //     trigger: ['blur', 'change']
-          //   }
-          // ]
+        },
+        {
+          type: "input",
+          label: "工号",
+          key: "userId",
+          defaultValue: "",
+        },
+        {
+          type: "input",
+          label: "密码",
+          key: "userId",
+          defaultValue: "",
+        },
+        {
+          type: "select",
+          label: "座席角色",
+          key: "userId",
+          defaultValue: "",
+          optionData:[
+            {key:'1',value:'普通坐席'},
+            {key:'2',value:'企业管理员'},
+          ],
+        },
+        {
+          type: "select",
+          label: "状态",
+          key: "userId",
+          defaultValue: "",
+          optionData:[
+            {key:'1',value:'有效'},
+            {key:'2',value:'停用'},
+          ],
         },
       ],
       id: "",

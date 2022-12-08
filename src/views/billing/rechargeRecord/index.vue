@@ -3,8 +3,47 @@
     <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
-      @create="_mxCreate"
+      :add="false"
     ></Search>
+    <h4 class="textLeft margin10">下表是语音充值记录</h4>
+    <el-table
+      :data="listData"
+      border
+      highlight-current-row
+      style="width: 100%"
+    >
+      <el-table-column label="序号" type="index" align="center"/>
+      <el-table-column prop="corpId" label="公司名称" />
+      <el-table-column prop="corpId" label="账户名称" />
+      <el-table-column prop="corpId" label="账户身份" />
+      <el-table-column prop="corpId" label="账户身份" />
+      <el-table-column prop="corpId" label="操作类型" />
+      <el-table-column prop="corpId" label="缴费金额（元）" />
+      <el-table-column prop="corpId" label="账户余额（元）" />
+      <el-table-column prop="corpId" label="操作时间" />
+      <el-table-column prop="corpId" label="操作人" />
+      <el-table-column prop="corpId" label="操作人身份" />
+      <el-table-column prop="corpId" label="备注" />
+      <el-table-column label="操作" width="100" fixed="right">
+        <template slot-scope="scope">
+          <el-button
+            @click="_mxEdit(scope.row, 'templateId')"
+            type="text"
+            size="small"
+            >修改</el-button
+          >
+          <el-button
+            @click="
+              _mxDeleteItem('templateId', scope.row.templateId, false, true)
+            "
+            type="text"
+            size="small"
+            >删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <h4 class="textLeft margin10">下表是短信充值记录</h4>
     <el-table
       :data="listData"
       border
@@ -14,20 +53,21 @@
     >
       <el-table-column label="序号" type="index" align="center"/>
       <el-table-column prop="corpId" label="公司名称" />
-      <el-table-column prop="corpId" label="账户名称" /> 
-      <el-table-column prop="corpId" label="计费费率" />
-      <el-table-column prop="corpId" label="账户余额（元）" />
-      <el-table-column prop="corpId" label="透支额度（元）" />
-      <el-table-column prop="corpId" label="套餐名称" />
-      <el-table-column prop="corpId" label="套餐剩余时长（秒）" />
-      <el-table-column prop="corpId" label="账户状态" /> 
-      <el-table-column prop="corpId" label="有效时间" />
-      <el-table-column prop="corpId" label="开户时间" />
+      <el-table-column prop="corpId" label="账户名称" />
+      <el-table-column prop="corpId" label="账户身份" />
+      <el-table-column prop="corpId" label="账户身份" />
+      <el-table-column prop="corpId" label="操作类型" />
+      <el-table-column prop="corpId" label="缴费金额（元）" />
+      <el-table-column prop="corpId" label="充值数量（条）" />
+      <el-table-column prop="corpId" label="短信余额（条）" />
+      <el-table-column prop="corpId" label="操作时间" />
+      <el-table-column prop="corpId" label="操作人" />
+      <el-table-column prop="corpId" label="操作人身份" />
       <el-table-column prop="corpId" label="备注" />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="_mxEdit(scope.row, 'corpId')"
+            @click="_mxEdit(scope.row, 'templateId')"
             type="text"
             size="small"
             >修改</el-button
@@ -48,22 +88,6 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     ></Page>
-    <el-dialog
-      :title="formTit"
-      :visible.sync="addChannel"
-      :close-on-click-modal="false"
-      top="45px"
-    >
-      <FormItem
-        ref="formItem"
-        :formConfig="formConfig"
-        :btnTxt="formTit"
-        @submit="_mxHandleSubmit"
-        @cancel="_mxCancel"
-        @choose="choose"
-      ></FormItem>
-    </el-dialog>
-
   </div>
 </template>
 
@@ -91,50 +115,7 @@ export default {
           label: "开户时间",
           key: ["", "submitStartTime1", "submitEndTime1"]
         },
-      ],
-      //搜索框数据
-      searchParam: {},
-      //接口地址
-      searchAPI: {
-        namespace: "smslongnum",
-        list: "list",
-        detele: "delete"
-      },
-      // 列表参数
-      namespace: "configs",
-      namespaceType: "Array",
-       // 表单配置
-      formConfig: [
-        {
-          type: "input",
-          label: "账户编号",
-          key: "userId",
-          defaultValue: "",
-          rules: [
-            {
-              required: true,
-              message: "请输入必填项",
-              trigger: ["blur", "change"]
-            }
-          ]
-        },
-        {
-          type: "textarea",
-          label: "长号码",
-          key: "smsLongNum",
-          defaultValue: "",
-          maxlength: 4000
-          // rules: [
-          //   {
-          //     required: true,
-          //     message: "请输入必填项",
-          //     trigger: ['blur', 'change']
-          //   }
-          // ]
-        }
-      ],
-      id: "",
-
+      ]
     };
   },
   created() {},

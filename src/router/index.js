@@ -70,51 +70,143 @@ const constRouterList = [
     ]
   },
   {
-    path: "/",
+    path: '/billing',
+    name: 'billing',
     component: Layout,
-    redirect: "/billing",
-    parent: true,
+    meta: {
+      title: '计费管理',
+    },
     children: [
       {
-        path: '/billing',
-        name: 'billing',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/billing/billing/index.vue'),
+        path: '/billing/rate',
+        name: 'rate',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/billing/rate/index.vue'),
         meta: {
-          title: '计费管理',
-        }
+          title: '费率',
+        },
+      },
+      {
+        path: '/billing/combo',
+        name: 'combo',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/billing/combo/index.vue'),
+        meta: {
+          title: '套餐',
+        },
+      },
+      {
+        path: '/billing/rechargeRecord',
+        name: 'rechargeRecord',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/billing/rechargeRecord/index.vue'),
+        meta: {
+          title: '充值记录',
+        },
       },
     ]
   },
   {
-    path: "/",
+    path: '/line',
+    name: 'line',
     component: Layout,
-    redirect: "/line",
-    parent: true,
+    meta: {
+      title: '语音线路管理',
+    },
     children: [
       {
-        path: '/line',
-        name: 'line',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/line/line/index.vue'),
+        path: '/line/lineDocking',
+        name: 'lineDocking',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/line/lineDocking/index.vue'),
         meta: {
-          title: '语音线路管理',
-        }
+          title: '线路对接',
+        },
+      },
+      {
+        path: '/line/secretFriend',
+        name: 'secretFriend',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/line/secretFriend/index.vue'),
+        meta: {
+          title: '号码管理',
+        },
       },
     ]
   },
   {
-    path: "/",
+    path: '/IVR',
+    name: 'IVR',
     component: Layout,
-    redirect: "/IVR",
-    parent: true,
+    meta: {
+      title: 'IVR管理',
+    },
     children: [
       {
-        path: '/IVR',
-        name: 'IVR',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/IVR/index.vue'),
+        path: '/IVR/IVRIndex',
+        name: 'IVRIndex',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/IVRIndex/index.vue'),
         meta: {
           title: 'IVR管理',
-        }
+        },
       },
+      {
+        path: '/IVR/AI',
+        name: 'AI',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/AI/index.vue'),
+        meta: {
+          title: 'AI机器学习',
+        },
+      },
+      {
+        path: '/IVR/AI/detail',
+        name: 'AIDetail',
+        hidden:true,
+        component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/AI/components/details.vue'),
+        meta: {
+          title: 'AI机器学习',
+        },
+      },
+    ]
+  },
+  {
+    path: '/seats',
+    name: 'seats',
+    component: Layout,
+    meta: {
+      title: '坐席管理',
+    },
+    children: [
+      {
+        path: '/seats/extension',
+        name: 'extension',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/seats/extension/index.vue'),
+        meta: {
+          title: '分机',
+        },
+      },
+      {
+        path: '/seats/seatsIndex',
+        name: 'seats',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/seats/seatsIndex/index.vue'),
+        meta: {
+          title: '坐席',
+        },
+      },
+    ]
+  },
+  {
+    path: '/system',
+    name: 'system',
+    component: Layout,
+    meta: {
+      title: '系统管理',
+    },
+    children: [
+      {
+        path: '/system/account',
+        name: 'account',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/system/account/index.vue'),
+        meta: {
+          title: '账号管理',
+        },
+      },
+      
     ]
   },
   

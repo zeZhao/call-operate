@@ -179,6 +179,8 @@ export default {
         pageSize: 10,
         total: 0
       },
+      formTit: "新增",
+      addChannel: false,
       //查询条件参数
       searchParam: {},
 

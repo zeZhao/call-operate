@@ -1,6 +1,6 @@
 <template>
-<div class='billing'>
-  <h1>计费管理</h1>
+<div class='IVR'>
+  <h1>IVR</h1>
 </div>
 </template>
 
