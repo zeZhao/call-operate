@@ -1,11 +1,15 @@
 <template>
-<!-- 线路对接 -->
+  <!-- 线路对接 -->
   <div class="lineDocking">
     <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
       @create="_mxCreate"
-    ></Search>
+    >
+      <template slot="other">
+        <el-button type="primary" @click="advanced">高级配置</el-button>
+      </template>
+    </Search>
     <el-table
       :data="listData"
       border
@@ -66,6 +70,26 @@
         @choose="choose"
       ></FormItem>
     </el-dialog>
+
+    <!-- 高级配置 -->
+    <el-dialog
+      title="高级设置"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <div>
+        <p>主叫改写规则</p>
+        <el-divider></el-divider>
+        <p>被叫改写规则</p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,27 +102,48 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商家账号", key: "corpName" },
-        { type: "input", label: "座席名称", key: "corpNames" },
-        { type: "inputNum", label: "工号", key: "userId" },
+        { type: "input", label: "供应商名称", key: "corpName" },
+        { type: "input", label: "线路名称", key: "corpNames" },
+        { type: "inputNum", label: "供应商账户", key: "userId" },
         {
           type: "select",
-          label: "角色",
+          label: "对接方式",
           key: "sign",
           optionData: [
             { key: "1", value: "全部" },
-            { key: "2", value: "普通坐席" },
-            { key: "3", value: "企业管理员" },
+            { key: "2", value: "SIP对接" },
+            { key: "3", value: "账号注册" },
           ],
         },
         {
           type: "select",
-          label: "归属技能组",
+          label: "线路类型",
           key: "signs",
           optionData: [
             { key: "1", value: "全部" },
-            { key: "2", value: "技能组A" },
-            { key: "3", value: "技能组B" },
+            { key: "2", value: "直连" },
+            { key: "3", value: "第三方" },
+          ],
+        },
+        {
+          type: "select",
+          label: "运营商",
+          key: "signs",
+          optionData: [
+            { key: "1", value: "全部" },
+            { key: "2", value: "移动" },
+            { key: "3", value: "联通" },
+            { key: "4", value: "电信" },
+          ],
+        },
+        {
+          type: "select",
+          label: "落地省份",
+          key: "signs",
+          optionData: [
+            { key: "1", value: "全部" },
+            { key: "2", value: "停用" },
+            { key: "3", value: "有效" },
           ],
         },
         {
@@ -127,7 +172,7 @@ export default {
       formConfig: [
         {
           type: "input",
-          label: "商家名称",
+          label: "供应商名称",
           key: "userId",
           defaultValue: "",
           rules: [
@@ -140,30 +185,44 @@ export default {
         },
         {
           type: "input",
-          label: "座席姓名",
+          label: "供应商账户",
           key: "userId",
           defaultValue: "",
         },
         {
           type: "input",
-          label: "工号",
-          key: "userId",
-          defaultValue: "",
-        },
-        {
-          type: "input",
-          label: "密码",
+          label: "线路名称",
           key: "userId",
           defaultValue: "",
         },
         {
           type: "select",
-          label: "座席角色",
+          label: "线路类型",
           key: "userId",
           defaultValue: "",
-          optionData:[
-            {key:'1',value:'普通坐席'},
-            {key:'2',value:'企业管理员'},
+          optionData: [
+            { key: "1", value: "普通坐席" },
+            { key: "2", value: "企业管理员" },
+          ],
+        },
+        {
+          type: "select",
+          label: "运营商",
+          key: "userId",
+          defaultValue: "",
+          optionData: [
+            { key: "1", value: "普通坐席" },
+            { key: "2", value: "企业管理员" },
+          ],
+        },
+        {
+          type: "select",
+          label: "落地城市",
+          key: "userId",
+          defaultValue: "",
+          optionData: [
+            { key: "1", value: "普通坐席" },
+            { key: "2", value: "企业管理员" },
           ],
         },
         {
@@ -171,19 +230,50 @@ export default {
           label: "状态",
           key: "userId",
           defaultValue: "",
-          optionData:[
-            {key:'1',value:'有效'},
-            {key:'2',value:'停用'},
+          optionData: [
+            { key: "1", value: "有效" },
+            { key: "2", value: "停用" },
           ],
+        },
+        {
+          type: "input",
+          label: "线路并发数",
+          key: "userId",
+          defaultValue: "",
+        },
+        {
+          type: "select",
+          label: "对接方式",
+          key: "userId",
+          defaultValue: "",
+          optionData: [
+            { key: "1", value: "有效" },
+            { key: "2", value: "停用" },
+          ],
+        },
+        {
+          type: "input",
+          label: "服务器IP",
+          key: "userId",
+          defaultValue: "",
+        },
+        {
+          type: "input",
+          label: "信令端口",
+          key: "userId",
+          defaultValue: "",
         },
       ],
       id: "",
+      dialogVisible:false
     };
   },
   created() {},
   mounted() {},
   computed: {},
-  methods: {},
+  methods: {
+    advanced() {},
+  },
   watch: {},
 };
 </script>

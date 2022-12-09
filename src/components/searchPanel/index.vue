@@ -232,7 +232,7 @@
             </slot>
           </div>
         </el-col>
-        <el-col :span="8" v-show="$slots.Other || isOther">
+        <el-col :span="8" v-show="$slots.other || isOther">
           <div class="btnStyle">
             <slot name="other" :form="form"></slot>
           </div>

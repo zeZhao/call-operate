@@ -44,5 +44,28 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+function request(url, method, data, isBlod = false) {
+  let obj = {
+    url,
+    method,
+    params: data,
+    data,
+  }
+  if (method === 'get') {
+    delete obj.data
+    if (isBlod) {
+      obj.responseType = 'blob'
+    }
+    return service(obj)
+  }
+  if (method === 'post') {
+    delete obj.params
+    if (isBlod) {
+      obj.responseType = 'blob'
+    }
+    return service(obj)
+  }
 
-export default service
+}
+
+export default request

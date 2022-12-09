@@ -1,5 +1,5 @@
 <template>
-<!-- 分机 -->
+  <!-- 分机 -->
   <div class="extension">
     <Search
       :searchFormConfig="searchFormConfig"
@@ -55,21 +55,37 @@
       :close-on-click-modal="false"
       top="45px"
     >
-      <el-form :model="form">
+      <el-form :model="form" label-position="left" label-width="80px" ref="form">
         <el-form-item label="商家名称：">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="商家名称：">
-          <el-input v-model="form.name"></el-input>
-          <span>-</span>
-          <el-input v-model="form.name"></el-input>
+        <el-form-item label="分机号：">
+          <el-row>
+            <el-col :span="2">
+              <el-input v-model="form.name"></el-input>
+            </el-col>
+            <el-col :span="2" style="text-align:center">
+              <span>-</span>
+            </el-col>
+            <el-col :span="2">
+              <el-input v-model="form.name"></el-input>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item label="分机密码：">
-          <el-radio-group v-model="form.passWord">
-            <el-radio :label="1">随机生成</el-radio>
-            <el-radio :label="2">指定密码</el-radio>
-          </el-radio-group>
-          <el-input v-model="form.passwd" v-if="form.passWord == 2"></el-input>
+          <el-row>
+            <el-col :span="9"
+              ><el-radio-group v-model="form.passWord">
+                <el-radio :label="1">随机生成</el-radio>
+                <el-radio :label="2">指定密码</el-radio>
+              </el-radio-group></el-col>
+            <el-col :span="6">
+              <el-input
+                v-model="form.passwd"
+                v-if="form.passWord == 2"
+              ></el-input
+            ></el-col>
+          </el-row>
         </el-form-item>
         <el-form-item label="分机类型：">
           <el-select v-model="form.type">
@@ -83,14 +99,20 @@
         <el-form-item label="外呼主叫：">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="是否录音">
+        <el-form-item label="是否录音：">
           <el-select v-model="form.type">
             <el-option :value="1">是</el-option>
             <el-option :value="2">否</el-option>
           </el-select>
         </el-form-item>
-        <el-checkbox v-model="form.extension">按照分机信息生成并绑定座席</el-checkbox>
+        <el-checkbox v-model="form.extension"
+          >按照分机信息生成并绑定座席</el-checkbox
+        >
       </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addChannel = false">取 消</el-button>
+        <el-button type="primary" @click="addChannel = false">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -169,11 +191,11 @@ export default {
       namespace: "configs",
       namespaceType: "Array",
       // 表单配置
-      form:{
-        name:'',
-        type:'',
-        password:'',
-        passwd:'',
+      form: {
+        name: "",
+        type: "",
+        password: "",
+        passwd: "",
       },
       id: "",
     };
