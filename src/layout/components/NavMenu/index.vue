@@ -87,7 +87,7 @@ export default {
     },
     submitExport() {
       setStorage("token");
-      setStorage("info");
+      // setStorage("info");
           this.$router.push("/login");
       // logout().then((res) => {
       //   if (res.code === 200) {

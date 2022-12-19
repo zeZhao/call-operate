@@ -21,20 +21,20 @@
           autocomplete="on"
           label-position="left"
         >
-          <el-form-item prop="username" label="手机号">
+          <el-form-item prop="account" label="账号">
             <el-input
-              ref="username"
-              v-model="loginForm.username"
-              placeholder="请输入手机号"
-              name="username"
+              ref="account"
+              v-model="loginForm.account"
+              placeholder="请输入账号"
+              name="account"
               type="text"
               tabindex="1"
             />
           </el-form-item>
 
-          <el-form-item prop="password" label="密码">
+          <el-form-item prop="pwd" label="密码">
             <el-input
-              v-model="loginForm.password"
+              v-model="loginForm.pwd"
               type="password"
               placeholder="请输入密码"
               tabindex="2"
@@ -60,6 +60,7 @@
 
 // import { phone } from "@/utils/validator";
 // import SocialSign from "./components/SocialSignin";
+import { setStorage, getStorage,randomNum, getTime } from "@/utils/auth";
 import logo from "@/assets/images/logo.png";
 export default {
   name: "Login",
@@ -83,17 +84,19 @@ export default {
       logo: logo,
       captcha: "",
       loginForm: {
-        username: "",
-        password: "",
-        verifyCode: "",
+        account: "",
+        pwd: "",
+        // verifyCode: "",
         // uuid: this.common.randomNum(),
         // time: this.common.getTime()
       },
       loginRules: {
-        // username: [{ required: true, trigger: "blur", validator: phone }],
-        password: [
-          { required: true, trigger: "blur", validator: validatePassword }
-        ],
+        // account: [{ required: true, trigger: "blur", validator: phone }],
+        account: [{ required: true, trigger: "blur", message:'请输入账号'}],
+        pwd: [{ required: true, trigger: "blur", message:'请输入密码'}],
+        // pwd: [
+        //   // { required: true, trigger: "blur", validator: validatePassword }
+        // ],
         verifyCode: [
           { required: true, trigger: "blur", validator: validateVerifyCode }
         ]
@@ -136,6 +139,23 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
+          this.$http.login.login(this.loginForm).then(res=>{
+            if(res.state == '200'){
+              
+              setStorage('token',res.msg)
+              // setStorage('info',res.data)
+              this.$router.push("/");
+              
+              this.$message.success("登录成功");
+              this.loading = false;
+            }else{
+              this.loading = false;
+              // this.getCaptcha()
+              this.$message.error(res.msg)
+            }
+          }).catch(()=>{
+            this.loading = false;
+          })
         } else {
           console.log("error submit!!");
           return false;

@@ -2,6 +2,7 @@
   <div class="Sidebar">
     <el-menu
       :default-active="activeMenu"
+      :unique-opened="true"
       class="el-menu-vertical"
       @open="handleOpen"
       @close="handleClose"
@@ -71,10 +72,10 @@ export default {
   mounted() {},
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
   },
 };

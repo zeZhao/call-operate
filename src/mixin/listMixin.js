@@ -113,9 +113,9 @@ async function queryData() {
       params = {
         ...searchParam,
         // pageIndex: this.pageObj.currentPage,
-        pageNumber: this.pageObj.currentPage,
+        current: this.pageObj.currentPage,
         // pageNum: this.pageObj.currentPage,
-        pageSize: this.pageObj.pageSize
+        size: this.pageObj.pageSize
       };
     }
 
