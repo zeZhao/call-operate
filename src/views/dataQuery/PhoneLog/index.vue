@@ -1,67 +1,6 @@
 <template>
   <div class="company">
-    <Search
-      :searchFormConfig="searchFormConfig"
-      @search="_mxDoSearch"
-      @create="_mxCreate"
-    ></Search>
-    <el-table
-      :data="listData"
-      border
-      highlight-current-row
-      style="width: 100%"
-      :height="tableHeight"
-    >
-      <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="公司名称" />
-      <el-table-column prop="corpId" label="类别" />
-      <el-table-column prop="corpId" label="联系人" />
-      <el-table-column prop="corpId" label="联系电话" />
-      <el-table-column prop="corpId" label="邮箱" />
-      <el-table-column prop="corpId" label="银行账户" />
-      <el-table-column prop="corpId" label="地址" />
-      <el-table-column prop="corpId" label="状态" />
-      <el-table-column prop="corpId" label="开户时间" />
-      <el-table-column prop="corpId" label="备注" />
-      <el-table-column label="操作" width="100" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
-            type="text"
-            size="small"
-            >修改</el-button
-          >
-          <el-button
-            @click="
-              _mxDeleteItem('templateId', scope.row.templateId, false, true)
-            "
-            type="text"
-            size="small"
-            >删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <Page
-      :pageObj="pageObj"
-      @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    ></Page>
-    <el-dialog
-      :title="formTit"
-      :visible.sync="addChannel"
-      :close-on-click-modal="false"
-      top="45px"
-    >
-      <FormItem
-        ref="formItem"
-        :formConfig="formConfig"
-        :btnTxt="formTit"
-        @submit="_mxHandleSubmit"
-        @cancel="_mxCancel"
-        @choose="choose"
-      ></FormItem>
-    </el-dialog>
+    <h1>短信记录</h1>
   </div>
 </template>
 

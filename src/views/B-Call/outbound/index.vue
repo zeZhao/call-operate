@@ -75,8 +75,46 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
-        @choose="choose"
-      ></FormItem>
+        :isSubmitBtn="true"
+      >
+      <template v-slot:custom = 'formData'>
+        <el-form-item label="有效时段1：">
+          <el-select v-model="formData.formData.timeValidity1_1">
+            <el-option :value="1">星期一</el-option>
+            <el-option :value="2">星期二</el-option>
+            <el-option :value="3">星期三</el-option>
+          </el-select>
+          <el-time-picker
+            v-model="formData.formData.timeValidity1_2"
+            style="width:120px;margin-left:20px"
+            placeholder="任意时间点">
+          </el-time-picker>
+          <el-time-picker
+            style="width:120px;margin-left:20px"  
+            v-model="formData.formData.timeValidity1_3"
+            placeholder="任意时间点">
+          </el-time-picker>
+        </el-form-item>
+        <el-form-item label="有效时段2：">
+          <el-select v-model="formData.formData.timeValidity2_1">
+            <el-option :value="1">星期一</el-option>
+            <el-option :value="2">星期二</el-option>
+            <el-option :value="3">星期三</el-option>
+          </el-select>
+          <el-time-picker
+            v-model="formData.formData.timeValidity2_2"
+            style="width:120px;margin-left:20px"
+            placeholder="任意时间点">
+          </el-time-picker>
+          <el-time-picker
+            style="width:120px;margin-left:20px"  
+            v-model="formData.formData.timeValidity2_3"
+            placeholder="任意时间点">
+          </el-time-picker>
+        </el-form-item>
+      </template>
+      </FormItem>
+      
     </el-dialog>
   </div>
 </template>
@@ -142,31 +180,63 @@ export default {
       formConfig: [
         {
           type: "input",
-          label: "账户编号",
+          label: "商户名称",
           key: "userId",
           defaultValue: "",
-          rules: [
-            {
-              required: true,
-              message: "请输入必填项",
-              trigger: ["blur", "change"],
-            },
-          ],
         },
         {
-          type: "textarea",
-          label: "长号码",
-          key: "smsLongNum",
+          type: "input",
+          label: "任务名称",
+          key: "userId1",
           defaultValue: "",
-          maxlength: 4000,
-          // rules: [
-          //   {
-          //     required: true,
-          //     message: "请输入必填项",
-          //     trigger: ['blur', 'change']
-          //   }
-          // ]
         },
+        {
+          type:"select",
+          label:'任务类型',
+          key:"supplier1",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'主叫/线路',
+          key:"supplier2",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'服务流程/班组',
+          key:"supplier3",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type:"input",
+          label:'并发数',
+          key:"supplier4",
+          colSpan:12,
+        },
+        {
+          type:"uploadXlsx",
+          label:'外呼号码',
+          key:"supplier5",
+          // colSpan:12,
+        },
+        // {
+        //   type: "textarea",
+        //   label: "长号码",
+        //   key: "smsLongNum",
+        //   defaultValue: "",
+        //   maxlength: 4000,
+        //   // rules: [
+        //   //   {
+        //   //     required: true,
+        //   //     message: "请输入必填项",
+        //   //     trigger: ['blur', 'change']
+        //   //   }
+        //   // ]
+        // },
       ],
       id: "",
     };
@@ -174,7 +244,11 @@ export default {
   created() {},
   mounted() {},
   computed: {},
-  methods: {},
+  methods: {
+    _mxHandleSubmit(form){
+      console.log(form,'----')
+    }
+  },
   watch: {},
 };
 </script>

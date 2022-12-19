@@ -5,26 +5,35 @@
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
       @create="_mxCreate"
-    ></Search>
+    >
+    <template slot="other">
+        <el-button type="primary" @click="allocation">分配号码</el-button>
+        <el-button type="primary" @click="_mxCreate">新增号码</el-button>
+        <el-button type="primary" @click="deteleNum">删除</el-button>
+        <el-button type="primary" @click="exportNum">导出Excel</el-button>
+      </template>
+    </Search>
     <el-table
       :data="listData"
       border
       highlight-current-row
       style="width: 100%"
       :height="tableHeight"
+       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="公司名称" />
-      <el-table-column prop="corpId" label="类别" />
-      <el-table-column prop="corpId" label="联系人" />
-      <el-table-column prop="corpId" label="联系电话" />
-      <el-table-column prop="corpId" label="邮箱" />
-      <el-table-column prop="corpId" label="银行账户" />
-      <el-table-column prop="corpId" label="地址" />
-      <el-table-column prop="corpId" label="状态" />
-      <el-table-column prop="corpId" label="开户时间" />
-      <el-table-column prop="corpId" label="备注" />
-      <el-table-column label="操作" width="100" fixed="right">
+      <el-table-column label="选择" type="selection" align="center" />
+      <el-table-column prop="corpId" label="供应商名称" />
+      <el-table-column prop="corpId" label="线路名称" />
+      <el-table-column prop="corpId" label="号码归属地区" />
+      <el-table-column prop="corpId" label="运营商" />
+      <el-table-column prop="corpId" label="运营商号码" />
+      <el-table-column prop="corpId" label="号码月租成本（元）" />
+      <el-table-column prop="corpId" label="号码状态" />
+      <el-table-column prop="corpId" label="使用商家" />
+      <el-table-column prop="corpId" label="商家账户" />
+      <el-table-column prop="corpId" label="路由类型" />
+      <el-table-column prop="corpId" label="流程名称" />
+      <!-- <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'templateId')"
@@ -41,7 +50,7 @@
             >删除
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <Page
       :pageObj="pageObj"
@@ -60,7 +69,20 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
-        @choose="choose"
+      ></FormItem>
+    </el-dialog>
+    <el-dialog
+      title="分配号码"
+      :visible.sync="allocationVisible"
+      :close-on-click-modal="false"
+      top="45px"
+    >
+      <FormItem
+        ref="allocationForm"
+        :formConfig="allocationConfig"
+        btnTxt="确定"
+        @submit="submitAllocation"
+        @cancel="cancelAllocation"
       ></FormItem>
     </el-dialog>
   </div>
@@ -75,12 +97,9 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "公司名称", key: "corpName" },
-        { type: "input", label: "联系人", key: "corpNames" },
-        { type: "inputNum", label: "联系电话", key: "userId" },
         {
           type: "select",
-          label: "签名",
+          label: "供应商名称",
           key: "sign",
           optionData: [
             { key: "1", value: "有效" },
@@ -89,7 +108,18 @@ export default {
         },
         {
           type: "select",
-          label: "类别",
+          label: "运营商",
+          key: "signs",
+          optionData: [
+            { key: "1", value: "商家" },
+            { key: "2", value: "代理商" },
+            { key: "3", value: "供应商" },
+          ],
+        },
+        { type: "input", label: "商家名称", key: "corpName" },
+        {
+          type: "select",
+          label: "号码状态",
           key: "signs",
           optionData: [
             { key: "1", value: "商家" },
@@ -98,10 +128,23 @@ export default {
           ],
         },
         {
-          type: "daterange",
-          label: "开户时间",
-          key: ["", "submitStartTime", "submitEndTime"],
+          type: "select",
+          label: "线路名称",
+          key: "signs",
+          optionData: [
+            { key: "1", value: "商家" },
+            { key: "2", value: "代理商" },
+            { key: "3", value: "供应商" },
+          ],
         },
+        { type: "input", label: "号码", key: "corpNames" },
+        { type: "inputNum", label: "商家账号", key: "userId" },
+        { type: "input", label: "号码归属地区", key: "corpNames" },
+        // {
+        //   type: "daterange",
+        //   label: "开户时间",
+        //   key: ["", "submitStartTime", "submitEndTime"],
+        // },
       ],
       //搜索框数据
       searchParam: {},
@@ -117,40 +160,141 @@ export default {
       // 表单配置
       formConfig: [
         {
-          type: "input",
-          label: "账户编号",
-          key: "userId",
-          defaultValue: "",
-          rules: [
-            {
-              required: true,
-              message: "请输入必填项",
-              trigger: ["blur", "change"],
-            },
-          ],
+          type:"select",
+          label:'供应商名称',
+          key:"supplier",
+          optionData:[]
         },
         {
-          type: "textarea",
-          label: "长号码",
+          type:"select",
+          label:'线路名称',
+          key:"supplier",
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'号码归属地区',
+          key:"supplier",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'号码归属运营商',
+          key:"supplier",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type: "input",
+          label: "单号码月租（元）",
+          key: "userId",
+          defaultValue: "",
+        },
+        {
+          type: "uploadXlsx",
+          label: "运营商号码",
           key: "smsLongNum",
           defaultValue: "",
-          maxlength: 4000,
-          // rules: [
-          //   {
-          //     required: true,
-          //     message: "请输入必填项",
-          //     trigger: ['blur', 'change']
-          //   }
-          // ]
         },
       ],
       id: "",
+      allocationConfig:[
+        {
+          type:"select",
+          label:'供应商名称',
+          key:"supplier",
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'线路名称',
+          key:"supplier",
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'号码归属地区',
+          key:"supplier",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'号码归属运营商',
+          key:"supplier",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type: "input",
+          label: "运营商号码",
+          key: "smsLongNum",
+          defaultValue: "",
+        },
+        {
+          type:'divider'
+        },
+        {
+          type:"select",
+          label:'使用商户',
+          key:"supplier",
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'商户账号',
+          key:"supplier",
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'路由类型',
+          key:"supplier",
+          colSpan:12,
+          optionData:[]
+        },
+        {
+          type:"select",
+          label:'流程名称',
+          key:"supplier",
+          colSpan:12,
+          optionData:[]
+        },
+      ],
+      allocationVisible:false,
+      multipleSelection:[]
     };
   },
   created() {},
   mounted() {},
   computed: {},
-  methods: {},
+  methods: {
+    //table 多选
+    handleSelectionChange(val){
+      this.multipleSelection = val
+    },
+    submitAllocation(){},
+    cancelAllocation(){
+      this.allocationVisible = false
+      setTimeout(() => {
+        this.$refs.allocationForm.resetForm();
+      }, 0);
+    },
+    allocation(){
+      this.allocationVisible = true
+      setTimeout(() => {
+        this.$refs.allocationForm.resetForm();
+      }, 0);
+    },
+    addNum(){},
+    deteleNum(){
+      if(this.multipleSelection.length === 0){
+        this.$message.error('请选择一条数据')
+      }
+    },
+    exportNum(){},
+  },
   watch: {},
 };
 </script>

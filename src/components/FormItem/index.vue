@@ -501,7 +501,11 @@
             <p v-if="item.tip" class="tip">{{ item.tip }}</p>
           </el-form-item>
         </el-col>
+        <!-- 自定义表单项 -->
         <div>
+          <slot name="custom" :formData="formData"></slot>
+        </div>
+        <div v-if="isSubmitBtn">
           <slot name="Other"></slot>
           <div
             class="submitBtn"
@@ -565,7 +569,7 @@ export default {
     labelWidth: {
       type: [String, Number],
       default() {
-        return 150;
+        return 120;
       },
     },
     gutter: {
@@ -594,6 +598,13 @@ export default {
         return false;
       },
     },
+    // 是否展示footer提交按钮
+    isSubmitBtn: {
+      type: Boolean,
+      default() {
+        return true;
+      },
+    },
   },
   data() {
     return {
@@ -607,11 +618,11 @@ export default {
       dialogImageUrl: "",
       submitDisabled: false,
       itemRules: [
-        {
-          required: true,
-          message: "请输入必填项",
-          trigger: ["blur", "change"],
-        },
+        // {
+        //   required: true,
+        //   message: "请输入必填项",
+        //   trigger: ["blur", "change"],
+        // },
       ],
     };
   },

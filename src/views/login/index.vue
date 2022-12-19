@@ -111,18 +111,20 @@ export default {
     // localStorage.uuid = this.common.randomNum();
     // localStorage.time = this.common.getTime();
     // window.localStorage.getItem('uuid')
+    window.addEventListener('keydown',this.keyDown);
   },
   destroyed() {
+    window.removeEventListener('keydown',this.keyDown,false);
   },
   methods: {
+    keyDown(e){
+      //如果是回车则执行登录方法
+      if(e.keyCode == 13){
+         this.handleLogin();
+      }
+    },
     getCaptcha() {
       const num = Math.ceil(Math.random() * 10); //生成一个随机数（防止缓存）
-      // this.$http.sysLogin
-      //   .captcha({ uuId: this.loginForm.uuid, num: num })
-      //   .then(res => {
-      //     this.captcha = res;
-      //     console.log(res, "-----------");
-      //   });
       this.captcha =
         process.env.VUE_APP_BASE_API +
         "/sysLogin/captcha?uuId=" +
@@ -131,18 +133,6 @@ export default {
         num;
     },
     handleLogin() {
-      if (this.loginForm.username.length === 0) {
-        this.$message.error("请输入手机号");
-        return;
-      }
-      if (this.loginForm.password.length === 0) {
-        this.$message.error("请输入密码");
-        return;
-      }
-      // if (this.loginForm.verifyCode.length === 0) {
-      //   this.$message.error("请输入口令");
-      //   return;
-      // }
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;

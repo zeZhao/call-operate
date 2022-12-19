@@ -65,6 +65,7 @@
         ref="formItem"
         :formConfig="formConfig"
         :btnTxt="formTit"
+        :labelWidth="100"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
         @choose="choose"
@@ -75,13 +76,48 @@
     <el-dialog
       title="高级设置"
       :visible.sync="dialogVisible"
-      width="30%"
+      width="50%"
       :before-close="handleClose"
     >
       <div>
         <p>主叫改写规则</p>
+        <div v-for="(item, index) in zj" :key="index" class="advanced">
+          <div class="demo-input-suffix">
+            前缀：
+            <el-input placeholder="请输入前缀" v-model="item.val"> </el-input>
+          </div>
+          <div class="demo-input-suffix">
+            修改为：
+            <el-input placeholder="请输入前缀" v-model="item.newVal">
+            </el-input>
+          </div>
+          <div>
+            <el-button type="text" @click="deteleZj(index)">删除</el-button>
+            <el-button type="text" @click="addZj">增加</el-button>
+          </div>
+        </div>
         <el-divider></el-divider>
-        <p>被叫改写规则</p>
+        <p>
+          被叫改写规则<span
+            style="color: rgb(175 170 170); font-size: 12px; padding-left: 10px"
+            >开发说明：支持通配符。*表示所有，?表示单个字符</span
+          >
+        </p>
+        <div v-for="(item, index) in bj" :key="index" class="advanced">
+          <div class="demo-input-suffix">
+            前缀：
+            <el-input placeholder="请输入前缀" v-model="item.val"> </el-input>
+          </div>
+          <div class="demo-input-suffix">
+            修改为：
+            <el-input placeholder="请输入前缀" v-model="item.newVal">
+            </el-input>
+          </div>
+          <div>
+            <el-button type="text" @click="deteleBj(index)">删除</el-button>
+            <el-button type="text" @click="addBj">增加</el-button>
+          </div>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -265,14 +301,37 @@ export default {
         },
       ],
       id: "",
-      dialogVisible:false
+      dialogVisible: false,
+      zj: [{ val: "", newVal: "" }],
+      bj: [{ val: "", newVal: "" }],
     };
   },
   created() {},
   mounted() {},
   computed: {},
   methods: {
-    advanced() {},
+    advanced() {
+      this.dialogVisible = true;
+      this.zj = [{ val: "", newVal: "" }];
+      this.bj = [{ val: "", newVal: "" }];
+    },
+    handleClose() {
+      this.dialogVisible = false;
+    },
+    addZj() {
+      let obj = { val: "", newVal: "" };
+      this.zj.push(obj);
+    },
+    deteleZj(index) {
+      this.zj.splice(index, 1);
+    },
+    addBj() {
+      let obj = { val: "", newVal: "" };
+      this.bj.push(obj);
+    },
+    deteleBj(index) {
+      this.bj.splice(index, 1);
+    },
   },
   watch: {},
 };
