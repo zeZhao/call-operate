@@ -51,7 +51,7 @@ function request(url, method, data, isBlod = false) {
     params: data,
     data,
   }
-  if (method === 'get') {
+  if (method === 'get' || method === 'delete') {
     delete obj.data
     if (isBlod) {
       obj.responseType = 'blob'

@@ -1,12 +1,13 @@
 <template>
-<!-- 号码管理 -->
+  <!-- 号码管理 -->
   <div class="secretFriend">
     <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
       @create="_mxCreate"
+      :add="false"
     >
-    <template slot="other">
+      <template slot="other">
         <el-button type="primary" @click="allocation">分配号码</el-button>
         <el-button type="primary" @click="_mxCreate">新增号码</el-button>
         <el-button type="primary" @click="deteleNum">删除</el-button>
@@ -19,20 +20,39 @@
       highlight-current-row
       style="width: 100%"
       :height="tableHeight"
-       @selection-change="handleSelectionChange"
+      @selection-change="handleSelectionChange"
     >
       <el-table-column label="选择" type="selection" align="center" />
-      <el-table-column prop="corpId" label="供应商名称" />
-      <el-table-column prop="corpId" label="线路名称" />
-      <el-table-column prop="corpId" label="号码归属地区" />
-      <el-table-column prop="corpId" label="运营商" />
-      <el-table-column prop="corpId" label="运营商号码" />
-      <el-table-column prop="corpId" label="号码月租成本（元）" />
-      <el-table-column prop="corpId" label="号码状态" />
-      <el-table-column prop="corpId" label="使用商家" />
-      <el-table-column prop="corpId" label="商家账户" />
-      <el-table-column prop="corpId" label="路由类型" />
-      <el-table-column prop="corpId" label="流程名称" />
+      <el-table-column prop="supplyId" label="供应商名称" />
+      <el-table-column prop="lineName" label="线路名称" />
+      <el-table-column prop="privince" label="号码归属地区" />
+      <el-table-column prop="operaId" label="运营商">
+        <template slot-scope="{ row }">
+          <span v-if="row.operaId === 0">非法</span>
+          <span v-if="row.operaId === 1">移动</span>
+          <span v-if="row.operaId === 2">联通</span>
+          <span v-if="row.operaId === 3">电信</span>
+          <span v-if="row.operaId === 4">国际</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="operaNumber" label="运营商号码" />
+      <el-table-column prop="numberCost" label="号码月租成本（元）" />
+      <el-table-column prop="numberStatus" label="号码状态">
+        <template slot-scope="{ row }">
+          <span v-if="row.numberStatus === 0">空闲</span>
+          <span v-if="row.numberStatus === 1">已分配</span>
+          <span v-if="row.numberStatus === 2">停用</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="userName" label="使用商家" />
+      <el-table-column prop="userId" label="商家账户" />
+      <el-table-column prop="routeType" label="路由类型">
+        <template slot-scope="{ row }">
+          <span v-if="row.routeType === 0">技能组</span>
+          <span v-if="row.routeType === 1">IVR</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="sceneName" label="流程名称" />
       <!-- <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
@@ -69,6 +89,7 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
+        @changeFileUpload="changeFileUpload"
       ></FormItem>
     </el-dialog>
     <el-dialog
@@ -95,12 +116,14 @@ export default {
   components: {},
   data() {
     return {
+      isParamsNotData: false,
+      submitParamsIsData: false,
       // 搜索框配置
       searchFormConfig: [
         {
-          type: "select",
+          type: "input",
           label: "供应商名称",
-          key: "sign",
+          key: "supplyId",
           optionData: [
             { key: "1", value: "有效" },
             { key: "2", value: "无效" },
@@ -109,37 +132,39 @@ export default {
         {
           type: "select",
           label: "运营商",
-          key: "signs",
+          key: "operaId",
           optionData: [
-            { key: "1", value: "商家" },
-            { key: "2", value: "代理商" },
-            { key: "3", value: "供应商" },
+            { key: 0, value: "非法" },
+            { key: 1, value: "移动" },
+            { key: 2, value: "联通" },
+            { key: 3, value: "电信" },
+            { key: 4, value: "国际" },
           ],
         },
-        { type: "input", label: "商家名称", key: "corpName" },
+        { type: "input", label: "商家名称", key: "userName" },
         {
           type: "select",
           label: "号码状态",
-          key: "signs",
+          key: "numberStatus",
           optionData: [
-            { key: "1", value: "商家" },
-            { key: "2", value: "代理商" },
-            { key: "3", value: "供应商" },
+            { key: 0, value: "空闲" },
+            { key: 1, value: "已分配" },
+            { key: 2, value: "停用" },
           ],
         },
         {
-          type: "select",
+          type: "input",
           label: "线路名称",
-          key: "signs",
+          key: "lineName",
           optionData: [
             { key: "1", value: "商家" },
             { key: "2", value: "代理商" },
             { key: "3", value: "供应商" },
           ],
         },
-        { type: "input", label: "号码", key: "corpNames" },
-        { type: "inputNum", label: "商家账号", key: "userId" },
-        { type: "input", label: "号码归属地区", key: "corpNames" },
+        { type: "input", label: "号码", key: "operaNumber" },
+        { type: "inputNum", label: "商户账号", key: "userId" },
+        { type: "input", label: "号码归属地区", key: "privince" },
         // {
         //   type: "daterange",
         //   label: "开户时间",
@@ -150,120 +175,171 @@ export default {
       searchParam: {},
       //接口地址
       searchAPI: {
-        namespace: "smslongnum",
-        list: "list",
+        namespace: "inboundcfg",
+        list: "get",
+        add: "post",
+        edit: "put",
         detele: "delete",
       },
       // 列表参数
-      namespace: "configs",
+      namespace: "",
       namespaceType: "Array",
       // 表单配置
       formConfig: [
         {
-          type:"select",
-          label:'供应商名称',
-          key:"supplier",
-          optionData:[]
+          type: "select",
+          label: "供应商名称",
+          key: "supplyId",
+          optionData: [
+            { key: 0, value: "供应商A" },
+            { key: 1, value: "供应商B" },
+            { key: 2, value: "供应商C" },
+          ],
         },
         {
-          type:"select",
-          label:'线路名称',
-          key:"supplier",
-          optionData:[]
+          type: "select",
+          label: "线路名称",
+          key: "lineName",
+          optionData: [
+            { key: 0, value: "线路A" },
+            { key: 1, value: "线路B" },
+            { key: 2, value: "线路C" },
+          ],
         },
         {
-          type:"select",
-          label:'号码归属地区',
-          key:"supplier",
-          colSpan:12,
-          optionData:[]
+          type: "select",
+          label: "号码归属地区",
+          key: "privince",
+          colSpan: 12,
+          optionData: [
+            { key: 0, value: "北京" },
+            { key: 1, value: "天津" },
+            { key: 2, value: "河北" },
+          ],
         },
         {
-          type:"select",
-          label:'号码归属运营商',
-          key:"supplier",
-          colSpan:12,
-          optionData:[]
+          type: "select",
+          label: "号码归属运营商",
+          key: "operaId",
+          colSpan: 12,
+          optionData: [
+            // { key: 0, value: "非法" },
+            { key: 1, value: "移动" },
+            { key: 2, value: "联通" },
+            { key: 3, value: "电信" },
+            // { key: 4, value: "国际" },
+          ],
         },
         {
           type: "input",
           label: "单号码月租（元）",
-          key: "userId",
+          key: "numberCost",
           defaultValue: "",
         },
+        // {
+        //   type: "uploadXlsx",
+        //   label: "运营商号码",
+        //   key: "operaNumber",
+        //   uploadUrl:'https://jsonplaceholder.typicode.com/posts/',
+        //   defaultValue: "",
+        // },
         {
-          type: "uploadXlsx",
+          type: "fileUpload",
           label: "运营商号码",
-          key: "smsLongNum",
+          key: "operaNumber",
           defaultValue: "",
         },
       ],
       id: "",
-      allocationConfig:[
+      allocationConfig: [
         {
-          type:"select",
-          label:'供应商名称',
-          key:"supplier",
-          optionData:[]
+          type: "select",
+          label: "供应商名称",
+          key: "supplyId",
+          disabled:true,
+          optionData: [
+             { key: 0, value: "供应商A" },
+            { key: 1, value: "供应商B" },
+            { key: 2, value: "供应商C" },
+          ],
         },
         {
-          type:"select",
-          label:'线路名称',
-          key:"supplier",
-          optionData:[]
+          type: "select",
+          label: "线路名称",
+          key: "lineId",
+          disabled:true,
+          optionData: [
+             { key: 0, value: "线路A" },
+            { key: 1, value: "线路B" },
+            { key: 2, value: "线路C" },
+          ],
         },
         {
-          type:"select",
-          label:'号码归属地区',
-          key:"supplier",
-          colSpan:12,
-          optionData:[]
+          type: "select",
+          label: "号码归属地区",
+          key: "privince",
+          colSpan: 12,
+          disabled:true,
+          optionData: [],
         },
         {
-          type:"select",
-          label:'号码归属运营商',
-          key:"supplier",
-          colSpan:12,
-          optionData:[]
+          type: "select",
+          label: "号码归属运营商",
+          key: "operaId",
+          colSpan: 12,
+          disabled:true,
+          optionData: [],
         },
         {
           type: "input",
           label: "运营商号码",
-          key: "smsLongNum",
+          key: "operaNumber",
+          disabled:true,
           defaultValue: "",
         },
         {
-          type:'divider'
+          type: "divider",
         },
         {
-          type:"select",
-          label:'使用商户',
-          key:"supplier",
-          optionData:[]
+          type: "select",
+          label: "使用商家",
+          key: "userName",
+          optionData: [
+            { key: 0, value: "商户A" },
+            { key: 1, value: "商户B" },
+            { key: 2, value: "商户C" },
+          ],
         },
         {
-          type:"select",
-          label:'商户账号',
-          key:"supplier",
-          optionData:[]
+          type: "select",
+          label: "商家账户",
+          key: "userId",
+          optionData: [
+            { key: 0, value: "商户A" },
+            { key: 1, value: "商户B" },
+            { key: 2, value: "商户C" },
+          ],
         },
         {
-          type:"select",
-          label:'路由类型',
-          key:"supplier",
-          colSpan:12,
-          optionData:[]
+          type: "select",
+          label: "路由类型",
+          key: "routeType",
+          colSpan: 12,
+          optionData: [
+            { key: 0, value: "技能组" },
+            { key: 1, value: "IVR" },
+          ],
         },
         {
-          type:"select",
-          label:'流程名称',
-          key:"supplier",
-          colSpan:12,
-          optionData:[]
+          type: "input",
+          label: "流程名称",
+          key: "sceneName",
+          colSpan: 12,
+          optionData: [],
         },
       ],
-      allocationVisible:false,
-      multipleSelection:[]
+      allocationVisible: false,
+      multipleSelection: [],
     };
   },
   created() {},
@@ -271,29 +347,81 @@ export default {
   computed: {},
   methods: {
     //table 多选
-    handleSelectionChange(val){
-      this.multipleSelection = val
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     },
-    submitAllocation(){},
-    cancelAllocation(){
-      this.allocationVisible = false
+    submitAllocation(form) {
+      console.log(form,'-----')
+      this.$http.inboundcfg.put(form).then(res=>{
+        console.log(res)
+      })
+    },
+    cancelAllocation() {
+      this.allocationVisible = false;
       setTimeout(() => {
         this.$refs.allocationForm.resetForm();
       }, 0);
     },
-    allocation(){
-      this.allocationVisible = true
-      setTimeout(() => {
-        this.$refs.allocationForm.resetForm();
-      }, 0);
-    },
-    addNum(){},
-    deteleNum(){
-      if(this.multipleSelection.length === 0){
-        this.$message.error('请选择一条数据')
+    allocation() {
+      
+      if (this.multipleSelection.length === 0 || this.multipleSelection.length > 1) {
+        this.$message.error("请选择一条数据");
+      } else {
+        this.allocationVisible = true;
+        setTimeout(() => {
+          this.$refs.allocationForm.resetForm();
+          let obj = this.multipleSelection[0]
+          this.allocationConfig.forEach(item=>{
+            if(item.key === 'supplyId'){
+              item.defaultValue = obj.supplyId
+            }
+            if(item.key === 'lineId'){
+              item.defaultValue = obj.lineId
+            }
+            if(item.key === 'privince'){
+              item.defaultValue = obj.privince
+            }
+            if(item.key === 'operaId'){
+              item.defaultValue = obj.operaId
+            }
+            if(item.key === 'operaNumber'){
+              item.defaultValue = obj.operaNumber
+            }
+          })
+          // console.log()
+          // this._setDefaultValue(this.allocationConfig,[],'supplyId',obj.supplyId)
+          // this._setDefaultValue(this.allocationConfig,[],'lineId',obj.lineId)
+          // this._setDefaultValue(this.allocationConfig,[],'privince',obj.privince)
+          // this._setDefaultValue(this.allocationConfig,[],'operaId',obj.operaId)
+          // this._setDefaultValue(this.allocationConfig,[],'operaNumber',obj.operaNumber)
+          // this.allocationConfig.forEach(item=>{
+
+          // })
+        }, 0);
       }
     },
-    exportNum(){},
+    addNum() {},
+    deteleNum() {},
+    exportNum() {
+      this.$http.inboundcfg.exportExcel().then(res=>{
+        console.log(res)
+      })
+    },
+    _mxHandleSubmit(form){
+      let params = this.jsonToFormData(form)
+      this.$http.inboundcfg.batchcreate(params).then(res=>{
+        console.log(res)
+      })
+    },
+    changeFileUpload( { item, e }){
+      if(item.key === "operaNumber"){
+        this.formConfig.forEach(i=>{
+          if(i.key === item.key){
+            i.defaultValue = e.target.files[0]
+          }
+        })
+      }
+    }
   },
   watch: {},
 };

@@ -18,30 +18,57 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="线路名称" />
-      <el-table-column prop="corpId" label="供应商名称" />
-      <el-table-column prop="corpId" label="供应商账户" />
-      <el-table-column prop="corpId" label="对接方式" />
-      <el-table-column prop="corpId" label="线路并发数" />
-      <el-table-column prop="corpId" label="IP地址" />
-      <el-table-column prop="corpId" label="端口" />
-      <el-table-column prop="corpId" label="注册账号" />
-      <el-table-column prop="corpId" label="可用状态" />
-      <el-table-column prop="corpId" label="落地省份" />
-      <el-table-column prop="corpId" label="归属运营商" />
-      <el-table-column prop="corpId" label="线路类型" />
-      <el-table-column prop="corpId" label="备注" />
+      <el-table-column prop="lineName" label="线路名称" />
+      <el-table-column prop="userName" label="供应商名称" />
+      <el-table-column prop="userId" label="供应商账户" />
+      <el-table-column prop="linkType" label="对接方式">
+        <template slot-scope="{row}">
+          <span v-if="row.linkType === 0">SIP对接</span>
+          <span v-if="row.linkType === 1">账号注册</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="concurrentCount" label="线路并发数" />
+      <el-table-column prop="ip" label="服务器IP地址" />
+      <el-table-column prop="port" label="端口" />
+      <el-table-column prop="sipAccount" label="注册账号" />
+      <el-table-column prop="status" label="可用状态" >
+          <template slot-scope="{row}">
+          <span v-if="row.status === 0">禁用</span>
+          <span v-if="row.status === 1">启用</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="city" label="落地省份" >
+        <template slot-scope="{row}">
+          <span>{{row.province}} - {{row.city}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="operaId" label="归属运营商" >
+        <template slot-scope="{row}">
+          <span v-if="row.operaId === 0">非法</span>
+          <span v-if="row.operaId === 1">移动</span>
+          <span v-if="row.operaId === 2">联通</span>
+          <span v-if="row.operaId === 3">电信</span>
+          <span v-if="row.operaId === 4">国际</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="lineType" label="线路类型" >
+        <template slot-scope="{row}">
+          <span v-if="row.lineType === 0">直连</span>
+          <span v-if="row.lineType === 1">第三方</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="remarks" label="备注" />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click="_mxEdit(scope.row, 'lineId')"
             type="text"
             size="small"
             >修改</el-button
           >
           <el-button
             @click="
-              _mxDeleteItem('templateId', scope.row.templateId, false, true)
+              _mxDeleteItem('templateId', scope.row.lineId, false, true)
             "
             type="text"
             size="small"
@@ -144,38 +171,37 @@ export default {
         {
           type: "select",
           label: "对接方式",
-          key: "sign",
+          key: "linkType",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "SIP对接" },
-            { key: "3", value: "账号注册" },
+            { key: 0, value: "SIP对接" },
+            { key: 1, value: "账号注册" },
           ],
         },
         {
           type: "select",
           label: "线路类型",
-          key: "signs",
+          key: "lineType",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "直连" },
-            { key: "3", value: "第三方" },
+            { key: 0, value: "直连" },
+            { key: 1, value: "第三方" },
           ],
         },
         {
           type: "select",
           label: "运营商",
-          key: "signs",
+          key: "operaId",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "移动" },
-            { key: "3", value: "联通" },
-            { key: "4", value: "电信" },
+            { key: 0, value: "非法" },
+            { key: 1, value: "移动" },
+            { key: 2, value: "联通" },
+            { key: 3, value: "电信" },
+            { key: 4, value: "国际" },
           ],
         },
         {
           type: "select",
           label: "落地省份",
-          key: "signs",
+          key: "city",
           optionData: [
             { key: "1", value: "全部" },
             { key: "2", value: "停用" },
@@ -185,11 +211,10 @@ export default {
         {
           type: "select",
           label: "状态",
-          key: "signs",
+          key: "status",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "停用" },
-            { key: "3", value: "有效" },
+            { key: 0, value: "禁用" },
+            { key: 1, value: "启用" },
           ],
         },
       ],
@@ -197,27 +222,24 @@ export default {
       searchParam: {},
       //接口地址
       searchAPI: {
-        namespace: "smslongnum",
-        list: "list",
+        namespace: "linecfg",
+        list: "get",
+        add: "post",
+        edit: "put",
         detele: "delete",
       },
+      isParamsNotData: false,
+      submitParamsIsData: false,
       // 列表参数
-      namespace: "configs",
+      namespace: "",
       namespaceType: "Array",
       // 表单配置
       formConfig: [
         {
           type: "input",
           label: "供应商名称",
-          key: "userId",
+          key: "supplyId",
           defaultValue: "",
-          rules: [
-            {
-              required: true,
-              message: "请输入必填项",
-              trigger: ["blur", "change"],
-            },
-          ],
         },
         {
           type: "input",
@@ -228,76 +250,101 @@ export default {
         {
           type: "input",
           label: "线路名称",
-          key: "userId",
+          key: "lineName",
           defaultValue: "",
         },
         {
           type: "select",
           label: "线路类型",
-          key: "userId",
+          key: "lineType",
           defaultValue: "",
           optionData: [
-            { key: "1", value: "普通坐席" },
-            { key: "2", value: "企业管理员" },
+            { key: 0, value: "直连" },
+            { key: 1, value: "第三方" },
           ],
+          colSpan:12
         },
         {
           type: "select",
           label: "运营商",
-          key: "userId",
+          key: "operaId",
           defaultValue: "",
           optionData: [
-            { key: "1", value: "普通坐席" },
-            { key: "2", value: "企业管理员" },
+            { key: 0, value: "非法" },
+            { key: 1, value: "移动" },
+            { key: 2, value: "联通" },
+            { key: 3, value: "电信" },
+            { key: 4, value: "国际" },
           ],
+          colSpan:12
         },
         {
-          type: "select",
-          label: "落地城市",
-          key: "userId",
+          type: "input",
+          label: "落地省份",
+          key: "province",
           defaultValue: "",
-          optionData: [
-            { key: "1", value: "普通坐席" },
-            { key: "2", value: "企业管理员" },
-          ],
+          colSpan:12
         },
+        {
+          type: "input",
+          label: "落地城市",
+          key: "city",
+          defaultValue: "",
+          colSpan:12
+        },
+        // {
+        //   type: "select",
+        //   label: "落地城市",
+        //   key: "userId",
+        //   defaultValue: "",
+        //   optionData: [
+        //     { key: "1", value: "普通坐席" },
+        //     { key: "2", value: "企业管理员" },
+        //   ],
+        //   colSpan:12
+        // },
         {
           type: "select",
           label: "状态",
-          key: "userId",
+          key: "status",
           defaultValue: "",
           optionData: [
-            { key: "1", value: "有效" },
-            { key: "2", value: "停用" },
+            { key: 0, value: "禁用" },
+            { key: 1, value: "启用" },
           ],
+          colSpan:12
         },
         {
           type: "input",
           label: "线路并发数",
-          key: "userId",
+          key: "concurrentCount",
           defaultValue: "",
+          colSpan:12
         },
         {
           type: "select",
           label: "对接方式",
-          key: "userId",
+          key: "linkType",
           defaultValue: "",
           optionData: [
-            { key: "1", value: "有效" },
-            { key: "2", value: "停用" },
+            { key: 0, value: "SIP对接" },
+            { key: 1, value: "账号注册" },
           ],
+          colSpan:12
         },
         {
           type: "input",
           label: "服务器IP",
-          key: "userId",
+          key: "ip",
           defaultValue: "",
+          colSpan:12
         },
         {
           type: "input",
           label: "信令端口",
-          key: "userId",
+          key: "port",
           defaultValue: "",
+          colSpan:12
         },
       ],
       id: "",

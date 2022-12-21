@@ -487,6 +487,11 @@
                       handleProgress(item, event, file, fileList);
                     }
                   "
+                  :on-change="
+                    (file, fileList) => {
+                      handleChange(item, file, fileList);
+                    }
+                  "
                   :on-error="handleError"
                   :limit="item.limit || 1"
                   :file-list="item.defaultFileList || []"
@@ -497,6 +502,18 @@
                   }}</el-button>
                 </el-upload>
               </div>
+            </template>
+            <!-- input上传 获取file文件 -->
+            <template v-if="item.type === 'fileUpload'">
+              <!-- <el-button type="primary">上传</el-button> -->
+              <input
+                ref="fileUpload"
+                type="file"
+                name="fileUpload"
+                accept="*"
+                @change="(e) => { changeFileUpload(item,e) }"
+                :title="item.title || '未选择任何文件'"
+              />
             </template>
             <p v-if="item.tip" class="tip">{{ item.tip }}</p>
           </el-form-item>
@@ -631,6 +648,7 @@ export default {
   },
   computed: {},
   methods: {
+    
     upLoadUrl(item) {
       return item.uploadUrl || this.action;
     },
@@ -770,6 +788,10 @@ export default {
         this.$set(item, "defaultValue", val);
       }
     },
+    //input 上传
+    changeFileUpload(item,e){
+      this.$emit("changeFileUpload", { item,e });
+    },
     //  文件上传成功时的钩子
     handleSuccess(item, response, file, fileList) {
       this.submitDisabled = false;
@@ -786,6 +808,9 @@ export default {
       this.$nextTick(() => {
         this.submitDisabled = true;
       });
+    },
+    handleChange(item, file, fileList){
+      this.$emit("handleChange", { item, file, fileList });    
     },
     //  文件上传时的钩子
     handleProgress(item, event, file, fileList) {

@@ -14,24 +14,29 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="商家账号" />
-      <el-table-column prop="corpId" label="座席姓名" />
-      <el-table-column prop="corpId" label="工号" />
-      <el-table-column prop="corpId" label="座席密码" />
-      <el-table-column prop="corpId" label="角色" />
-      <el-table-column prop="corpId" label="归属技能组" />
-      <el-table-column prop="corpId" label="状态" />
+      <el-table-column prop="userId" label="商家账号" />
+      <el-table-column prop="attendName" label="座席姓名" />
+      <el-table-column prop="jobNumber" label="工号" />
+      <el-table-column prop="pwd" label="座席密码" />
+      <el-table-column prop="attendroleId" label="角色" />
+      <el-table-column prop="skillgroupId" label="归属技能组" />
+      <el-table-column prop="status" label="状态">
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">禁用</span>
+          <span v-if="row.status == 1">启用</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click="_mxEdit(scope.row, 'attendId')"
             type="text"
             size="small"
             >修改</el-button
           >
           <el-button
             @click="
-              _mxDeleteItem('templateId', scope.row.templateId, false, true)
+              _mxDeleteItem('attendId', scope.row.attendId, false, false)
             "
             type="text"
             size="small"
@@ -72,13 +77,13 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商家账号", key: "corpName" },
-        { type: "input", label: "座席名称", key: "corpNames" },
-        { type: "inputNum", label: "工号", key: "userId" },
+        { type: "input", label: "商家账号", key: "userName" },
+        { type: "input", label: "座席名称", key: "attendName" },
+        { type: "inputNum", label: "工号", key: "jobNumber" },
         {
           type: "select",
           label: "角色",
-          key: "sign",
+          key: "attendroleId",
           optionData: [
             { key: "1", value: "全部" },
             { key: "2", value: "普通坐席" },
@@ -88,7 +93,7 @@ export default {
         {
           type: "select",
           label: "归属技能组",
-          key: "signs",
+          key: "skillgroupId",
           optionData: [
             { key: "1", value: "全部" },
             { key: "2", value: "技能组A" },
@@ -98,24 +103,27 @@ export default {
         {
           type: "select",
           label: "状态",
-          key: "signs",
+          key: "status",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "停用" },
-            { key: "3", value: "有效" },
+            { key: 0, value: "禁用" },
+            { key: 1, value: "启用" },
           ],
         },
       ],
+      isParamsNotData: false,
+      submitParamsIsData: false,
       //搜索框数据
       searchParam: {},
       //接口地址
       searchAPI: {
-        namespace: "smslongnum",
+        namespace: "attend",
         list: "list",
+        add: "updateAndSaveAttend",
+        edit: "updateAndSaveAttend",
         detele: "delete",
       },
       // 列表参数
-      namespace: "configs",
+      namespace: "",
       namespaceType: "Array",
       // 表单配置
       formConfig: [
@@ -124,36 +132,29 @@ export default {
           label: "商家名称",
           key: "userId",
           defaultValue: "",
-          rules: [
-            {
-              required: true,
-              message: "请输入必填项",
-              trigger: ["blur", "change"],
-            },
-          ],
         },
         {
           type: "input",
           label: "座席姓名",
-          key: "userId",
+          key: "attendName",
           defaultValue: "",
         },
         {
           type: "input",
           label: "工号",
-          key: "userId",
+          key: "jobNumber",
           defaultValue: "",
         },
         {
           type: "input",
           label: "密码",
-          key: "userId",
+          key: "pwd",
           defaultValue: "",
         },
         {
           type: "select",
           label: "座席角色",
-          key: "userId",
+          key: "attendroleId",
           defaultValue: "",
           optionData:[
             {key:'1',value:'普通坐席'},
@@ -163,11 +164,11 @@ export default {
         {
           type: "select",
           label: "状态",
-          key: "userId",
+          key: "status",
           defaultValue: "",
           optionData:[
-            {key:'1',value:'有效'},
-            {key:'2',value:'停用'},
+            { key: 1, value: "启用" },
+            { key: 0, value: "禁用" },
           ],
         },
       ],

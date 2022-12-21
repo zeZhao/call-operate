@@ -57,10 +57,10 @@ class callPlugin {
     {
       window.resOk = function (res = {}) {
         const {
-          code
+          state
         } = res
-        if (code === '200' || code === 200 || res.data) {
-          if (code === 500 || code === '500') {
+        if (state === '200' || state === 200 || res.data) {
+          if (state === 9000 || state === '9000') {
             return false
           }
           return true;
@@ -102,10 +102,22 @@ class callPlugin {
       }
       return objClone;
     }
-    /**
+    /* 
+    json数据格式转换为formdata格式
+    */
+    Vue.prototype.jsonToFormData = function jsonToFormData(config) { 
+      const formData = new FormData();
+      //循环传入的值转换formData
+      Object.keys(config).forEach((key) => {
+          
+          formData.append(key, config[key]);
+      })
+      return formData;
+    };
+    /**   
      * 根据数据流下载文件
      */
-    Vue.prototype.downloadFileByFile = function ( url, params, fileName) {
+    Vue.prototype.downloadFileByFile = function (url, params, fileName) {
       this.$axios
         .post(
           url,

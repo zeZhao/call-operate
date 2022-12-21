@@ -366,6 +366,7 @@ export default {
         } else {
           params = id.toString()
         }
+        
 
         const { namespace, detele } = this.searchAPI;
         this.$http[namespace][detele](params).then(res => {
@@ -559,7 +560,8 @@ export default {
         this._mxGetList();
         this.addChannel = false;
       } else {
-        this.$message.error(res.data || res.msg);
+        console.log(111)
+        this.$message.error(res.msg || res.data);
       }
     },
 

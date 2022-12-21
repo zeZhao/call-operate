@@ -32,7 +32,7 @@ const constRouterList = [
     component:Layout,
     // redirect: "/partner/company",
     meta: {
-      title: '合作方管理',
+      title: '账户管理',
     },
     children:[
       {
@@ -40,7 +40,7 @@ const constRouterList = [
         name:"company",
         component: () => import(/* webpackChunkName: "about" */ '@/views/partner/company/index.vue'),
         meta: {
-          title: '企业管理',
+          title: '合作方管理',
         }
       },
       {
@@ -103,48 +103,48 @@ const constRouterList = [
       },
     ]
   },
-  {
-    path: '/dataQuery',
-    name: 'dataQuery',
-    component: Layout,
-    meta: {
-      title: '数据查询',
-    },
-    children: [
-      {
-        path: '/dataQuery/callList',
-        name: 'callList',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/callList/index.vue'),
-        meta: {
-          title: '通话详单',
-        },
-      },
-      {
-        path: '/dataQuery/PhoneLog',
-        name: 'PhoneLog',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/PhoneLog/index.vue'),
-        meta: {
-          title: '短信记录',
-        },
-      },
-      {
-        path: '/dataQuery/AIrecord',
-        name: 'AIrecord',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/AIrecord/index.vue'),
-        meta: {
-          title: 'AI对话记录',
-        },
-      },
-      {
-        path: '/dataQuery/recording',
-        name: 'recording',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/recording/index.vue'),
-        meta: {
-          title: '录音记录',
-        },
-      },
-    ]
-  },
+  // {
+  //   path: '/dataQuery',
+  //   name: 'dataQuery',
+  //   component: Layout,
+  //   meta: {
+  //     title: '数据查询',
+  //   },
+  //   children: [
+  //     {
+  //       path: '/dataQuery/callList',
+  //       name: 'callList',
+  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/callList/index.vue'),
+  //       meta: {
+  //         title: '通话详单',
+  //       },
+  //     },
+  //     {
+  //       path: '/dataQuery/PhoneLog',
+  //       name: 'PhoneLog',
+  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/PhoneLog/index.vue'),
+  //       meta: {
+  //         title: '短信记录',
+  //       },
+  //     },
+  //     {
+  //       path: '/dataQuery/AIrecord',
+  //       name: 'AIrecord',
+  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/AIrecord/index.vue'),
+  //       meta: {
+  //         title: 'AI对话记录',
+  //       },
+  //     },
+  //     {
+  //       path: '/dataQuery/recording',
+  //       name: 'recording',
+  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/recording/index.vue'),
+  //       meta: {
+  //         title: '录音记录',
+  //       },
+  //     },
+  //   ]
+  // },
   {
     path: '/line',
     name: 'line',
@@ -166,7 +166,7 @@ const constRouterList = [
         name: 'secretFriend',
         component: () => import(/* webpackChunkName: "about" */ '@/views/line/secretFriend/index.vue'),
         meta: {
-          title: '号码管理',
+          title: '呼入配置',
         },
       },
     ]

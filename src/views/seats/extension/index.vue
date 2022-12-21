@@ -14,28 +14,43 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="商家账户" />
-      <el-table-column prop="corpId" label="分机号" />
-      <el-table-column prop="corpId" label="分机密码" />
-      <el-table-column prop="corpId" label="分机类型" />
-      <el-table-column prop="corpId" label="绑定座席" />
-      <el-table-column prop="corpId" label="外呼主叫" />
-      <el-table-column prop="corpId" label="外呼线路" />
-      <el-table-column prop="corpId" label="分机昵称" />
-      <el-table-column prop="corpId" label="作为批量外呼主叫" />
-      <el-table-column prop="corpId" label="是否录音" />
-      <el-table-column prop="corpId" label="状态" />
+      <el-table-column prop="userId" label="商家账户" />
+      <el-table-column prop="ext" label="分机号" />
+      <el-table-column prop="pwd" label="分机密码" />
+      <el-table-column prop="extType" label="分机类型" >
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">网页电话</span>
+          <span v-if="row.status == 1">SIP话机</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="attendName" label="绑定座席" />
+      <el-table-column prop="caller" label="外呼主叫" />
+      <el-table-column prop="lineId" label="外呼线路" />
+      <el-table-column prop="extName" label="分机昵称" />
+      <el-table-column prop="isBatchcaller" label="作为批量外呼主叫" />
+      <el-table-column prop="isRecording" label="是否录音">
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">否</span>
+          <span v-if="row.status == 1">是</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="status" label="状态" >
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">禁用</span>
+          <span v-if="row.status == 1">启用</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click="_mxEdit(scope.row, 'extId')"
             type="text"
             size="small"
             >修改</el-button
           >
           <el-button
             @click="
-              _mxDeleteItem('templateId', scope.row.templateId, false, true)
+              _mxDeleteItem('extId', scope.row.extId, false, false)
             "
             type="text"
             size="small"
@@ -49,70 +64,21 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     ></Page>
+    
     <el-dialog
       :title="formTit"
       :visible.sync="addChannel"
       :close-on-click-modal="false"
       top="45px"
     >
-      <el-form :model="form" label-position="left" label-width="80px" ref="form">
-        <el-form-item label="商家名称：">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="分机号：">
-          <el-row>
-            <el-col :span="2">
-              <el-input v-model="form.name"></el-input>
-            </el-col>
-            <el-col :span="2" style="text-align:center">
-              <span>-</span>
-            </el-col>
-            <el-col :span="2">
-              <el-input v-model="form.name"></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="分机密码：">
-          <el-row>
-            <el-col :span="9"
-              ><el-radio-group v-model="form.passWord">
-                <el-radio :label="1">随机生成</el-radio>
-                <el-radio :label="2">指定密码</el-radio>
-              </el-radio-group></el-col>
-            <el-col :span="6">
-              <el-input
-                v-model="form.passwd"
-                v-if="form.passWord == 2"
-              ></el-input
-            ></el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="分机类型：">
-          <el-select v-model="form.type">
-            <el-option :value="1">网页电话</el-option>
-            <el-option :value="2">SIP话机</el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="外呼线路：">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="外呼主叫：">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="是否录音：">
-          <el-select v-model="form.type">
-            <el-option :value="1">是</el-option>
-            <el-option :value="2">否</el-option>
-          </el-select>
-        </el-form-item>
-        <el-checkbox v-model="form.extension"
-          >按照分机信息生成并绑定座席</el-checkbox
-        >
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addChannel = false">取 消</el-button>
-        <el-button type="primary" @click="addChannel = false">确 定</el-button>
-      </span>
+      <FormItem
+        ref="formItem"
+        :formConfig="formConfig"
+        :btnTxt="formTit"
+        @submit="_mxHandleSubmit"
+        @cancel="_mxCancel"
+        @onChange="onChange"
+      ></FormItem>
     </el-dialog>
   </div>
 </template>
@@ -126,22 +92,21 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商家账号", key: "corpName" },
-        { type: "input", label: "分机号", key: "corpNames" },
+        { type: "input", label: "商家账号", key: "userName" },
+        { type: "input", label: "分机号", key: "ext" },
         {
           type: "select",
           label: "分机类型",
-          key: "sign",
+          key: "extType",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "1", value: "SIP话机" },
-            { key: "2", value: "网页电话" },
+            { key: 1, value: "SIP话机" },
+            { key: 0, value: "网页电话" },
           ],
         },
         {
           type: "select",
           label: "外呼线路",
-          key: "signs",
+          key: "lineId",
           optionData: [
             { key: "1", value: "全部" },
             { key: "2", value: "线路A" },
@@ -151,27 +116,25 @@ export default {
         {
           type: "select",
           label: "状态",
-          key: "signs",
+          key: "status",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "有效" },
-            { key: "3", value: "停用" },
+            { key: 1, value: "启用" },
+            { key: 0, value: "禁用" },
           ],
         },
         {
           type: "select",
           label: "是否录音",
-          key: "signs",
+          key: "isRecording",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "是" },
-            { key: "3", value: "否" },
+            { key: 1, value: "是" },
+            { key: 0, value: "否" },
           ],
         },
         {
           type: "select",
           label: "绑定座席",
-          key: "signs",
+          key: "attendId",
           optionData: [
             { key: "1", value: "全部" },
             { key: "2", value: "张三" },
@@ -179,16 +142,20 @@ export default {
           ],
         },
       ],
+      isParamsNotData: false,
+      submitParamsIsData: false,
       //搜索框数据
       searchParam: {},
       //接口地址
       searchAPI: {
-        namespace: "smslongnum",
+        namespace: "extensions",
         list: "list",
+        add: "saveExtensions",
+        edit: "updateExtensions",
         detele: "delete",
       },
       // 列表参数
-      namespace: "configs",
+      namespace: "",
       namespaceType: "Array",
       // 表单配置
       form: {
@@ -198,12 +165,192 @@ export default {
         passwd: "",
       },
       id: "",
+      // 表单配置
+      formConfig: [
+        {
+          type: "input",
+          label: "商家名称",
+          key: "userId",
+          defaultValue: "",
+        },
+        {
+          type: "input",
+          label: "分机数",
+          key: "extNum",
+          defaultValue: "",
+        },
+        {
+          type: "radio",
+          label: "分机密码类型",
+          key: "pwdType",
+          defaultValue: 1,
+          optionData:[
+            { key: 1, value: "随机生成" },
+            { key: 2, value: "指定密码" },
+          ]
+        },
+        {
+          type: "input",
+          label: "密码",
+          key: "pwd",
+          isShow:true,
+          defaultValue: "",
+        },
+        {
+          type: "select",
+          label: "分机类型",
+          key: "extType",
+          defaultValue: "",
+          optionData:[
+            { key: 1, value: "sip电话" },
+            { key: 0, value: "web电话" },
+          ],
+          colSpan:12
+        },
+        {
+          type: "select",
+          label: "是否录音",
+          key: "isRecording",
+          defaultValue: "",
+          optionData:[
+            { key: 1, value: "是" },
+            { key: 0, value: "否" },
+          ],
+          colSpan:12
+        },
+        {
+          type: "select",
+          label: "外呼线路",
+          key: "lineId",
+          defaultValue: "",
+          optionData:[
+            { key: 1, value: "外呼线路1" },
+            { key: 0, value: "外呼线路2" },
+          ],
+          colSpan:12
+        },
+        {
+          type: "input",
+          label: "外呼主叫",
+          key: "caller",
+          defaultValue: "",
+          colSpan:12
+        },
+        {
+          type: "checkbox",
+          label: "",
+          key: "isBatchcaller",
+          defaultValue: "",
+          optionData:[
+            { key: 1, value: "作为批量外呼主叫" },
+          ],
+          colSpan:12
+        },
+        {
+          type: "checkbox",
+          label: "",
+          key: "autogeneration",
+          defaultValue: "",
+          optionData:[
+            { key: 1, value: "自动生成并绑定座席" },
+          ],
+          colSpan:12
+        },
+        {
+          type: "input",
+          label: "主叫昵称",
+          key: "extName",
+          defaultValue: "",
+          isShow:true,
+          colSpan:12
+        },
+        
+        {
+          type: "input",
+          label: "座席起始工号",
+          key: "jobNumberStart",
+          defaultValue: "",
+          isShow:true,
+          colSpan:12
+        },
+      ],
     };
   },
   created() {},
   mounted() {},
   computed: {},
-  methods: {},
+  methods: {
+    _mxCreate(){
+      this.addChannel = true;
+      this.formTit = "新增";
+      setTimeout(() => {
+        this.$refs.formItem.resetForm();
+        this._setDisplayShow(this.formConfig,'pwd',true)
+        this._setDisplayShow(this.formConfig,'extName',true)
+        this._setDisplayShow(this.formConfig,'jobNumberStart',true)
+        this._setDisplayShow(this.formConfig,'isBatchcaller',false)
+        this._setDisplayShow(this.formConfig,'autogeneration',false)
+        this._setDisplayShow(this.formConfig,'extNum',false)
+        this._setDisplayShow(this.formConfig,'pwdType',false)
+      }, 0);
+    },
+    _mxEdit(row, ID) {
+      row = this._mxArrangeEditData(row);
+      this.id = row[ID];
+      this.editId = ID;
+      this.formTit = "修改";
+      this.formConfig.forEach(item => {
+        for (let key in row) {
+          if (item.key === key && row[key] !== "-") {
+            this.$set(item, "defaultValue", row[key]);   
+          }
+        }
+        if (!Object.keys(row).includes(item.key)) {
+          this.$set(item, "defaultValue", "");
+        }
+      });
+      this._setDisplayShow(this.formConfig,'extNum',true)
+      this._setDisplayShow(this.formConfig,'pwdType',true)
+      this._setDisplayShow(this.formConfig,'autogeneration',true)
+      this._setDisplayShow(this.formConfig,'jobNumberStart',true)
+      this._setDisplayShow(this.formConfig,'isBatchcaller',true)
+      this._setDisplayShow(this.formConfig,'pwd',false)
+      
+      setTimeout(() => {
+        this.$refs.formItem.clearValidate();
+      }, 0);
+      this.addChannel = true;
+    },
+    onChange({val,item}){
+      const {key } = item 
+      if( key === 'pwdType'){
+        if(val == 2){
+          this._setDisplayShow(this.formConfig,'pwd',false)
+        }else{
+          this._setDisplayShow(this.formConfig,'pwd',true)
+        }
+      }
+      if( key === 'isBatchcaller'){
+        if(val == 1){
+          this._setDisplayShow(this.formConfig,'extName',false)
+        }else{
+          this._setDisplayShow(this.formConfig,'extName',true)
+        }
+      }
+      if( key === 'autogeneration'){
+        if(val == 1){
+          this._setDisplayShow(this.formConfig,'jobNumberStart',false)
+        }else{
+          this._setDisplayShow(this.formConfig,'jobNumberStart',true)
+        }
+      }
+    },
+    _mxArrangeSubmitData(formData){
+      let form = Object.assign({},formData)
+      form.isBatchcaller = formData.isBatchcaller[0]
+      return form
+    }
+  },
   watch: {},
 };
 </script>
