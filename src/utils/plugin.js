@@ -2,6 +2,8 @@ import Page from "@/components/Page"
 import Search from "@/components/searchPanel"
 import FormItem from "@/components/FormItem"
 import Api from "@/utils/api.js";
+import axios from "axios";
+import { setStorage, getStorage } from "@/utils/auth";
 
 class callPlugin {
 
@@ -109,7 +111,7 @@ class callPlugin {
       const formData = new FormData();
       //循环传入的值转换formData
       Object.keys(config).forEach((key) => {
-          
+
           formData.append(key, config[key]);
       })
       return formData;
@@ -118,13 +120,13 @@ class callPlugin {
      * 根据数据流下载文件
      */
     Vue.prototype.downloadFileByFile = function (url, params, fileName) {
-      this.$axios
+      axios
         .post(
           url,
           { ...params },
           {
             responseType: "blob",
-            headers: { token: window.localStorage.getItem("token") }
+            headers: { token: getStorage("token") }
           }
         )
         .then(res => {

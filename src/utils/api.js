@@ -7,6 +7,18 @@ export default {
       return request('/sysLogin/login', 'post', data)
     }
   },
+  // 下拉接口
+  select: {
+    //获取公司
+    // corpType（0:商家,1:代理商,2:供应商）
+    queryCorpByCorpType(data) {
+      return request('/corp/queryCorpByCorpType', 'get', data)
+    },
+    // 获取供应商
+    listAll(data) {
+      return request('/corpSupply/listAll', 'post', data)
+    },
+  },
   //账户
   sysUser: {
     //列表
@@ -113,7 +125,7 @@ export default {
       return request('/corpSupply/delete', 'get', data)
     },
   },
-  //供应商
+  //代理商
   corpAgent: {
     //列表
     list(data) {
@@ -216,4 +228,14 @@ export default {
       return request('/inboundcfg/exportExcel', 'post', data , true)
     },
   },
+  rechargeWater:{
+    //短信充值记录
+    smsRechargeLog(data){  
+      return request('/smsRechargeLog/get/rechargeWater/detail', 'post', data)
+    },
+    //语音充值记录
+    speechRechargeLog(data){  
+      return request('/speechRechargeLog/get/rechargeWater/detail', 'post', data)
+    },
+  }
 }

@@ -16,8 +16,8 @@
       <el-table-column prop="comboName" label="套餐名称" />
       <el-table-column prop="comboType" label="套餐类型" >
         <template slot-scope="{ row }">
-          <span v-if="row.comboType == 0">禁用</span>
-          <span v-if="row.comboType == 1">可用</span>
+          <span v-if="row.comboType == 0">通话</span>
+          <span v-if="row.comboType == 1">录音</span>
         </template>
       </el-table-column>
       <el-table-column prop="cycle" label="租用周期" />
@@ -138,8 +138,8 @@ export default {
           key: "comboType",
           defaultValue: "",
           optionData: [
-            { key: 1, value: "代理商" },
-            { key: 0, value: "运营" },
+            { key: 1, value: "录音" },
+            { key: 0, value: "通话" },
           ],
         },
         {

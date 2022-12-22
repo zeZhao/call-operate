@@ -1,22 +1,21 @@
 <template>
   <div class="agent">
-    <Search
+    <!-- <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
       :add="false"
-    ></Search>
+    ></Search> -->
     <h4 class="textLeft margin10">下表是语音充值记录</h4>
     <el-table
-      :data="listData"
+      :data="listData1"
       border
       highlight-current-row
       style="width: 100%"
     >
       <el-table-column label="序号" type="index" align="center"/>
-      <el-table-column prop="corpId" label="公司名称" />
-      <el-table-column prop="corpId" label="账户名称" />
-      <el-table-column prop="corpId" label="账户身份" />
-      <el-table-column prop="corpId" label="账户身份" />
+      <el-table-column prop="corpName" label="公司名称" />
+      <el-table-column prop="userName" label="账户名称" />
+      <el-table-column prop="userType" label="账户身份" />
       <el-table-column prop="corpId" label="操作类型" />
       <el-table-column prop="corpId" label="缴费金额（元）" />
       <el-table-column prop="corpId" label="账户余额（元）" />
@@ -24,28 +23,10 @@
       <el-table-column prop="corpId" label="操作人" />
       <el-table-column prop="corpId" label="操作人身份" />
       <el-table-column prop="corpId" label="备注" />
-      <el-table-column label="操作" width="100" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
-            type="text"
-            size="small"
-            >修改</el-button
-          >
-          <el-button
-            @click="
-              _mxDeleteItem('templateId', scope.row.templateId, false, true)
-            "
-            type="text"
-            size="small"
-            >删除
-          </el-button>
-        </template>
-      </el-table-column>
     </el-table>
     <h4 class="textLeft margin10">下表是短信充值记录</h4>
     <el-table
-      :data="listData"
+      :data="listData2"
       border
       highlight-current-row
       style="width: 100%"
@@ -64,24 +45,6 @@
       <el-table-column prop="corpId" label="操作人" />
       <el-table-column prop="corpId" label="操作人身份" />
       <el-table-column prop="corpId" label="备注" />
-      <el-table-column label="操作" width="100" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
-            type="text"
-            size="small"
-            >修改</el-button
-          >
-          <el-button
-            @click="
-              _mxDeleteItem('templateId', scope.row.templateId, false, true)
-            "
-            type="text"
-            size="small"
-            >删除
-          </el-button>
-        </template>
-      </el-table-column>
     </el-table>
     <Page
       :pageObj="pageObj"
@@ -115,13 +78,29 @@ export default {
           label: "开户时间",
           key: ["", "submitStartTime1", "submitEndTime1"]
         },
-      ]
+      ],
+      listData1:[],
+      listData2:[]
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getSmsRechargeLog()
+    this.getSpeechRechargeLog()
+  },
   computed: {},
-  methods: {},
+  methods: {
+    getSmsRechargeLog(){
+      this.$http.rechargeWater.smsRechargeLog({}).then(res=>{
+        this.listData2 = res.data.list
+      })
+    },
+    getSpeechRechargeLog(){
+      this.$http.rechargeWater.speechRechargeLog({}).then(res=>{
+        this.listData1 = res.data.list
+      })
+    }
+  },
   watch: {},
 };
 </script>

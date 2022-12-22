@@ -157,13 +157,6 @@ export default {
       // 列表参数
       namespace: "",
       namespaceType: "Array",
-      // 表单配置
-      form: {
-        name: "",
-        type: "",
-        password: "",
-        passwd: "",
-      },
       id: "",
       // 表单配置
       formConfig: [
@@ -179,6 +172,7 @@ export default {
           key: "extNum",
           defaultValue: "",
         },
+        
         {
           type: "radio",
           label: "分机密码类型",
@@ -188,6 +182,13 @@ export default {
             { key: 1, value: "随机生成" },
             { key: 2, value: "指定密码" },
           ]
+        },
+        {
+          type: "input",
+          label: "分机号",
+          key: "ext",
+          isShow:true,
+          defaultValue: "",
         },
         {
           type: "input",
@@ -204,6 +205,16 @@ export default {
           optionData:[
             { key: 1, value: "sip电话" },
             { key: 0, value: "web电话" },
+          ],
+          colSpan:12
+        },
+        {
+          type: "select",
+          label: "状态",
+          key: "status",
+          optionData: [
+            { key: 1, value: "启用" },
+            { key: 0, value: "禁用" },
           ],
           colSpan:12
         },
@@ -288,6 +299,8 @@ export default {
         this._setDisplayShow(this.formConfig,'pwd',true)
         this._setDisplayShow(this.formConfig,'extName',true)
         this._setDisplayShow(this.formConfig,'jobNumberStart',true)
+        this._setDisplayShow(this.formConfig,'status',true)
+        this._setDisplayShow(this.formConfig,'ext',true)
         this._setDisplayShow(this.formConfig,'isBatchcaller',false)
         this._setDisplayShow(this.formConfig,'autogeneration',false)
         this._setDisplayShow(this.formConfig,'extNum',false)
@@ -302,7 +315,7 @@ export default {
       this.formConfig.forEach(item => {
         for (let key in row) {
           if (item.key === key && row[key] !== "-") {
-            this.$set(item, "defaultValue", row[key]);   
+            this.$set(item, "defaultValue", row[key]);
           }
         }
         if (!Object.keys(row).includes(item.key)) {
@@ -315,6 +328,9 @@ export default {
       this._setDisplayShow(this.formConfig,'jobNumberStart',true)
       this._setDisplayShow(this.formConfig,'isBatchcaller',true)
       this._setDisplayShow(this.formConfig,'pwd',false)
+      this._setDisplayShow(this.formConfig,'status',false)
+      this._setDisplayShow(this.formConfig,'ext',false)
+      this._setDisplayShow(this.formConfig,'extName',false)
       
       setTimeout(() => {
         this.$refs.formItem.clearValidate();

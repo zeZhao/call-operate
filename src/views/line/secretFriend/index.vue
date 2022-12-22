@@ -10,7 +10,7 @@
       <template slot="other">
         <el-button type="primary" @click="allocation">分配号码</el-button>
         <el-button type="primary" @click="_mxCreate">新增号码</el-button>
-        <el-button type="primary" @click="deteleNum">删除</el-button>
+        <el-button type="primary" @click="_mxDeleteItem">删除</el-button>
         <el-button type="primary" @click="exportNum">导出Excel</el-button>
       </template>
     </Search>
@@ -23,7 +23,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column label="选择" type="selection" align="center" />
-      <el-table-column prop="supplyId" label="供应商名称" />
+      <el-table-column prop="corpName" label="供应商名称" />
       <el-table-column prop="lineName" label="线路名称" />
       <el-table-column prop="privince" label="号码归属地区" />
       <el-table-column prop="operaId" label="运营商">
@@ -199,7 +199,7 @@ export default {
         {
           type: "select",
           label: "线路名称",
-          key: "lineName",
+          key: "lineId",
           optionData: [
             { key: 0, value: "线路A" },
             { key: 1, value: "线路B" },
@@ -246,7 +246,7 @@ export default {
         {
           type: "fileUpload",
           label: "运营商号码",
-          key: "operaNumber",
+          key: "file",
           defaultValue: "",
         },
       ],
@@ -256,9 +256,9 @@ export default {
           type: "select",
           label: "供应商名称",
           key: "supplyId",
-          disabled:true,
+          disabled: true,
           optionData: [
-             { key: 0, value: "供应商A" },
+            { key: 0, value: "供应商A" },
             { key: 1, value: "供应商B" },
             { key: 2, value: "供应商C" },
           ],
@@ -267,9 +267,9 @@ export default {
           type: "select",
           label: "线路名称",
           key: "lineId",
-          disabled:true,
+          disabled: true,
           optionData: [
-             { key: 0, value: "线路A" },
+            { key: 0, value: "线路A" },
             { key: 1, value: "线路B" },
             { key: 2, value: "线路C" },
           ],
@@ -279,7 +279,7 @@ export default {
           label: "号码归属地区",
           key: "privince",
           colSpan: 12,
-          disabled:true,
+          disabled: true,
           optionData: [],
         },
         {
@@ -287,14 +287,14 @@ export default {
           label: "号码归属运营商",
           key: "operaId",
           colSpan: 12,
-          disabled:true,
+          disabled: true,
           optionData: [],
         },
         {
           type: "input",
           label: "运营商号码",
           key: "operaNumber",
-          disabled:true,
+          disabled: true,
           defaultValue: "",
         },
         {
@@ -346,15 +346,53 @@ export default {
   mounted() {},
   computed: {},
   methods: {
+    _mxDeleteItem() {
+      if(this.multipleSelection.length === 0){
+        this.$message.error('请选择一条数据')
+        return false
+      }
+      const h = this.$createElement;
+      this.$msgbox({
+        title: "删除",
+        message: h("div", null, [
+          h("p", null, '您确定要删除此项吗？')
+          // h('p', {
+          //     style: 'color: red'
+          // }, '删除后，将不再执行重发，请谨慎操作')
+        ]),
+        showCancelButton: true,
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      }).then(action => {
+        let params = this.multipleSelection.map(item => item.inId).join(",");
+        const { namespace, detele } = this.searchAPI;
+        this.$http[namespace][detele](params).then(res => {
+          if (resOk(res)) {
+            this.$message.success("删除成功！");
+            this.pageObj.currentPage = 1;
+            this._mxGetList();
+          } else {
+            this.$message.error(res.msg || "删除失败！");
+          }
+        });
+      }).catch(() => { });
+    },
     //table 多选
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
     submitAllocation(form) {
-      console.log(form,'-----')
-      this.$http.inboundcfg.put(form).then(res=>{
-        console.log(res)
-      })
+      form.inId = this.multipleSelection[0].inId;
+      this.$http.inboundcfg.put(form).then((res) => {
+        if (res.state == 200) {
+          this.$message.success(res.msg);
+          this._mxGetList();
+          this.allocationVisible = false;
+        } else {
+          this.$message.error(res.msg);
+        }
+        console.log(res);
+      });
     },
     cancelAllocation() {
       this.allocationVisible = false;
@@ -363,31 +401,33 @@ export default {
       }, 0);
     },
     allocation() {
-      
-      if (this.multipleSelection.length === 0 || this.multipleSelection.length > 1) {
+      if (
+        this.multipleSelection.length === 0 ||
+        this.multipleSelection.length > 1
+      ) {
         this.$message.error("请选择一条数据");
       } else {
         this.allocationVisible = true;
         setTimeout(() => {
           this.$refs.allocationForm.resetForm();
-          let obj = this.multipleSelection[0]
-          this.allocationConfig.forEach(item=>{
-            if(item.key === 'supplyId'){
-              item.defaultValue = obj.supplyId
+          let obj = this.multipleSelection[0];
+          this.allocationConfig.forEach((item) => {
+            if (item.key === "supplyId") {
+              item.defaultValue = obj.supplyId;
             }
-            if(item.key === 'lineId'){
-              item.defaultValue = obj.lineId
+            if (item.key === "lineId") {
+              item.defaultValue = obj.lineId;
             }
-            if(item.key === 'privince'){
-              item.defaultValue = obj.privince
+            if (item.key === "privince") {
+              item.defaultValue = obj.privince;
             }
-            if(item.key === 'operaId'){
-              item.defaultValue = obj.operaId
+            if (item.key === "operaId") {
+              item.defaultValue = obj.operaId;
             }
-            if(item.key === 'operaNumber'){
-              item.defaultValue = obj.operaNumber
+            if (item.key === "operaNumber") {
+              item.defaultValue = obj.operaNumber;
             }
-          })
+          });
           // console.log()
           // this._setDefaultValue(this.allocationConfig,[],'supplyId',obj.supplyId)
           // this._setDefaultValue(this.allocationConfig,[],'lineId',obj.lineId)
@@ -403,25 +443,44 @@ export default {
     addNum() {},
     deteleNum() {},
     exportNum() {
-      this.$http.inboundcfg.exportExcel().then(res=>{
-        console.log(res)
-      })
+      this.downloadFileByFile('/api/inboundcfg/exportExcel',this.searchParam,'号码')
+      // this.$http.inboundcfg.exportExcel(this.searchParam).then((res) => {
+      //   let fileName = "号码";
+      //   let blob = new Blob([res.data], {
+      //       type: "application/vnd.ms-excel;charset=utf-8",
+      //     });
+      //     let url = window.URL.createObjectURL(blob);
+      //     let aLink = document.createElement("a");
+      //     aLink.style.display = "none";
+      //     aLink.href = url;
+      //     aLink.setAttribute("download", `${fileName}.xlsx`);
+      //     document.body.appendChild(aLink);
+      //     aLink.click();
+      //     document.body.removeChild(aLink);
+      //     window.URL.revokeObjectURL(url);
+      // });
     },
-    _mxHandleSubmit(form){
-      let params = this.jsonToFormData(form)
-      this.$http.inboundcfg.batchcreate(params).then(res=>{
-        console.log(res)
-      })
+    _mxHandleSubmit(form) {
+      let params = this.jsonToFormData(form);
+      this.$http.inboundcfg.batchcreate(params).then((res) => {
+        if (res.state == 200) {
+          this.$message.success(res.msg);
+          this._mxGetList();
+          this.addChannel = false;
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
     },
-    changeFileUpload( { item, e }){
-      if(item.key === "operaNumber"){
-        this.formConfig.forEach(i=>{
-          if(i.key === item.key){
-            i.defaultValue = e.target.files[0]
+    changeFileUpload({ item, e }) {
+      if (item.key === "file") {
+        this.formConfig.forEach((i) => {
+          if (i.key === item.key) {
+            i.defaultValue = e.target.files[0];
           }
-        })
+        });
       }
-    }
+    },
   },
   watch: {},
 };

@@ -155,10 +155,11 @@ export default {
       // 表单配置
       formConfig: [
         {
-          type: "input",
+          type: "select",
           label: "公司名称",
-          key: "corpName",
+          key: "corpId",
           defaultValue: "",
+          optionData:[]
         },
         {
           type: "input",
@@ -322,9 +323,36 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType()
+    this.costRateList()
+    this.comboList()
+  },
   computed: {},
   methods: {
+    //获取公司下拉
+    queryCorpByCorpType(){
+      this.$http.select.queryCorpByCorpType({corpType:2}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'corpId','corpId','corpName')
+      })
+    },
+    //获取费率下拉
+    costRateList(){
+      this.$http.costRate.get({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'rateId','rateId','rateName')
+      })
+    },
+    //获取通话套餐
+    comboList(){
+      this.$http.combo.get({enablePage:false,comboType:0}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'comboId','comboId','comboName')
+
+      })
+      //获取录音套餐
+      this.$http.combo.get({enablePage:false,comboType:1}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'recComboId','comboId','comboName')
+      })
+    },
     //充值
     recharge(row) {
       this.rechargeVisible = true;

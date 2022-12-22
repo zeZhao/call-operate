@@ -155,10 +155,11 @@ export default {
       // 表单配置
       formConfig: [
         {
-          type: "input",
+          type: "select",
           label: "公司名称",
-          key: "corpName",
+          key: "corpId",
           defaultValue: "",
+          optionData:[]
         },
         {
           type: "input",
@@ -172,9 +173,7 @@ export default {
           key: "agentId",
           defaultValue: "",
           optionData:[
-            { key: 0, value: "商家" },
-            { key: 1, value: "代理商" },
-            { key: 2, value: "供应商" },
+            { key: 0, value: "自营" },
           ],
           colSpan:12
         },
@@ -206,9 +205,6 @@ export default {
           key: "rateId",
           defaultValue: "",
           optionData:[
-            { key: 0, value: "商家" },
-            { key: 1, value: "代理商" },
-            { key: 2, value: "供应商" },
           ],
           colSpan:12
         },
@@ -218,9 +214,6 @@ export default {
           key: "comboId",
           defaultValue: "",
           optionData:[
-            { key: 0, value: "通话套餐A" },
-            { key: 1, value: "通话套餐B" },
-            { key: 2, value: "通话套餐C" },
           ],
           colSpan:12
         },
@@ -230,9 +223,6 @@ export default {
           key: "recComboId",
           defaultValue: "",
           optionData:[
-            { key: 0, value: "录音套餐A" },
-            { key: 1, value: "录音套餐B" },
-            { key: 2, value: "录音套餐C" },
           ],
           colSpan:12
         },
@@ -321,9 +311,43 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType()
+    this.corpAgentList()
+    this.costRateList()
+    this.comboList()
+  },
   computed: {},
   methods: {
+    //获取公司下拉
+    queryCorpByCorpType(){
+      this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'corpId','corpId','corpName')
+      })
+    },
+    //获取代理商下拉
+    corpAgentList(){
+      this.$http.corpAgent.list({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'agentId','agentId','userName')
+      })
+    },
+    //获取费率下拉
+    costRateList(){
+      this.$http.costRate.get({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'rateId','rateId','rateName')
+      })
+    },
+    //获取通话套餐
+    comboList(){
+      this.$http.combo.get({enablePage:false,comboType:0}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'comboId','comboId','comboName')
+
+      })
+      //获取录音套餐
+      this.$http.combo.get({enablePage:false,comboType:1}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'recComboId','comboId','comboName')
+      })
+    },
     //充值
     recharge(row) {
       this.rechargeVisible = true;
