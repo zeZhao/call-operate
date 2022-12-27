@@ -4,21 +4,21 @@
 }
 </style>
 <template>
-  <div style="width:100%">
+  <div style="width: 100%">
     <div id="outsideBox" v-if="$route.matched.length < 3">
       <div id="queryBox">
         <el-form :inline="true" class="demo-form-inline" size="small">
           <el-form-item label="商户名称：" v-if="!userType">
             <el-select
-              v-model="query.clientId"
+              v-model="query.corpId"
               clearable
               filterable
               placeholder="请选择商户名称"
             >
               <el-option
                 v-for="(item, index) in clientList"
-                :label="item.clientName"
-                :value="item.clientId"
+                :label="item.corpName"
+                :value="item.corpId"
                 :key="index"
               ></el-option>
             </el-select>
@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item label="状态：">
             <el-select
-              v-model="query.auditStatus"
+              v-model="query.status"
               clearable
               placeholder="请选择状态"
             >
@@ -62,7 +62,7 @@
             size="small "
             type="primary"
             @click="NewlyEdit('', '', '新增')"
-            style="float: right;margin-right:30px"
+            style="float: right; margin-right: 30px"
           >
             新增
             <i class="el-icon-plus"></i>
@@ -76,12 +76,12 @@
           ref="filterTable"
           :data="tableData"
           max-height="500"
-          style="width: 100%;"
+          style="width: 100%"
           :header-cell-style="styleObj"
         >
           <el-table-column
             align="center"
-            prop="clientName"
+            prop="corpName"
             label="商户名称"
             min-width="150"
             :show-overflow-tooltip="true"
@@ -131,17 +131,17 @@
           ></el-table-column>
           <el-table-column
             align="center"
-            prop="auditStatus"
+            prop="status"
             label="状态"
             min-width="120"
             :show-overflow-tooltip="true"
           >
             <template slot-scope="{ row }">
-              <span v-if="row.auditStatus == 1">待提审</span>
-              <span v-else-if="row.auditStatus == 2">待审核</span>
-              <span v-else-if="row.auditStatus == 3">通过</span>
-              <span v-else-if="row.auditStatus == 4">拒绝</span>
-              <span v-else>待提审</span>
+              <span v-if="row.status == 1">有效</span>
+              <span v-else-if="row.status == 2">停用</span>
+              <!-- <span v-else-if="row.status == 3">通过</span>
+              <span v-else-if="row.status == 4">拒绝</span> -->
+              <span v-else>停用</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -158,38 +158,35 @@
           <!--width="100"-->
           <!--:show-overflow-tooltip="true"-->
           <!--&gt;</el-table-column>-->
-          <el-table-column align="center" label="操作" min-width="300">
+          <el-table-column align="center" label="操作" min-width="330">
             <template slot-scope="{ row, $index }">
               <el-button
                 @click="NewlyEdit($index, row, '编辑')"
                 type="text"
                 size="small"
                 v-if="
-                  (
-                    (row.auditStatus == 1 ||
-                      row.auditStatus == 3 ||
-                      row.auditStatus == 4)) ||
-                    !userType
+                  !userType
                 "
                 >编辑</el-button
               >
               <el-divider
                 direction="vertical"
-                v-if="
-                  row.auditStatus == 1 ||
-                    row.auditStatus == 3 ||
-                    row.auditStatus == 4
-                "
               ></el-divider>
               <el-button
                 @click="delRow($index, row)"
                 type="text"
                 size="small"
-                v-if="
-                  (row.auditStatus !== 2) ||
-                    !userType
-                "
+                v-if="!userType"
                 >删除</el-button
+              >
+              <el-divider direction="vertical"></el-divider>
+              <el-button
+                @click="
+                  updateSceneStatus(row);
+                "
+                type="text"
+                size="small"
+                >{{row.status === 1 ? '停用' : '启用'}}</el-button
               >
               <el-divider
                 direction="vertical"
@@ -203,39 +200,34 @@
 
               <el-divider
                 direction="vertical"
-                v-if="row.auditStatus !== 2"
               ></el-divider>
-              <el-button
+              <!-- <el-button
                 @click="Release($index, row)"
                 type="text"
                 size="small"
-                v-if="issue(row)"
                 >发布</el-button
-              >
+              > -->
+              <!-- <el-divider
+                direction="vertical"
+              ></el-divider> -->
               <el-button
                 @click="againRelease($index, row)"
                 type="text"
                 size="small"
-                v-if="republish(row)"
                 >重新发布</el-button
               >
               <el-divider
                 direction="vertical"
-                v-if="
-                  row.auditStatus == 3 && (row.status == 2 || row.status == 0)
-                "
               ></el-divider>
-              <el-button
+              <!-- <el-button
                 @click="check(row, 2)"
                 type="text"
                 size="small"
-                v-if="row.auditStatus == 1 || row.auditStatus == 4"
                 >提交审核</el-button
-              >
-              <el-divider
+              > -->
+              <!-- <el-divider
                 direction="vertical"
-                v-if="row.auditStatus == 1 || row.auditStatus == 4"
-              ></el-divider>
+              ></el-divider> -->
               <el-button
                 @click="
                   push('/IVR/AI/detail', row);
@@ -245,6 +237,8 @@
                 size="small"
                 >详情</el-button
               >
+              
+              
             </template>
           </el-table-column>
         </el-table>
@@ -255,14 +249,14 @@
           layout="prev, pager, next"
           :total="totalNumber"
           :current-page="page"
-          style="float: right;margin-right:30px"
+          style="float: right; margin-right: 30px"
           @current-change="pagingChange"
         ></el-pagination>
       </div>
 
       <!-- 新增,编辑弹框 -->
       <el-drawer :title="title" v-if="isNew" :visible.sync="isNew" width="55%">
-        <div style="width:100%;padding:0 20px">
+        <div style="width: 100%; padding: 0 20px">
           <el-form
             ref="RuleForm"
             :rules="newRules"
@@ -282,14 +276,14 @@
                 show-word-limit
               ></el-input>
             </el-form-item>
-            <el-form-item label="适用行业：" prop="applyIndustry">
+            <!-- <el-form-item label="适用行业：" prop="applyIndustry">
               <el-input
                 v-model.trim="RuleForm.applyIndustry"
                 placeholder="请输入适用行业"
                 maxlength="20"
                 show-word-limit
               ></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="最大超时次数：" prop="maxOverTimes">
               <el-input
                 v-model.number="RuleForm.maxOverTimes"
@@ -304,25 +298,36 @@
                 placeholder="请输入最大未识别次数"
               ></el-input>
             </el-form-item>
-            <el-form-item label="商户：" prop="clientId" v-if="!userType">
+            <el-form-item label="商户：" prop="corpId" v-if="!userType">
               <el-select
-                v-model="RuleForm.clientId"
+                v-model="RuleForm.corpId"
                 clearable
                 filterable
                 placeholder="请选择商户"
-                style="width:200px"
+                style="width: 200px"
                 @change="chooseClient"
               >
                 <el-option
                   v-for="(item, index) in clientList"
-                  :label="item.clientName"
-                  :value="item.clientId"
+                  :label="item.corpName"
+                  :value="item.corpId"
                   :key="index"
                 ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="流程类型：">
+              <el-radio v-model="RuleForm.processType" :label="1"
+                >IVR</el-radio
+              >
+              <el-radio v-model="RuleForm.processType" :label="2"
+                >技能组</el-radio
+              >
+              <!-- <el-radio v-model="RuleForm.asrEnable" label="0"
+                >ASR不识别</el-radio
+              > -->
+            </el-form-item>
             <el-form-item label="是否开启异常短信提醒：">
-              <div style="width:200px">
+              <div style="width: 200px">
                 <el-radio v-model="RuleForm.isAbnormalSms" :label="1"
                   >开启</el-radio
                 >
@@ -334,15 +339,14 @@
             <p class="form-tip">
               开启后将在用户秒挂、不在服务区、关机、欠费、未接通等状态下发送短信
             </p>
-            <el-form-item label="短信模板：">
+            <!-- <el-form-item label="短信模板：">
               <el-select
                 v-model="RuleForm.smsTemplateId"
                 clearable
                 placeholder="请选择短信模板"
                 style="width:200px"
               >
-                <!-- templateData -->
-                <!-- <el-option label="不设置" value="1"></el-option> -->
+                
                 <el-option
                   v-for="(item, index) in templateData"
                   :label="item.templateName"
@@ -350,7 +354,7 @@
                   :key="index"
                 ></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="有效通话时长/s：" prop="validTalkTime">
               <el-input
                 v-model.trim="RuleForm.validTalkTime"
@@ -359,17 +363,7 @@
                 show-word-limit
               ></el-input>
             </el-form-item>
-            <!-- <el-form-item label="应答类型：">
-              <el-radio v-model="RuleForm.asrEnable" label="1"
-                >ASR识别</el-radio
-              >
-              <el-radio v-model="RuleForm.asrEnable" label="2"
-                >按键应答</el-radio
-              >
-              <el-radio v-model="RuleForm.asrEnable" label="0"
-                >ASR不识别</el-radio
-              >
-            </el-form-item> -->
+            
             <!-- <el-form-item label="启用识别：">
               <el-select
                 v-model="RuleForm.asrEnable"
@@ -523,15 +517,15 @@ export default {
         padding: "15",
       },
       clientList: [],
-      tableData: [{clientName:"11"},{clientName:"22"}],
+      tableData: [{ corpName: "11" }, { corpName: "22" }],
       page: 1,
       size: 10,
       totalNumber: 10, //分页总数
       isNew: false,
       query: {
-        auditStatus: "",
+        status: "",
         sceneName: "",
-        clientId: "",
+        corpId: "",
         auditTime: [
           new Date(
             new Date(new Date().toLocaleDateString()).getTime() -
@@ -593,9 +587,16 @@ export default {
             trigger: "change",
           },
         ],
+        corpId: [
+          {
+            required: true,
+            message: "请填写必填项",
+            trigger: ['blur','change'],
+          },
+        ],
       },
       RuleForm: {
-        clientId: "",
+        corpId: "",
         sceneName: "",
         applyIndustry: "",
         sceneDesc: "",
@@ -603,20 +604,21 @@ export default {
         validTalkTime: "",
         maxUnrecogTimes: "3",
         asrEnable: "1",
+        processType: 1,
         isAbnormalSms: 2,
         smsTemplateId: "",
       },
       sceneId: "", //修改id
-      clientId: "", //商户id
+      corpId: "", //商户id
       userType: "",
       templateData: [], //模本列表数据
     };
   },
   created() {
-    this.userType = this.$cookies.get("userType") == "B" ? true : false;
+    this.userType = false;
     this.List();
     this.listClient();
-    this.templateist(); //模板列表
+    // this.templateist(); //模板列表
   },
 
   components: {},
@@ -628,12 +630,26 @@ export default {
   },
 
   methods: {
+    updateSceneStatus({sceneId,status}){
+      var data = {
+        data: {
+          sceneId,
+          status:status == 1 ? 2 : 1
+        },
+        version: "1.0",
+      };
+      this.$http.scene.updateSceneStatus(data).then(res=>{
+        if (res.state == "200") {
+          this.List();
+        } else {
+          self.$message.error(res.msg);
+        }
+      })
+    },
+    // 发布按钮显示
     issue(row) {
       if (this.userType) {
-        if (
-          row.auditStatus == 3 &&
-          row.status == 0
-        ) {
+        if (row.status == 3 && row.status == 0) {
           return true;
         } else {
           return false;
@@ -646,12 +662,10 @@ export default {
         }
       }
     },
+    // 重新发布按钮显示
     republish(row) {
       if (this.userType) {
-        if (
-          row.auditStatus == 3 &&
-          row.status == 2
-        ) {
+        if (row.status == 3 && row.status == 2) {
           return true;
         } else {
           return false;
@@ -668,7 +682,7 @@ export default {
     根据选择不同商户展示不同短信模板
     */
     chooseClient() {
-      this.templateist();
+      // this.templateist();
     },
     /*
       短信模板选项列表
@@ -678,31 +692,33 @@ export default {
       const self = this;
       var data = {
         data: {
-          clientId: this.RuleForm.clientId,
+          corpId: this.RuleForm.corpId,
           status: "",
         },
         version: "1.0",
       };
       self.$http.note.listSmsTemplate(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.templateData = res.data;
+        } else {
+          self.$message.error(res.msg);
         }
       });
     },
     /* 
     提交审核
     */
-    check(row, auditStatus) {
+    check(row, status) {
       const self = this;
       var data = {
         data: {
-          auditStatus,
+          status,
           sceneId: row.sceneId,
         },
         version: "1.0",
       };
       self.$http.auditManage.updateAuditStatus(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             type: "success",
             message: "操作成功!",
@@ -712,6 +728,8 @@ export default {
           }
 
           self.List();
+        } else {
+          self.$message.error(res.msg);
         }
       });
     },
@@ -721,16 +739,16 @@ export default {
     updatedAuditStatus(row, auditStatus) {
       const self = this;
       if (!self.userType) return;
-      if (row.auditStatus === 2) return;
+      if (row.status === 2) return;
       var data = {
         data: {
-          auditStatus,
+          status,
           sceneId: row.sceneId,
         },
         version: "1.0",
       };
       self.$http.auditManage.updateAuditStatus(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           // self.$message({
           //   type: "success",
           //   message: "操作成功!",
@@ -740,6 +758,8 @@ export default {
           }
 
           self.List();
+        } else {
+          self.$message.error(res.msg);
         }
       });
     },
@@ -760,18 +780,20 @@ export default {
         var data = {
           data: {
             sceneId: row.sceneId,
-            clientId: row.clientId,
+            corpId: row.corpId,
           },
           version: "1.0",
         };
         self.$http.scene.releaseScene(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.$message({
               type: "success",
               message: "重新发布成功!",
             });
 
             self.List();
+          } else {
+            self.$message.error(res.msg);
           }
         });
       });
@@ -793,18 +815,20 @@ export default {
         var data = {
           data: {
             sceneId: row.sceneId,
-            clientId: row.clientId,
+            corpId: row.corpId,
           },
           version: "1.0",
         };
         self.$http.scene.releaseScene(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.$message({
               type: "success",
               message: "重新发布成功!",
             });
 
             self.List();
+          } else {
+            self.$message.error(res.msg);
           }
         });
       });
@@ -822,13 +846,15 @@ export default {
         version: "1.0",
       };
       self.$http.scene.updateSceneByOpenFlag(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             type: "success",
             message: "设置成功!",
           });
 
           self.List();
+        } else {
+          self.$message.error(res.msg);
         }
       });
     },
@@ -850,7 +876,7 @@ export default {
           version: "1.0",
         };
         self.$http.scene.deleteScene(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.$message({
               type: "success",
               message: "删除成功!",
@@ -860,6 +886,8 @@ export default {
             }
 
             self.List();
+          } else {
+            self.$message.error(res.msg);
           }
         });
       });
@@ -876,7 +904,7 @@ export default {
           if (self.title == "新增") {
             var data = {
               data: {
-                clientId: self.RuleForm.clientId,
+                corpId: self.RuleForm.corpId,
                 sceneName: self.RuleForm.sceneName,
                 applyIndustry: self.RuleForm.applyIndustry,
                 sceneDesc: self.RuleForm.sceneDesc,
@@ -884,6 +912,7 @@ export default {
                 validTalkTime: self.RuleForm.validTalkTime,
                 maxUnrecogTimes: self.RuleForm.maxUnrecogTimes,
                 // asrEnable: self.RuleForm.asrEnable,
+                processType: self.RuleForm.processType,
                 smsTemplateId: self.RuleForm.smsTemplateId,
                 isAbnormalSms: self.RuleForm.isAbnormalSms,
               },
@@ -891,7 +920,7 @@ export default {
             };
             self.$http.scene.addScene(data).then((res) => {
               self.SubmitLoading = false;
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   message: "新增成功",
                   type: "success",
@@ -899,6 +928,8 @@ export default {
                 self.isNew = false; //关闭新增弹框
 
                 self.List(); //重新请求列表
+              } else {
+                self.$message.error(res.msg);
               }
             });
           }
@@ -907,7 +938,7 @@ export default {
             var data = {
               data: {
                 sceneId: self.sceneId,
-                clientId: self.RuleForm.clientId,
+                corpId: self.RuleForm.corpId,
                 sceneName: self.RuleForm.sceneName,
                 applyIndustry: self.RuleForm.applyIndustry,
                 sceneDesc: self.RuleForm.sceneDesc,
@@ -915,6 +946,7 @@ export default {
                 validTalkTime: self.RuleForm.validTalkTime,
                 maxUnrecogTimes: self.RuleForm.maxUnrecogTimes,
                 // asrEnable: self.RuleForm.asrEnable,
+                processType: self.RuleForm.processType,
                 smsTemplateId: self.RuleForm.smsTemplateId,
                 isAbnormalSms: self.RuleForm.isAbnormalSms,
                 status: "2",
@@ -922,17 +954,19 @@ export default {
               version: "1.0",
             };
             if (self.userType) {
-              data.data.auditStatus = 1;
+              data.data.status = 1;
             }
             self.$http.scene.updateScene(data).then((res) => {
               self.SubmitLoading = false;
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   message: "编辑成功",
                   type: "success",
                 });
                 self.isNew = false; //关闭新增弹框
                 self.List(); //重新请求列表
+              } else {
+                self.$message.error(res.msg);
               }
             });
           } else if (self.title == "复制") {
@@ -940,7 +974,7 @@ export default {
             var data = {
               data: {
                 sceneId: self.sceneId,
-                clientId: self.RuleForm.clientId,
+                corpId: self.RuleForm.corpId,
                 sceneName: self.RuleForm.sceneName,
                 applyIndustry: self.RuleForm.applyIndustry,
                 sceneDesc: self.RuleForm.sceneDesc,
@@ -953,13 +987,15 @@ export default {
               version: "1.0",
             };
             self.$http.scene.copyScene(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   message: "复制成功",
                   type: "success",
                 });
                 self.isNew = false; //关闭新增弹框
                 self.List(); //重新请求列表
+              } else {
+                self.$message.error(res.msg);
               }
             });
           }
@@ -982,12 +1018,13 @@ export default {
     listClient() {
       const self = this;
       var data = {
-        data: { clientId: "", clientName: "", mobile: "" },
-        version: "1.0",
+        corpType: 0,
       };
-      this.$http.merchant.listClient(data).then((res) => {
-        if (res.state == "0000") {
-          self.clientList = res.data;
+      this.$http.select.queryCorpByCorpType(data).then((res) => {
+        if (res.state == "200") {
+          self.clientList = res.data.records;
+        } else {
+          self.$message.error(res.msg);
         }
       });
     },
@@ -999,20 +1036,21 @@ export default {
       this.isNew = true;
       this.title = title;
       this.sceneId = row.sceneId;
-      this.clientId = row.clientId;
+      this.corpId = row.corpId;
       if (title == "编辑") {
         let arr = [];
         this.templateData.forEach((item) => {
           arr.push(item.templateId);
         });
         this.RuleForm = {
-          clientId: row.clientId,
+          corpId: row.corpId,
           sceneName: row.sceneName,
           applyIndustry: row.applyIndustry,
           sceneDesc: row.sceneDesc,
           maxOverTimes: row.maxOverTimes,
           validTalkTime: row.validTalkTime,
           maxUnrecogTimes: row.maxUnrecogTimes,
+          processType: row.processType,
           // asrEnable: row.asrEnable,
           // smsTemplateId: row.smsTemplateId,
           smsTemplateId:
@@ -1025,7 +1063,7 @@ export default {
         };
       } else if (title == "新增" || title == "复制") {
         this.RuleForm = {
-          clientId: "",
+          corpId: "",
           sceneName: "",
           applyIndustry: "",
           sceneDesc: "",
@@ -1033,11 +1071,12 @@ export default {
           validTalkTime: "",
           maxUnrecogTimes: "2",
           // asrEnable: "1",
+          processType: 1,
           smsTemplateId: "",
           isAbnormalSms: 2,
         };
       }
-      this.templateist();
+      // this.templateist();
     },
     /*
      列表
@@ -1057,19 +1096,23 @@ export default {
           pageSize: self.size,
 
           scene: {
-            auditStatus: self.query.auditStatus,
+            status: self.query.status,
             sceneName: self.query.sceneName,
-            clientId: self.query.clientId,
+            corpId: self.query.corpId,
             starTime:
               self.query.auditTime.length > 0
-                ? new Date(self.query.auditTime[0]).Format("yyyy-MM-dd hh:mm:ss")
+                ? new Date(self.query.auditTime[0]).Format(
+                    "yyyy-MM-dd hh:mm:ss"
+                  )
                 : new Date(
                     new Date(new Date().toLocaleDateString()).getTime() -
                       24 * 60 * 60 * 1000 * 6
                   ),
             endTime:
               self.query.auditTime.length > 0
-                ? new Date(self.query.auditTime[1]).Format("yyyy-MM-dd hh:mm:ss")
+                ? new Date(self.query.auditTime[1]).Format(
+                    "yyyy-MM-dd hh:mm:ss"
+                  )
                 : new Date(
                     new Date(new Date().toLocaleDateString()).getTime() +
                       (24 * 60 * 60 * 1000 - 1)
@@ -1078,13 +1121,17 @@ export default {
         },
         version: "1.0",
       };
-      this.$http.scene.listSceneByPage(data).then((res) => {
+      this.$http.scene.listSceneByPage(data).then((res) => { 
         self.loading = false;
-        if (res.state == "0000") {
+        if (res.state == "200") {
           var arr = [];
-          res.data.list.forEach((val) => {
-            val.createTime = new Date(val.createTime).Format("yyyy-MM-dd hh:mm:ss");
-            val.auditTime = new Date(val.auditTime).Format("yyyy-MM-dd hh:mm:ss");
+          res.data.records.forEach((val) => {
+            // val.createTime = new Date(val.createTime).Format(
+            //   "yyyy-MM-dd hh:mm:ss"
+            // );
+            // val.auditTime = new Date(val.auditTime).Format(
+            //   "yyyy-MM-dd hh:mm:ss"
+            // );
             // if (val.voiceSource == 1 || val.voiceSource == "1") {
             //   val.voiceSourceName = "人工录制";
             // } else {
@@ -1095,6 +1142,8 @@ export default {
           self.tableData = arr;
 
           self.totalNumber = res.data.total;
+        } else {
+          self.$message.error(res.msg);
         }
       });
     },
@@ -1113,10 +1162,11 @@ export default {
       this.$router.push({
         path: url,
         query: {
-          clientId: row.clientId,
+          corpId: row.corpId,
           sceneId: row.sceneId,
+          processType: row.processType,
           // asrEnable: row.asrEnable,
-          auditStatus: row.auditStatus,
+          status: row.status,
           tagType: row.tagType,
         },
       });
@@ -1127,7 +1177,7 @@ export default {
 <style lang="scss" scoped>
 #outsideBox {
   width: 100%;
-  padding: 20px;
+  // padding: 20px;
 
   box-sizing: border-box;
   #listBox {

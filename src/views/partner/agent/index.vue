@@ -75,7 +75,7 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
-        @choose="choose"
+        @selectChange="selectChange"
       ></FormItem>
     </el-dialog>
 
@@ -412,6 +412,72 @@ export default {
       setTimeout(() => {
         this.$refs.rechargeForm.resetForm();
       }, 0);
+    },
+    /**
+     * 创建表单
+     * @param row  当前行数据
+     * @param id  当前行ID
+     * @private
+     */
+
+    _mxCreate() {
+      this.addChannel = true;
+      this.formTit = "新增";
+      setTimeout(() => {
+        this.$refs.formItem.resetForm();
+      }, 0);
+      this._setDisplayShow(this.formConfig,'comboId',true)
+      this._setDisplayShow(this.formConfig,'recComboId',true)
+    },
+
+    /**
+     * 编辑表单
+     * @param row  当前行数据
+     * @param ID  当前行ID
+     * @private
+     */
+
+    _mxEdit(row, ID) {
+      row = this._mxArrangeEditData(row);
+      this.id = row[ID];
+      this.editId = ID;
+      this.formTit = "修改";
+      this.formConfig.forEach(item => {
+        for (let key in row) {
+          if (item.key === key && row[key] !== "-") {
+            this.$set(item, "defaultValue", row[key]);
+          }
+          if(row['chargeType'] === 0){
+            this._setDisplayShow(this.formConfig,'comboId',false)
+            this._setDisplayShow(this.formConfig,'recComboId',false)
+          }else{
+            this._setDisplayShow(this.formConfig,'comboId',true)
+            this._setDisplayShow(this.formConfig,'recComboId',true)
+          }
+        }
+        if (!Object.keys(row).includes(item.key)) {
+          this.$set(item, "defaultValue", "");
+        }
+      });
+      setTimeout(() => {
+        this.$refs.formItem.clearValidate();
+      }, 0);
+      
+      this.addChannel = true;
+    },
+    selectChange({val,item}){
+      if(item.key === 'chargeType'){
+        if(this.formTit === '修改'){
+          if(val === 1){
+            this._setDisplayShow(this.formConfig,'comboId',true)
+            this._setDisplayShow(this.formConfig,'recComboId',true)
+          }else{
+            this._setDisplayShow(this.formConfig,'comboId',false)
+            this._setDisplayShow(this.formConfig,'recComboId',false)
+          }
+        }
+        
+      }
     },
   },
   watch: {},

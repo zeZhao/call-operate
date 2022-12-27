@@ -747,7 +747,8 @@
                         <el-button-group v-if="item.segType == 1">
                           <el-upload
                             style="float:left;margin-top: -1px;"
-                            action="/rob/voicelib/sentence/uploadWav"
+                            action="/api/scene/branch/uploadWav"
+                            :headers="header"
                             :show-file-list="false"
                             :limit="1"
                             ref="my_upload"
@@ -1021,9 +1022,8 @@
 </template>
 
 <script>
-import { constants } from "fs";
 import Voice from "./voice.vue";
-import aplayer from "vue-aplayer";
+import { getStorage } from "@/utils/auth";
 export default {
   props: {
     auditStatus: {
@@ -1031,7 +1031,6 @@ export default {
       default: false,
     },
   },
-  components:[aplayer],
   data() {
     var self = this;
     // 人工电话不能为空
@@ -1183,7 +1182,7 @@ export default {
         ],
       },
       RuleForm: {
-        clientId: "",
+        corpId: "",
         sceneId: "", //url 传过来的id  过
         branchTitle: "", //分支标题   过
         branchType: "1", //题目类型  过
@@ -1249,16 +1248,19 @@ export default {
       clientTableList: [],
       // 字段数据
       tableColumnList: [],
+      header:{
+        token:getStorage('token')
+      }
     };
   },
   mounted() {
     this.RuleForm.sceneId = this.$route.query.sceneId;
-    this.RuleForm.clientId = this.$route.query.clientId;
+    this.RuleForm.corpId = this.$route.query.corpId;
     this.asrEnable = this.$route.query.asrEnable;
     this.List(); //列表
     this.TagList(); //标签选项列表
     this.variableList(); //变量列表
-    this.templateist(); //模板列表
+    // this.templateist(); //模板列表
     this.getKnowledgeBase(1);
     this.getKnowledgeBase(2);
     this.VallLis();
@@ -1293,16 +1295,9 @@ export default {
         version: "1.0",
       };
       this.$http.dataTable.getTableColumnList({ ...data }).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.tableColumnList = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -1313,20 +1308,13 @@ export default {
     listClientTable() {
       const self = this;
       var data = {
-        data: { clientId: self.RuleForm.clientId },
+        data: { corpId: self.RuleForm.corpId },
         version: "1.0",
       };
       this.$http.dataTable.selectClientTable({ ...data }).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.clientTableList = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -1346,7 +1334,7 @@ export default {
         version: "1.0",
       };
       this.$http.scene.listVarAlias(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.vallLisData = [];
           res.data.forEach((val) => {
             self.vallLisData.push({
@@ -1355,13 +1343,6 @@ export default {
             });
           });
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -1615,7 +1596,7 @@ export default {
      * 上传成功回调
      */
     handleSuccess(response) {
-      if (response.state === "0000") {
+      if (response.state === "200") {
         this.varFileName = response.data.fileName; // 获取文件名
         this.$http.scene
           .updateSegment({
@@ -1627,17 +1608,10 @@ export default {
           })
           .then((res) => {
             const { state, data } = res;
-            if (state === "0000") {
+            if (state === "200") {
               this.$message.success("上传成功");
               this.List();
             } else {
-              if (res.state == "9000") {
-                this.$Beoverdue(function(url) {
-                  self.$router.push({
-                    path: url,
-                  });
-                }); //公共方法，utils.js
-              }
               this.$notify({
                 title: "上传失败",
                 message: res.msg,
@@ -1670,20 +1644,13 @@ export default {
           version: "1.0",
         };
         self.$http.scene.deleteOption(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.$message({
               type: "success",
               message: "删除成功!",
             });
             self.List();
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -1766,7 +1733,7 @@ export default {
               version: "1.0",
             };
             self.$http.scene.addOption(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.isOption = false;
                 self.$message({
                   type: "success",
@@ -1774,13 +1741,6 @@ export default {
                 });
                 self.List();
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -1797,7 +1757,7 @@ export default {
               version: "1.0",
             };
             self.$http.scene.updateOption(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.isOption = false;
                 self.$message({
                   type: "success",
@@ -1805,13 +1765,6 @@ export default {
                 });
                 self.List();
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -1833,20 +1786,13 @@ export default {
           version: "1.0",
         };
         self.$http.scene.deleteMatchRule(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.matchingData.splice(index, 1);
             self.$message({
               type: "success",
               message: "删除成功!",
             });
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -1859,20 +1805,13 @@ export default {
           version: "1.0",
         };
         self.$http.scene.deleteOptionMatchRule(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.matchingData.splice(index, 1);
             self.$message({
               type: "success",
               message: "删除成功!",
             });
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -1893,17 +1832,10 @@ export default {
           version: "1.0",
         };
         self.$http.scene.checkMatchRule(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.addMatching();
             this.RuleForm2.Matchingtext = "";
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -1921,16 +1853,9 @@ export default {
           version: "1.0",
         };
         self.$http.scene.checkOptionRuleExist(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.addOptionMatching();
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -1954,20 +1879,13 @@ export default {
             version: "1.0",
           };
           self.$http.scene.addOptionMatchRule(data).then((res) => {
-            if (res.state == "0000") {
+            if (res.state == "200") {
               self.$message({
                 type: "success",
                 message: "添加成功!",
               });
               self.Optionlist();
             } else {
-              if (res.state == "9000") {
-                this.$Beoverdue(function(url) {
-                  self.$router.push({
-                    path: url,
-                  });
-                }); //公共方法，utils.js
-              }
               self.$message.error(res.msg);
             }
           });
@@ -1993,20 +1911,13 @@ export default {
             version: "1.0",
           };
           self.$http.scene.addMatchRule(data).then((res) => {
-            if (res.state == "0000") {
+            if (res.state == "200") {
               self.$message({
                 type: "success",
                 message: "添加成功!",
               });
               self.MatchRule();
             } else {
-              if (res.state == "9000") {
-                this.$Beoverdue(function(url) {
-                  self.$router.push({
-                    path: url,
-                  });
-                }); //公共方法，utils.js
-              }
               self.$message.error(res.msg);
             }
           });
@@ -2048,16 +1959,9 @@ export default {
         version: "1.0",
       };
       self.$http.scene.listOptionMatchRule(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.matchingData = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2075,16 +1979,9 @@ export default {
         version: "1.0",
       };
       self.$http.scene.listMatchRule(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.matchingData = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2120,20 +2017,13 @@ export default {
           version: "1.0",
         };
         self.$http.scene.deleteBranch(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.$message({
               type: "success",
               message: "删除成功!",
             });
             self.List();
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -2152,16 +2042,9 @@ export default {
         version: "1.0",
       };
       self.$http.scene.listVarAlias(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.variableData = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2186,7 +2069,7 @@ export default {
         this.RuleForm.unrecogNext = "";
       }
       self.$http.scene.listKnowledge(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           if (i == 1) {
             // self.RetainovertimeTopicData = self.overtimeTopicData;
             self.overtimeTopicData = res.data;
@@ -2195,13 +2078,6 @@ export default {
             self.trackTopicData = res.data;
           }
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2219,7 +2095,7 @@ export default {
         version: "1.0",
       };
       self.$http.scene.listKnowledge(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           if (i == 1) {
             // self.RetainovertimeTopicData = self.overtimeTopicData;
             self.overtimeTopicData = res.data;
@@ -2228,13 +2104,6 @@ export default {
             self.trackTopicData = res.data;
           }
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2247,22 +2116,15 @@ export default {
       const self = this;
       var data = {
         data: {
-          clientId: this.RuleForm.clientId,
+          corpId: this.RuleForm.corpId,
           status: "",
         },
         version: "1.0",
       };
       self.$http.note.listSmsTemplate(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.templateData = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2280,7 +2142,7 @@ export default {
         version: "1.0",
       };
       self.$http.scene.listTagBySceneId(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           let arr = [
             {
               tagName: "无",
@@ -2289,13 +2151,6 @@ export default {
           ];
           self.TagData = arr.concat(res.data);
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2314,7 +2169,7 @@ export default {
         version: "1.0",
       };
       self.$http.scene.listBranch(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           const data = res.data;
           this.nextBranchIdArr = [];
           this.activeNames = [];
@@ -2336,13 +2191,6 @@ export default {
           // self.trackTopicData = data;
           self.appointTopicData = data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -2374,7 +2222,7 @@ export default {
             };
             self.$http.scene.addBranch(data).then((res) => {
               self.SubmitLoading = false;
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   type: "success",
                   message: "新增成功!",
@@ -2399,7 +2247,7 @@ export default {
             };
             self.$http.scene.updateBranch(data).then((res) => {
               self.SubmitLoading = false;
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   type: "success",
                   message: "编辑成功!",
@@ -2407,13 +2255,6 @@ export default {
                 this.isNew = false;
                 this.List();
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -2513,7 +2354,7 @@ export default {
         })
         .then((res) => {
           const { data, state, msg } = res;
-          if (state === "0000") {
+          if (state === "200") {
             this.$nextTick(() => {
               self.branchSegmentList[index].segVoiceFile = res.data.voiceFile;
               self.branchSegmentList[index].segVoiceFileUrl =
@@ -2522,13 +2363,6 @@ export default {
 
             self.$message.success("合成成功");
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -2550,7 +2384,7 @@ export default {
      */
     uploadWavSuccess: function(response, file, fileList, index) {
       var self = this;
-      if (response.state == "0000") {
+      if (response.state == "200") {
         self.branchSegmentList[index].segVoiceFile = response.data.fileName;
         self.branchSegmentList[index].segVoiceFileUrl = response.data.url;
         self.$message.success("上传成功");

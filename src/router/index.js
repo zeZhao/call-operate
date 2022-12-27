@@ -225,6 +225,32 @@ const constRouterList = [
     ]
   },
   {
+    path: '/dataSheet',
+    name: 'dataSheet',
+    component: Layout,
+    meta: {
+      title: '数据表',
+    },
+    children: [
+      {
+        path: '/dataSheet/table',
+        name: 'table',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataSheet/table/index.vue'),
+        meta: {
+          title: '数据表管理',
+        },
+      },
+      {
+        path: '/dataSheet/tableData',
+        name: 'tableData',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataSheet/tableData/index.vue'),
+        meta: {
+          title: '表数据管理',
+        },
+      },
+    ]
+  },
+  {
     path: '/warningTone',
     name: 'warningTone',
     component: Layout,

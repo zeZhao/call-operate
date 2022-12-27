@@ -28,7 +28,7 @@ import Standalone from "./lableComponents/Standalone.vue";
 export default {
   data() {
     return {
-      activeName: this.$route.query.tagType.toString() || '1',
+      activeName: this.$route.query.tagType || '1',
     };
   },
   created() {
@@ -48,19 +48,14 @@ export default {
       var data = {
         data: {
           sceneId: self.$route.query.sceneId,
-          tagType: type,
+          tagType: type || '1',
         },
         version: "1.0",
       };
       self.$http.scene.updateSceneTag(data).then((res) => {
-        if (res.state == "9000") {
-          this.$Beoverdue(function(url) {
-            self.$router.push({
-              path: url,
-            });
-          }); //公共方法，utils.js
-          self.$message.error(res.msg);
-        }
+        // if (res.state !== "200") {
+        //   self.$message.error(res.msg);
+        // }
       });
     },
   },

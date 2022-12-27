@@ -1,6 +1,7 @@
 import Page from "@/components/Page"
 import Search from "@/components/searchPanel"
 import FormItem from "@/components/FormItem"
+import aplayer from "vue-aplayer";
 import Api from "@/utils/api.js";
 import axios from "axios";
 import { setStorage, getStorage } from "@/utils/auth";
@@ -78,6 +79,7 @@ class callPlugin {
     Vue.component("Page", Page);
     Vue.component("Search", Search);
     Vue.component("FormItem", FormItem);
+    Vue.component("aplayer", aplayer);
   }
 
   /*------------------添加vue过滤器------------------*/

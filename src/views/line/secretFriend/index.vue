@@ -44,8 +44,8 @@
           <span v-if="row.numberStatus === 2">停用</span>
         </template>
       </el-table-column>
-      <el-table-column prop="userName" label="使用商家" />
-      <el-table-column prop="userId" label="商家账户" />
+      <el-table-column prop="merchantTenantName" label="使用商家" />
+      <el-table-column prop="merchantTenantAccountName" label="商家账户" />
       <el-table-column prop="routeType" label="路由类型">
         <template slot-scope="{ row }">
           <span v-if="row.routeType === 0">技能组</span>
@@ -90,6 +90,7 @@
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
         @changeFileUpload="changeFileUpload"
+        
       ></FormItem>
     </el-dialog>
     <el-dialog
@@ -104,6 +105,7 @@
         btnTxt="确定"
         @submit="submitAllocation"
         @cancel="cancelAllocation"
+        @selectChange="selectChange"
       ></FormItem>
     </el-dialog>
   </div>
@@ -191,9 +193,6 @@ export default {
           label: "供应商名称",
           key: "supplyId",
           optionData: [
-            { key: 0, value: "供应商A" },
-            { key: 1, value: "供应商B" },
-            { key: 2, value: "供应商C" },
           ],
         },
         {
@@ -201,9 +200,6 @@ export default {
           label: "线路名称",
           key: "lineId",
           optionData: [
-            { key: 0, value: "线路A" },
-            { key: 1, value: "线路B" },
-            { key: 2, value: "线路C" },
           ],
         },
         {
@@ -212,9 +208,6 @@ export default {
           key: "privince",
           colSpan: 12,
           optionData: [
-            { key: 0, value: "北京" },
-            { key: 1, value: "天津" },
-            { key: 2, value: "河北" },
           ],
         },
         {
@@ -258,9 +251,6 @@ export default {
           key: "supplyId",
           disabled: true,
           optionData: [
-            { key: 0, value: "供应商A" },
-            { key: 1, value: "供应商B" },
-            { key: 2, value: "供应商C" },
           ],
         },
         {
@@ -269,9 +259,6 @@ export default {
           key: "lineId",
           disabled: true,
           optionData: [
-            { key: 0, value: "线路A" },
-            { key: 1, value: "线路B" },
-            { key: 2, value: "线路C" },
           ],
         },
         {
@@ -288,7 +275,11 @@ export default {
           key: "operaId",
           colSpan: 12,
           disabled: true,
-          optionData: [],
+          optionData: [
+             { key: 1, value: "移动" },
+            { key: 2, value: "联通" },
+            { key: 3, value: "电信" },
+          ],
         },
         {
           type: "input",
@@ -303,11 +294,8 @@ export default {
         {
           type: "select",
           label: "使用商家",
-          key: "userName",
+          key: "corpId",
           optionData: [
-            { key: 0, value: "商户A" },
-            { key: 1, value: "商户B" },
-            { key: 2, value: "商户C" },
           ],
         },
         {
@@ -315,9 +303,6 @@ export default {
           label: "商家账户",
           key: "userId",
           optionData: [
-            { key: 0, value: "商户A" },
-            { key: 1, value: "商户B" },
-            { key: 2, value: "商户C" },
           ],
         },
         {
@@ -343,9 +328,61 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType()
+    this.getUser()
+    this.linecfgList()
+    this.provincecity()
+  },
   computed: {},
   methods: {
+    //获取商家公司下拉
+    getUser(){
+      this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
+        this._setDefaultValue(this.allocationConfig,res.data.records,'corpId','corpId','corpName')
+      })
+    },
+    listAll(corpId){
+      this.$http.corpUser.list({enablePage:false,corpId}).then(res=>{
+        this._setDefaultValue(this.allocationConfig,res.data.records,'userId','userId','userName')
+      })
+    },
+    //获取供应商公司下拉
+    queryCorpByCorpType(){
+      this.$http.select.queryCorpByCorpType({corpType:2}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'supplyId','corpId','corpName')
+        this._setDefaultValue(this.allocationConfig,res.data.records,'supplyId','corpId','corpName')
+      })
+    },
+    //获取线路下拉
+    linecfgList(){
+      this.$http.linecfg.get({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'lineId','lineId','lineName')
+        this._setDefaultValue(this.allocationConfig,res.data.list,'lineId','lineId','lineName')
+      })
+    },
+    provincecity(province){
+      this.$http.select.provincecity({province}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data,'privince','province','province')
+        this._setDefaultValue(this.allocationConfig,res.data,'privince','province','province')
+      })
+    },
+    // listAll(corpId){
+    //   this.$http.select.listAll({corpId}).then(res=>{
+    //     this._setDefaultValue(this.formConfig,res.data.records,'userId','supplyId','userName')
+    //   })
+    // },
+    selectChange({val,item}){
+      if(item.key === 'corpId'){
+        if(val){
+          this.listAll(val)
+        }else{
+          this._setDefaultValue(this.formConfig,[],'userId','supplyId','userName')
+          this._deleteDefaultValue(this.formConfig,'userId')
+        }
+      }
+      
+    },
     _mxDeleteItem() {
       if(this.multipleSelection.length === 0){
         this.$message.error('请选择一条数据')

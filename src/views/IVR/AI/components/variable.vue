@@ -164,19 +164,12 @@ export default {
         version: "1.0",
       };
       this.$http.scene.addVarAlias(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             type: "success",
             message: "保存成功!",
           });
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -187,11 +180,11 @@ export default {
     */
     del(index) {
       this.tableData.splice(index, 1);
-      for (let i = 0; i < this.tableData.length; i++) {
-        if (this.tableData[i].varType == index + 1) {
-          this.tableData[i].varType = "";
-        }
-      }
+      // for (let i = 0; i < this.tableData.length; i++) {
+      //   if (this.tableData[i].varType == index + 1) {
+      //     this.tableData[i].varType = "";
+      //   }
+      // }
     },
     /*
     变量设定添加
@@ -218,7 +211,7 @@ export default {
         version: "1.0",
       };
       this.$http.scene.listVarAlias(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.tableData = [];
           res.data.forEach((val) => {
             self.tableData.push({
@@ -228,13 +221,6 @@ export default {
           });
           //   self.tableData = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });

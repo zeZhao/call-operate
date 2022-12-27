@@ -301,20 +301,13 @@ export default {
         },
       };
       this.$http.scene.moreAddTag(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             type: "success",
             message: "修改默认标签成功!",
           });
           this.listTag();
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -358,16 +351,9 @@ export default {
             data: arr,
           };
           this.$http.scene.updateTagAll(data).then((res) => {
-            if (res.state == "0000") {
+            if (res.state == "200") {
               this.listTag();
             } else {
-              if (res.state == "9000") {
-                this.$Beoverdue(function(url) {
-                  self.$router.push({
-                    path: url,
-                  });
-                }); //公共方法，utils.js
-              }
               self.$message.error(res.msg);
             }
           });
@@ -390,7 +376,7 @@ export default {
         version: "1.0",
       };
       this.$http.scene.moreUpdateTag(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             type: "success",
             message: "编辑成功!",
@@ -398,13 +384,6 @@ export default {
           self.listTag();
           self.isNew = false;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -466,20 +445,13 @@ export default {
           version: "1.0",
         };
         this.$http.scene.moreDeleteTag(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.listTag();
             self.$message({
               type: "success",
               message: "删除成功!",
             });
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -534,7 +506,7 @@ export default {
               version: "1.0",
             };
             this.$http.scene.moreAddTag(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   type: "success",
                   message: "添加成功!",
@@ -549,13 +521,6 @@ export default {
                 self.listTag();
                 self.isNew = false;
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -576,7 +541,7 @@ export default {
               version: "1.0",
             };
             this.$http.scene.moreUpdateTag(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   type: "success",
                   message: "编辑成功!",
@@ -584,13 +549,6 @@ export default {
                 self.listTag();
                 self.isNew = false;
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -612,7 +570,8 @@ export default {
         sceneId: self.sceneId,
       };
       this.$http.scene.listTag(data).then((res) => {
-        if (res.state == "0000") {
+        console.log(res,'======')
+        if (res.state == "200") {
           self.loading = false;
           self.tableData = [];
           res.data.forEach((item) => {
@@ -625,13 +584,6 @@ export default {
             }
           });
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });

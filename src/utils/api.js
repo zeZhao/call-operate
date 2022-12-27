@@ -18,6 +18,10 @@ export default {
     listAll(data) {
       return request('/corpSupply/listAll', 'post', data)
     },
+    // 获取省份
+    provincecity(data) {
+      return request('/provincecity/get', 'post', data)
+    },
   },
   //账户
   sysUser: {
@@ -200,6 +204,15 @@ export default {
     delete(data) {
       return request(`/linecfg/delete/${data}`, 'delete')
     },
+    //获取高级配置
+    callruleGet(data) {
+      return request('/callrule/get', 'post', data)
+    },
+    //提交高级配置
+    callrulePut(data) {
+      return request('/callrule/put', 'put', data)
+    },
+    
   },
   //呼入配置
   inboundcfg: {
@@ -237,5 +250,381 @@ export default {
     speechRechargeLog(data){  
       return request('/speechRechargeLog/get/rechargeWater/detail', 'post', data)
     },
-  }
+  },
+  //审核管理
+  auditManage: {
+    //查询所有菜单
+    listSceneAuditByPage(params) {
+      return request("/scene/listSceneAuditByPage", 'post', params);
+    },
+    //场景审核
+    updateAuditStatus(params) {
+      return request("/scene/updateAuditStatus", 'post', params);
+    },
+  },
+  // 场景管理
+  scene: {
+    // 合成
+    synthesisBranchVoice(params) {
+      return request("/scene/branch/synthesisBranchVoice", 'post', params);
+    },
+    // 试听变量上传的语音
+    getSegment(params) {
+      return request("/scene/branch/segment/getSegment", 'post', params);
+    },
+    // 上传变量文件后保存
+    updateSegment(params) {
+      return request("/scene/branch/segment/updateSegment", 'post', params);
+    },
+    // 场景列表
+    listSceneByPage(params) {
+      return request("/scene/listSceneByPage", 'post', params);
+    },
+    // 场景添加
+    addScene(params) {
+      return request("/scene/addScene", 'post', params);
+    },
+    // 场景修改
+    updateScene(params) {
+      return request("/scene/updateScene", 'post', params);
+    },
+    // 场景删除
+    deleteScene(params) {
+      return request("/scene/deleteScene", 'post', params);
+    },
+    // 场景公开，不公开
+    updateSceneByOpenFlag(params) {
+      return request("/scene/updateSceneByOpenFlag", 'post', params);
+    },
+    // 场景发布
+    enableScene(params) {
+      return request("/scene/enableScene", 'post', params);
+    },
+    // 场景复制
+    copyScene(params) {
+      return request("/scene/copyScene", 'post', params);
+    },
+    // 场景重新发布
+    releaseScene(params) {
+      return request("/scene/releaseScene", 'post', params);
+    },
+    //  111111111111111111111111111111111111、
+    //  场景详情话术设置添加
+    addBranch(params) {
+      return request("/scene/branch/addBranch", 'post', params);
+    },
+    //  场景详情话术设置修改
+    updateBranch(params) {
+      return request("/scene/branch/updateBranch", 'post', params);
+    },
+    //  场景详情话术设置列表
+    listBranch(params) {
+      return request("/scene/branch/listBranch", 'post', params);
+    },
+    //  场景详情话术设置删除
+    deleteBranch(params) {
+      return request("/scene/branch/deleteBranch", 'post', params);
+    },
+    //  场景详情话术设置标题文本配置
+    listMatchRule(params) {
+      return request("/scene/branch/matchRule/listMatchRule", 'post', params);
+    },
+    //  场景详情话术设置标题文本配置添加
+    addMatchRule(params) {
+      return request("/scene/branch/matchRule/addMatchRule", 'post', params);
+    },
+    //  场景详情话术设置标题文本选项添加
+    addOption(params) {
+      return request("/scene/branch/option/addOption", 'post', params);
+    },
+    //  场景详情话术设置选项删除
+    deleteOption(params) {
+      return request("/scene/branch/option/deleteOption", 'post', params);
+    },
+    //  场景详情话术设置选项列表
+    listOption(params) {
+      return request("/scene/branch/option/listOption", 'post', params);
+    },
+    //  场景详情话术设置选项修改
+    updateOption(params) {
+      return request("/scene/branch/option/updateOption", 'post', params);
+    },
+    //  场景详情话术设置 上传修改
+    updateBranchFile(params) {
+      return request("/scene/branch/updateBranchFile", 'post', params);
+    },
+    //  场景详情话术设置选项       文本配置
+    listOptionMatchRule(params) {
+      return request(
+        "/scene/branch/option/matchRule/listOptionMatchRule", 'post',
+        params
+      );
+    },
+    //  场景详情话术设置选项规则       文本配置添加
+    addOptionMatchRule(params) {
+      return request(
+        "/scene/branch/option/matchRule/addOptionMatchRule", 'post',
+        params
+      );
+    },
+    //  场景详情话术设置选项规则       文本配置校验
+    checkOptionRuleExist(params) {
+      return request(
+        "/scene/branch/option/matchRule/checkOptionRuleExist", 'post',
+        params
+      );
+    },
+    //  场景详情话术设置选项规则       文本配置删除
+    deleteOptionMatchRule(params) {
+      return request(
+        "/scene/branch/option/matchRule/deleteOptionMatchRule", 'post',
+        params
+      );
+    },
+    // 1
+    //  场景详情话术设置标题文本配置删除
+    deleteMatchRule(params) {
+      return request("/scene/branch/matchRule/deleteMatchRule", 'post', params);
+    },
+    //  场景详情话术设置标题文本 判断当前场景下是否存在
+    checkMatchRule(params) {
+      return request("/scene/branch/matchRule/checkMatchRule", 'post', params);
+    },
+    //  场景详情变量设定 列表
+    listVarAlias(params) {
+      return request("/varAlias/listVarAlias", 'post', params);
+    },
+    //  场景详情变量设定 添加
+    addVarAlias(params) {
+      return request("/varAlias/addVarAlias", 'post', params);
+    },
+    //  场景详情知识库选项 列表
+    listKnowledge(params) {
+      return request("/scene/knowledge/listKnowledge", 'post', params);
+    },
+    //  场景详情知识库 知识库列表信息
+    listKnowledgeClass(params) {
+      return request("/scene/knowledgeClass/listKnowledgeClass", 'post', params);
+    },
+    //  场景详情知识库 知识库状态
+    updateKnowledgeStatus(params) {
+      return request("/scene/knowledge/updateKnowledgeStatus", 'post', params);
+    },
+    //  场景详情知识库 知识点文件上传
+    updateKnowledgeFile(params) {
+      return request("/scene/knowledge/updateKnowledgeFile", 'post', params);
+    },
+    //  场景详情知识库 知识点添加
+    addKnowledge(params) {
+      return request("/scene/knowledge/addKnowledge", 'post', params);
+    },
+    //  场景详情知识库 知识点删除
+    deleteKnowledge(params) {
+      return request("/scene/knowledge/deleteKnowledge", 'post', params);
+    },
+    //  场景详情知识库 知识点修改
+    updateKnowledge(params) {
+      return request("/scene/knowledge/updateKnowledge", 'post', params);
+    },
+    //  场景详情知识库 知识点  添加规则校验
+    checkKnowledgeRuleExist(params) {
+      return request(
+        "/scene/knowledge/matchRule/checkKnowledgeRuleExist", 'post',
+        params
+      );
+    },
+    //  场景详情知识库 知识点  添加规则提交
+    addKnowledgeRule(params) {
+      return request("/scene/knowledge/matchRule/addKnowledgeRule", 'post', params);
+    },
+    //  场景详情知识库 知识点  添加规则删除
+    deleteKnowledgeRule(params) {
+      return request(
+        "/scene/knowledge/matchRule/deleteKnowledgeRule", 'post',
+        params
+      );
+    },
+    //  场景详情标签 列表
+    listTagBySceneId(params) {
+      return request("/scene/tag/listTagBySceneId", 'post', params);
+    },
+    //  场景详情标签 添加
+    addTag(params) {
+      return request("/scene/tag/addTag", 'post', params);
+    },
+    //  场景详情标签 删除
+    deleteTag(params) {
+      return request("/scene/tag/deleteTag", 'post', params);
+    },
+    //  场景详情标签 是否关联标签
+    checkBranchIsHaveTag(params) {
+      return request("/scene/tag/checkBranchIsHaveTag", 'post', params);
+    },
+    //  场景详情标签 编辑提交
+    updateTag(params) {
+      return request("/scene/tag/updateTag", 'post', params);
+    },
+
+    //  场景详情多标签 列表
+    listTag(params) {
+      return request("/sceneCombinationTag/listTag", 'get', params,);
+    },
+    //  场景详情多标签添加
+    moreAddTag(params) {
+      return request("/sceneCombinationTag/addTag", 'post', params);
+    },
+    //  场景详情多标签删除
+    moreDeleteTag(params) {
+      return request("/sceneCombinationTag/deleteTag", 'post', params);
+    },
+    //  场景详情多标签编辑
+    moreUpdateTag(params) {
+      return request("/sceneCombinationTag/updateTag", 'post', params);
+    },
+    //  更新标签顺序接口
+    updateTagAll(params) {
+      return request("/sceneCombinationTag/updateTagAll", 'post', params);
+    },
+    //  标签table页选择接口
+    updateSceneTag(params) {
+      return request("/scene/updateSceneTag", 'post', params);
+    },
+
+    ////////////////////////////////////////////////////
+    // 语义引擎管理列表
+    listSemanticsSourceByPage(params) {
+      return request("/semantic/provider/listSemanticsSourceByPage", 'post', params);
+    },
+    // 语义引擎添加
+    addSemanticsSource(params) {
+      return request("/semantic/provider/addSemanticsSource", 'post', params);
+    },
+    // 语义引擎修改
+    updateSemanticsSource(params) {
+      return request("/semantic/provider/updateSemanticsSource", 'post', params);
+    },
+    // 语义引擎删除
+    deleteSemanticsSource(params) {
+      return request("/semantic/provider/deleteSemanticsSource", 'post', params);
+    },
+    // 合成语音配置列表
+    listConvertConfig(params) {
+      return request("/tts/config/listConvertConfig", 'post', params);
+    },
+    // 合成语音配置 人声列表
+    listVoiceLib(params) {
+      return request("/tts/config/listVoiceLib", 'post', params);
+    },
+    // 合成语音配置 修改
+    updateConvertConfig(params) {
+      return request("/tts/config/updateConvertConfig", 'post', params);
+    },
+    // 场景学习列表
+    listSceneLogByPage(params) {
+      return request("/scene/log/listSceneLogByPage", 'post', params);
+    },
+    // 场景学习处理
+    updateSceneLog(params) {
+      return request("/scene/log/updateSceneLog", 'post', params);
+    },
+    // 修改发布状态
+    skipSceneInformation(params) {
+      return request("/scene/skipSceneInformation", 'post', params);
+    },
+    //语音验证码列表
+    voiceListSceneByPage(params) {
+      return request("/voiceMessageScene/listSceneByPage", 'post', params);
+    },
+    //新增场景
+    voiceAddScene(params) {
+      return request("/voiceMessageScene/addScene", 'post', params);
+    },
+    //新增场景
+    voiceDeleteScene(params) {
+      return request("/voiceMessageScene/deleteScene", 'post', params);
+    },
+    //修改场景
+    voiceUpdateScene(params) {
+      return request("/voiceMessageScene/updateScene", 'post', params);
+    },
+    //修改场景状态
+    updateSceneStatus(params) {
+      return request("/scene/updateSceneStatus", 'post', params);
+    },
+
+  },
+  // 短信
+  note:{
+    // 短信模板选项列表
+    listSmsTemplate(params) {
+      return request("/sms/template/listSmsTemplate", 'post', params);
+    },
+  },
+  // 商户管理
+  merchant: {
+    // 商户（用户）列表
+    listClient(params) {
+      return request("/client/listClient", 'post', params);
+    },
+  },
+  //数据表管理
+  dataSheet: {
+    //表管理列表
+    listClientTableByPage(params) {
+      return request("/client/table/listClientTableByPage", 'post', params);
+    },
+    //表管理添加
+    createClientTable(params) {
+      return request("/client/table/createClientTable", 'post', params);
+    },
+    //表管理删除
+    deleteClientTable(params) {
+      return request("/client/table/deleteClientTable", 'post', params);
+    },
+  },
+  //表数据管理
+  dataTable: {
+    //表数据列表
+    listClientTableData(params) {
+      return request("/client/table/listClientTableData", 'post', params);
+    },
+    //表数据列表
+    selectClientTable(params) {
+      return request("/client/table/selectClientTable", 'post', params);
+    },
+    //表数据删除
+    deleteDoc(params) {
+      return request("/client/table/deleteDoc", 'post', params);
+    },
+    //表数据更新
+    updateDoc(params) {
+      return request("/client/table/updateDoc", 'post', params);
+    },
+    //表数据导出
+    exportTableData(params) {
+      return fetchGet("/client/table/exportTableData", 'get', params);
+    },
+    //表数据导入
+    importClientData(params) {
+      return request("/client/table/importClientData", 'post', params);
+    },
+    //下载模板和导出数据
+    downloadExcelTemplate(params) {
+      return fetchGet("/client/table/downloadExcelTemplate", 'get', params);
+    },
+    //导入数据
+    importClientData(params) {
+      return request("/client/table/importClientData", 'post', params);
+    },
+    //字段列表
+    getTableColumnList(params) {
+      return request("/client/table/getTableColumnList", 'post', params);
+    },
+  },
+  //外呼
+  callTask:{
+    listTaskByPage(data){
+      return request("/callTask/listTaskByPage", 'post', data);
+    },
+  },
 }

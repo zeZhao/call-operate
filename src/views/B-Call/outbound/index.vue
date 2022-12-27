@@ -13,17 +13,31 @@
       :height="tableHeight"
     >
       <!-- <el-table-column label="序号" type="index" align="center" /> -->
-      <el-table-column prop="corpId" label="商户名称" />
-      <el-table-column prop="corpId" label="任务名称" />
-      <el-table-column prop="corpId" label="任务类型" />
+      <el-table-column prop="corpName" label="商户名称" />
+      <el-table-column prop="taskName" label="任务名称" />
+      <el-table-column prop="taskType" label="任务类型" >
+        <template slot-scope="{row}">
+          <span v-if="row.taskType === 1">自动语音</span>
+          <span v-if="row.taskType === 2">呼通后转人工</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="corpId" label="服务流程/班组" />
       <el-table-column prop="corpId" label="主叫/线路" />
       <el-table-column prop="corpId" label="并发上限" />
       <el-table-column prop="corpId" label="总号码数" />
       <el-table-column prop="corpId" label="剩余号码数" />
-      <el-table-column prop="corpId" label="任务状态" />
+      <el-table-column prop="state" label="任务状态" >
+        <template slot-scope="{row}">
+          <span v-if="row.state === 3">未开始</span>
+          <span v-if="row.state === 4">呼叫中</span>
+          <span v-if="row.state === 5">自动暂停</span>
+          <span v-if="row.state === 6">任务完成</span>
+          <span v-if="row.state === 7">任务终止</span>
+          <span v-if="row.state === 8">手动暂停</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="corpId" label="更新时间" />
-      <el-table-column label="操作" width="100" fixed="right">
+      <el-table-column label="操作" width="250" fixed="right">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'templateId')"
@@ -79,10 +93,10 @@
       >
       <template v-slot:custom = 'formData'>
         <el-form-item label="有效时段1：">
-          <el-select v-model="formData.formData.timeValidity1_1">
-            <el-option :value="1">星期一</el-option>
-            <el-option :value="2">星期二</el-option>
-            <el-option :value="3">星期三</el-option>
+          <el-select v-model="formData.formData.timeValidity1_1" multiple collapse-tags>
+            <el-option :value="1" label="星期一"></el-option>
+            <el-option :value="2" label="星期二"></el-option>
+            <el-option :value="3" label="星期三"></el-option>
           </el-select>
           <el-time-picker
             v-model="formData.formData.timeValidity1_2"
@@ -96,10 +110,10 @@
           </el-time-picker>
         </el-form-item>
         <el-form-item label="有效时段2：">
-          <el-select v-model="formData.formData.timeValidity2_1">
-            <el-option :value="1">星期一</el-option>
-            <el-option :value="2">星期二</el-option>
-            <el-option :value="3">星期三</el-option>
+          <el-select v-model="formData.formData.timeValidity2_1" multiple collapse-tags>
+            <el-option :value="1" label="星期一"></el-option>
+            <el-option :value="2" label="星期二"></el-option>
+            <el-option :value="3" label="星期三"></el-option>
           </el-select>
           <el-time-picker
             v-model="formData.formData.timeValidity2_2"
@@ -128,25 +142,29 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商户名称", key: "corpName" },
-        { type: "input", label: "任务名称", key: "corpNames" },
-        { type: "inputNum", label: "主叫号码", key: "userId" },
+        { type: "input", label: "商户名称", key: "corpId" },
+        { type: "input", label: "任务名称", key: "taskName" },
+        { type: "inputNum", label: "主叫号码", key: "extId" },
         {
           type: "select",
           label: "任务类型",
-          key: "sign",
+          key: "taskType",
           optionData: [
-            { key: "1", value: "自动语音" },
-            { key: "2", value: "呼通后转人工" },
+            { key: 1, value: "自动语音" },
+            { key: 2, value: "呼通后转人工" },
           ],
         },
         {
           type: "select",
           label: "任务状态",
-          key: "sign",
+          key: "state",
           optionData: [
-            { key: "1", value: "已停止" },
-            { key: "2", value: "运行中" },
+            { key: 3, value: "未开始" },
+            { key: 4, value: "呼叫中" },
+            { key: 5, value: "自动暂停" },
+            { key: 6, value: "任务完成" },
+            { key: 7, value: "任务终止" },
+            { key: 8, value: "手动暂停" },
           ],
         },
         // {
@@ -179,37 +197,47 @@ export default {
       // 表单配置
       formConfig: [
         {
-          type: "input",
+          type: "select",
           label: "商户名称",
-          key: "userId",
+          key: "corpId",
           defaultValue: "",
+          optionData:[]
         },
         {
           type: "input",
           label: "任务名称",
-          key: "userId1",
+          key: "taskName",
           defaultValue: "",
         },
         {
           type:"select",
           label:'任务类型',
-          key:"supplier1",
+          key:"taskType",
           colSpan:12,
-          optionData:[]
+          optionData:[
+            { key: 1, value: "自动语音" },
+            { key: 2, value: "呼通后转人工" },
+          ]
         },
         {
           type:"select",
           label:'主叫/线路',
           key:"supplier2",
           colSpan:12,
-          optionData:[]
+          optionData:[
+            { key: 1, value: "自动语音" },
+            { key: 2, value: "呼通后转人工" },
+          ]
         },
         {
           type:"select",
           label:'服务流程/班组',
           key:"supplier3",
           colSpan:12,
-          optionData:[]
+          optionData:[
+            { key: 1, value: "自动语音" },
+            { key: 2, value: "呼通后转人工" },
+          ]
         },
         {
           type:"input",

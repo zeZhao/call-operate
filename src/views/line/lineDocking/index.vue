@@ -19,8 +19,8 @@
     >
       <el-table-column label="序号" type="index" align="center" />
       <el-table-column prop="lineName" label="线路名称" />
-      <el-table-column prop="userName" label="供应商名称" />
-      <el-table-column prop="userId" label="供应商账户" />
+      <el-table-column prop="corpName" label="供应商名称" />
+      <el-table-column prop="supplyAccountName" label="供应商账户" />
       <el-table-column prop="linkType" label="对接方式">
         <template slot-scope="{row}">
           <span v-if="row.linkType === 0">SIP对接</span>
@@ -95,7 +95,7 @@
         :labelWidth="100"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
-        @choose="choose"
+        @selectChange="selectChange"
       ></FormItem>
     </el-dialog>
 
@@ -105,17 +105,18 @@
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="handleClose"
+      :close-on-click-modal="false"
     >
       <div>
         <p>主叫改写规则</p>
         <div v-for="(item, index) in zj" :key="index" class="advanced">
           <div class="demo-input-suffix">
-            前缀：
-            <el-input placeholder="请输入前缀" v-model="item.val"> </el-input>
+            <span>前缀：</span>
+            <el-input placeholder="请输入前缀" v-model="item.preFix"> </el-input>
           </div>
           <div class="demo-input-suffix">
-            修改为：
-            <el-input placeholder="请输入前缀" v-model="item.newVal">
+            <span>修改为：</span>
+            <el-input placeholder="请输入前缀" v-model="item.preFixCorrection">
             </el-input>
           </div>
           <div>
@@ -132,12 +133,12 @@
         </p>
         <div v-for="(item, index) in bj" :key="index" class="advanced">
           <div class="demo-input-suffix">
-            前缀：
-            <el-input placeholder="请输入前缀" v-model="item.val"> </el-input>
+            <span>前缀：</span>
+            <el-input placeholder="请输入前缀" v-model="item.preFix"> </el-input>
           </div>
           <div class="demo-input-suffix">
-            修改为：
-            <el-input placeholder="请输入前缀" v-model="item.newVal">
+            <span>修改为：</span>
+            <el-input placeholder="请输入前缀" v-model="item.preFixCorrection">
             </el-input>
           </div>
           <div>
@@ -148,7 +149,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-button type="primary" @click="callrulePut"
           >确 定</el-button
         >
       </span>
@@ -191,7 +192,7 @@ export default {
           label: "运营商",
           key: "operaId",
           optionData: [
-            { key: 0, value: "非法" },
+            // { key: 0, value: "非法" },
             { key: 1, value: "移动" },
             { key: 2, value: "联通" },
             { key: 3, value: "电信" },
@@ -236,16 +237,18 @@ export default {
       // 表单配置
       formConfig: [
         {
-          type: "input",
+          type: "select",
           label: "供应商名称",
           key: "supplyId",
           defaultValue: "",
+          optionData:[]
         },
         {
-          type: "input",
+          type: "select",
           label: "供应商账户",
           key: "userId",
           defaultValue: "",
+          optionData:[]
         },
         {
           type: "input",
@@ -257,7 +260,8 @@ export default {
           type: "select",
           label: "线路类型",
           key: "lineType",
-          defaultValue: "",
+          defaultValue: 0,
+          initDefaultValue:0,
           optionData: [
             { key: 0, value: "直连" },
             { key: 1, value: "第三方" },
@@ -270,7 +274,7 @@ export default {
           key: "operaId",
           defaultValue: "",
           optionData: [
-            { key: 0, value: "非法" },
+            // { key: 0, value: "非法" },
             { key: 1, value: "移动" },
             { key: 2, value: "联通" },
             { key: 3, value: "电信" },
@@ -279,17 +283,19 @@ export default {
           colSpan:12
         },
         {
-          type: "input",
+          type: "select",
           label: "落地省份",
           key: "province",
           defaultValue: "",
+          optionData:[],
           colSpan:12
         },
         {
-          type: "input",
+          type: "select",
           label: "落地城市",
           key: "city",
           defaultValue: "",
+          optionData:[],
           colSpan:12
         },
         // {
@@ -349,31 +355,117 @@ export default {
       ],
       id: "",
       dialogVisible: false,
-      zj: [{ val: "", newVal: "" }],
-      bj: [{ val: "", newVal: "" }],
+      zj: [],
+      bj: [],
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType()
+    this.provincecity()
+    this.callruleGet()
+  },
   computed: {},
   methods: {
+    callrulePut(){
+      let params = this.zj.concat(this.bj)
+      console.log(params,'-----')
+      this.$http.linecfg.callrulePut(params).then(res=>{
+        if(res.state == 200){
+          this.dialogVisible = false
+          this.callruleGet()
+          this.$message.success('设置成功')
+        }
+      })
+    },
+    //获取高级配置
+    callruleGet(){
+      this.zj = []
+      this.bj = []
+      this.$http.linecfg.callruleGet({}).then(res=>{
+        if(res.state == 200){
+          res.data.list.forEach(item=>{
+            this.$nextTick(()=>{
+              if(item.callType === 1){
+                console.log(item)
+                this.zj.push(item)
+              }else{
+                this.bj.push(item)
+              }
+            })
+            
+          })
+        }
+      })
+      console.log(this.zj,'======')
+    },
+    //获取公司下拉
+    queryCorpByCorpType(){
+      this.$http.select.queryCorpByCorpType({corpType:2}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'supplyId','corpId','corpName')
+      })
+    },
+    listAll(corpId){
+      this.$http.select.listAll({corpId}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'userId','supplyId','userName')
+      })
+    },
+    provincecity(province){
+      this.$http.select.provincecity({province}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data,'province','province','province')
+      })
+    },
+    selectChange({val,item}){
+      if(item.key === 'lineType'){
+        this.operaId
+        if(val == 0){
+          this._setDisplayShow(this.formConfig,'operaId',false)
+          this._setDisplayShow(this.formConfig,'province',false)
+          this._setDisplayShow(this.formConfig,'city',false)
+        }else{
+          this._setDisplayShow(this.formConfig,'operaId',true)
+          this._setDisplayShow(this.formConfig,'province',true)
+          this._setDisplayShow(this.formConfig,'city',true)
+        }
+        
+      }
+      if(item.key === 'province'){
+        if(val){
+          this.$http.select.provincecity({province:val}).then(res=>{
+            this._setDefaultValue(this.formConfig,res.data[0].cityList,'city','city','city')
+          })
+        }else{
+          this._setDefaultValue(this.formConfig,[],'city','city','city')
+          this._deleteDefaultValue(this.formConfig,'city')
+        }
+      }
+      if(item.key === 'supplyId'){
+        if(val){
+          this.listAll(val)
+        }else{
+          this._setDefaultValue(this.formConfig,[],'userId','supplyId','userName')
+          this._deleteDefaultValue(this.formConfig,'userId')
+        }
+      }
+      
+    },
     advanced() {
       this.dialogVisible = true;
-      this.zj = [{ val: "", newVal: "" }];
-      this.bj = [{ val: "", newVal: "" }];
+      // this.zj = [{ val: "", newVal: "" }];
+      // this.bj = [{ val: "", newVal: "" }];
     },
     handleClose() {
       this.dialogVisible = false;
     },
     addZj() {
-      let obj = { val: "", newVal: "" };
+      let obj = { preFix: "", preFixCorrection: "",callType:1 };
       this.zj.push(obj);
     },
     deteleZj(index) {
       this.zj.splice(index, 1);
     },
     addBj() {
-      let obj = { val: "", newVal: "" };
+      let obj = { preFix: "", preFixCorrection: "",callType:2 };
       this.bj.push(obj);
     },
     deteleBj(index) {
@@ -383,4 +475,12 @@ export default {
   watch: {},
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.advanced{
+  display: flex;
+  margin-top: 20px;
+  .el-input{
+    width: 70%;
+  }
+}
+</style>

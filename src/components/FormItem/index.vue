@@ -8,11 +8,12 @@
       v-if="formConfig.length"
       class="demo-ruleForm"
     >
-      <el-row :gutter="gutter">
+      <el-row :gutter="gutter" class="clearfix">
         <el-col
           v-for="(item, index) in formConfig"
           :key="index"
           :span="item.colSpan || colSpan"
+          
         >
           <div v-if="item.type === 'divider' && !item.isShow">
             <el-divider></el-divider>
@@ -519,6 +520,7 @@
           </el-form-item>
         </el-col>
         <!-- 自定义表单项 -->
+        <div style="clear:both"></div>
         <div>
           <slot name="custom" :formData="formData"></slot>
         </div>
@@ -660,6 +662,7 @@ export default {
     //  select 事件
     onChange(val, item) {
       this._setDefaultVal(val, item);
+      console.log(33333)
       this.$emit("onChange", { val, item });
     },
     // 选择组件
@@ -743,7 +746,7 @@ export default {
               "selectGroup",
             ].includes(type)
           ) {
-            if (item.initDefaultValue) {
+            if (item.initDefaultValue || item.initDefaultValue === 0) {
               this.$set(item, "defaultValue", item.initDefaultValue);
             } else {
               item.defaultValue = null;

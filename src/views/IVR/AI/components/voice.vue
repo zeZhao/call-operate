@@ -104,9 +104,7 @@
 </template>
 
 <script>
-import aplayer from "vue-aplayer";
 export default {
-  components:[aplayer],
   props: {
     voiceRow: {
       type: Object,
@@ -171,7 +169,7 @@ export default {
      */
     uploadWavSuccess: function(response) {
       var self = this;
-      if (response.state == "0000") {
+      if (response.state == "200") {
         var data = {
           data: {
             branchId: self.branchId,
@@ -180,20 +178,13 @@ export default {
           version: "1.0",
         };
         self.$http.scene.updateBranchFile(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.$message({
               message: "上传成功",
               type: "success",
             });
             self.List();
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -222,7 +213,7 @@ export default {
         })
         .then((res) => {
           const { data, state } = res;
-          if (state === "0000") {
+          if (state === "200") {
             this.varfileUrl = "";
 
             setTimeout(function() {
@@ -232,13 +223,7 @@ export default {
             //   self.$refs["varAudio"].play();
             // }, 1);
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
+            self.$message.error(res.msg);
           }
         });
     },
@@ -271,7 +256,7 @@ export default {
         })
         .then((res) => {
           const { data, state, msg } = res;
-          if (state === "0000") {
+          if (state === "200") {
             //  这个赋值没有任何作用，就是判断是否有合成语音
 
             // self.voiceRow.branchSegmentList[index].segVoiceFile="file"
@@ -282,13 +267,6 @@ export default {
             }
             self.$message.success("合成成功");
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });

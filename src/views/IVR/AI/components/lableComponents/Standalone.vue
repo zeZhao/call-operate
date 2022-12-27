@@ -216,7 +216,7 @@ export default {
         version: "1.0",
       };
       this.$http.scene.updateTag(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             type: "success",
             message: "编辑成功!",
@@ -224,13 +224,6 @@ export default {
           self.LabelLis();
           self.isNew = false;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -281,20 +274,13 @@ export default {
           version: "1.0",
         };
         this.$http.scene.deleteTag(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.LabelLis();
             self.$message({
               type: "success",
               message: "删除成功!",
             });
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -320,7 +306,7 @@ export default {
               version: "1.0",
             };
             this.$http.scene.addTag(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   type: "success",
                   message: "添加成功!",
@@ -334,13 +320,6 @@ export default {
                 self.LabelLis();
                 self.isNew = false;
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -358,7 +337,7 @@ export default {
               version: "1.0",
             };
             this.$http.scene.checkBranchIsHaveTag(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 if (res.data) {
                   this.$confirm(
                     "有关联，是否要继续，续续的话会影响已有标签为空",
@@ -375,13 +354,6 @@ export default {
                   this.editSub();
                 }
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -406,17 +378,10 @@ export default {
         version: "1.0",
       };
       this.$http.scene.listTagBySceneId(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.loading = false;
           self.tableData = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });

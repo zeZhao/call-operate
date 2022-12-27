@@ -24,7 +24,7 @@
           >
             <el-option
               v-for="(item, index) in KnowledgePointsData"
-              :label="item.typeName"
+              :label="item.className"
               :value="item.classId"
               :key="index"
             ></el-option>
@@ -188,7 +188,7 @@
             >
               <el-option
                 v-for="(item, index) in KnowledgePointsData"
-                :label="item.typeName"
+                :label="item.className"
                 :value="item.classId"
                 :key="index"
               ></el-option>
@@ -384,20 +384,13 @@ export default {
         version: "1.0",
       };
       self.$http.scene.updateKnowledgeStatus(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             message: "状态修改成功",
             type: "success",
           });
           self.List();
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -427,7 +420,7 @@ export default {
      */
     uploadWavSuccess: function(response) {
       var self = this;
-      if (response.state == "0000") {
+      if (response.state == "200") {
         var data = {
           data: {
             kbItemId: self.kbItemId,
@@ -436,20 +429,13 @@ export default {
           version: "1.0",
         };
         self.$http.scene.updateKnowledgeFile(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.$message({
               message: "上传成功",
               type: "success",
             });
             self.List();
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -480,20 +466,13 @@ export default {
         version: "1.0",
       };
       self.$http.scene.deleteKnowledgeRule(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             message: "删除成功",
             type: "success",
           });
           self.List();
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -521,16 +500,9 @@ export default {
           version: "1.0",
         };
         self.$http.scene.checkKnowledgeRuleExist(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.textSubmit();
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -552,7 +524,7 @@ export default {
         version: "1.0",
       };
       self.$http.scene.addKnowledgeRule(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.$message({
             message: "添加成功",
             type: "success",
@@ -560,13 +532,6 @@ export default {
           self.istext = false;
           self.List(); //重新请求列表
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -589,20 +554,13 @@ export default {
           version: "1.0",
         };
         this.$http.scene.deleteKnowledge(data).then((res) => {
-          if (res.state == "0000") {
+          if (res.state == "200") {
             self.data.splice(index, 1);
             self.$message({
               type: "success",
               message: "删除成功!",
             });
           } else {
-            if (res.state == "9000") {
-              this.$Beoverdue(function(url) {
-                self.$router.push({
-                  path: url,
-                });
-              }); //公共方法，utils.js
-            }
             self.$message.error(res.msg);
           }
         });
@@ -630,7 +588,7 @@ export default {
               version: "1.0",
             };
             self.$http.scene.addKnowledge(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   message: "新增成功",
                   type: "success",
@@ -639,13 +597,6 @@ export default {
 
                 self.List(); //重新请求列表
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -663,7 +614,7 @@ export default {
               version: "1.0",
             };
             self.$http.scene.updateKnowledge(data).then((res) => {
-              if (res.state == "0000") {
+              if (res.state == "200") {
                 self.$message({
                   message: "修改成功",
                   type: "success",
@@ -672,13 +623,6 @@ export default {
 
                 self.List(); //重新请求列表
               } else {
-                if (res.state == "9000") {
-                  this.$Beoverdue(function(url) {
-                    self.$router.push({
-                      path: url,
-                    });
-                  }); //公共方法，utils.js
-                }
                 self.$message.error(res.msg);
               }
             });
@@ -731,16 +675,9 @@ export default {
         version: "1.0",
       };
       this.$http.scene.listKnowledgeClass(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.KnowledgePointsData = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });
@@ -761,16 +698,9 @@ export default {
         version: "1.0",
       };
       this.$http.scene.listKnowledge(data).then((res) => {
-        if (res.state == "0000") {
+        if (res.state == "200") {
           self.data = res.data;
         } else {
-          if (res.state == "9000") {
-            this.$Beoverdue(function(url) {
-              self.$router.push({
-                path: url,
-              });
-            }); //公共方法，utils.js
-          }
           self.$message.error(res.msg);
         }
       });

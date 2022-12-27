@@ -60,7 +60,7 @@ export default {
   },
   created() {
     this.clientId = this.$route.query.clientId;
-    this.userType = this.$cookies.get("userType") == "B" ? true : false;
+    this.userType = false;
     let status = this.$route.query.auditStatus;
     if (this.userType) {
       if (status == 2) {
@@ -91,7 +91,7 @@ export default {
 <style lang="scss" scoped>
 #Box {
   width: 100%;
-  padding: 20px;
+  // padding: 20px;
   box-sizing: border-box;
   background: #eeeeee;
   height: 100%;
@@ -101,7 +101,7 @@ export default {
   .tabs {
     width: 100%;
     background: white;
-    padding: 20px;
+    // padding: 20px;
     box-sizing: border-box;
     min-height: 100%;
   }
