@@ -14,19 +14,19 @@
     >
       <!-- <el-table-column label="序号" type="index" align="center" /> -->
       <el-table-column prop="corpName" label="商户名称" />
-      <el-table-column prop="taskName" label="任务名称" />
-      <el-table-column prop="taskType" label="任务类型" >
+      <el-table-column prop="taskName" label="技能组名称" />
+      <el-table-column prop="taskType" label="技能组流程" >
         <template slot-scope="{row}">
           <span v-if="row.taskType === 1">自动语音</span>
           <span v-if="row.taskType === 2">呼通后转人工</span>
         </template>
       </el-table-column>
-      <el-table-column prop="corpId" label="服务流程/班组" />
-      <el-table-column prop="corpId" label="主叫/线路" />
-      <el-table-column prop="corpId" label="并发上限" />
-      <el-table-column prop="corpId" label="总号码数" />
-      <el-table-column prop="corpId" label="剩余号码数" />
-      <el-table-column prop="state" label="任务状态" >
+      <el-table-column prop="corpId" label="座席数量" />
+      <el-table-column prop="corpId" label="座席分配策略" />
+      <el-table-column prop="corpId" label="满意度流程" />
+      <el-table-column prop="corpId" label="报工号" />
+      <el-table-column prop="corpId" label="报工号语音" />
+      <el-table-column prop="state" label="状态" >
         <template slot-scope="{row}">
           <span v-if="row.state === 3">未开始</span>
           <span v-if="row.state === 4">呼叫中</span>
@@ -36,9 +36,14 @@
           <span v-if="row.state === 8">手动暂停</span>
         </template>
       </el-table-column>
-      <el-table-column prop="corpId" label="更新时间" />
-      <el-table-column label="操作" width="250" fixed="right">
+      <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
+          <el-button
+            @click="_mxEdit(scope.row, 'templateId')"
+            type="text"
+            size="small"
+            >查看</el-button
+          >
           <el-button
             @click="_mxEdit(scope.row, 'templateId')"
             type="text"
@@ -46,25 +51,7 @@
             >编辑</el-button
           >
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
-            type="text"
-            size="small"
-            >启动</el-button
-          >
-          <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
-            type="text"
-            size="small"
-            >暂停</el-button
-          >
-          <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
-            type="text"
-            size="small"
-            >追加</el-button
-          >
-          <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click=" _mxDeleteItem('extId', scope.row.extId, false, false)"
             type="text"
             size="small"
             >删除</el-button
@@ -92,40 +79,16 @@
         :isSubmitBtn="true"
       >
       <template v-slot:custom = 'formData'>
-        <el-form-item label="有效时段1：">
-          <el-select v-model="formData.formData.timeValidity1_1" multiple collapse-tags>
-            <el-option :value="1" label="星期一"></el-option>
-            <el-option :value="2" label="星期二"></el-option>
-            <el-option :value="3" label="星期三"></el-option>
-          </el-select>
-          <el-time-picker
-            v-model="formData.formData.timeValidity1_2"
-            style="width:120px;margin-left:20px"
-            placeholder="任意时间点">
-          </el-time-picker>
-          <el-time-picker
-            style="width:120px;margin-left:20px"  
-            v-model="formData.formData.timeValidity1_3"
-            placeholder="任意时间点">
-          </el-time-picker>
-        </el-form-item>
-        <el-form-item label="有效时段2：">
-          <el-select v-model="formData.formData.timeValidity2_1" multiple collapse-tags>
-            <el-option :value="1" label="星期一"></el-option>
-            <el-option :value="2" label="星期二"></el-option>
-            <el-option :value="3" label="星期三"></el-option>
-          </el-select>
-          <el-time-picker
-            v-model="formData.formData.timeValidity2_2"
-            style="width:120px;margin-left:20px"
-            placeholder="任意时间点">
-          </el-time-picker>
-          <el-time-picker
-            style="width:120px;margin-left:20px"  
-            v-model="formData.formData.timeValidity2_3"
-            placeholder="任意时间点">
-          </el-time-picker>
-        </el-form-item>
+        <div style="margin-left:50px;margin-bottom:20px">
+          <el-transfer 
+            v-model="formData.formData.seat" 
+            :data="data" 
+            :titles="['已关联座席', '待关联座席']" 
+            :left-default-checked="[2, 3]"
+            :right-default-checked="[1]"
+            ></el-transfer>
+        </div>
+        
       </template>
       </FormItem>
       
@@ -139,32 +102,46 @@ export default {
   mixins: [listMixin],
   components: {},
   data() {
+    const generateData = _ => {
+        const data = [];
+        for (let i = 1; i <= 8; i++) {
+          data.push({
+            key: i,
+            label: `备选项 ${ i }`,
+            disabled: i % 4 === 0
+          });
+        }
+        return data;
+      };
     return {
+      data: generateData(),
       // 搜索框配置
       searchFormConfig: [
         { type: "input", label: "商户名称", key: "corpId" },
-        { type: "input", label: "任务名称", key: "taskName" },
-        { type: "inputNum", label: "主叫号码", key: "extId" },
+        { type: "input", label: "技能组流程", key: "taskName" },
+        { type: "inputNum", label: "满意度流程", key: "extId" },
+        { type: "inputNum", label: "技能组名称", key: "extId" },
         {
           type: "select",
-          label: "任务类型",
+          label: "座席分配策略",
           key: "taskType",
           optionData: [
-            { key: 1, value: "自动语音" },
-            { key: 2, value: "呼通后转人工" },
+            { key: 1, value: "轮选" },
+            { key: 2, value: "随机" },
+            { key: 3, value: "分机记忆" },
+            { key: 4, value: "共振" },
+            { key: 5, value: "空闲时间最长" },
+            { key: 6, value: "通话时间最短" },
+            { key: 7, value: "电话数量最少" },
           ],
         },
         {
           type: "select",
-          label: "任务状态",
+          label: "状态",
           key: "state",
           optionData: [
-            { key: 3, value: "未开始" },
-            { key: 4, value: "呼叫中" },
-            { key: 5, value: "自动暂停" },
-            { key: 6, value: "任务完成" },
-            { key: 7, value: "任务终止" },
-            { key: 8, value: "手动暂停" },
+            { key: 3, value: "有效" },
+            { key: 4, value: "停用" },
           ],
         },
         // {
@@ -205,66 +182,49 @@ export default {
         },
         {
           type: "input",
-          label: "任务名称",
+          label: "技能组名称",
           key: "taskName",
           defaultValue: "",
         },
         {
           type:"select",
-          label:'任务类型',
+          label:'排队流程',
           key:"taskType",
           colSpan:12,
           optionData:[
-            { key: 1, value: "自动语音" },
+            { key: 1, value: "系统默认" },
             { key: 2, value: "呼通后转人工" },
           ]
         },
         {
           type:"select",
-          label:'主叫/线路',
+          label:'座席分配策略',
           key:"supplier2",
           colSpan:12,
           optionData:[
-            { key: 1, value: "自动语音" },
-            { key: 2, value: "呼通后转人工" },
+            { key: 1, value: "轮选" },
+            { key: 2, value: "随机" },
+            { key: 3, value: "分机记忆" },
+            { key: 4, value: "共振" },
+            { key: 5, value: "空闲时间最长" },
+            { key: 6, value: "通话时间最短" },
+            { key: 7, value: "电话数量最少" },
           ]
         },
         {
           type:"select",
-          label:'服务流程/班组',
+          label:'满意度调查流程',
           key:"supplier3",
           colSpan:12,
+          defaultValue:1,
           optionData:[
-            { key: 1, value: "自动语音" },
+            { key: 1, value: "系统默认" },
             { key: 2, value: "呼通后转人工" },
           ]
         },
         {
-          type:"input",
-          label:'并发数',
-          key:"supplier4",
-          colSpan:12,
+          type: "divider",
         },
-        {
-          type:"uploadXlsx",
-          label:'外呼号码',
-          key:"supplier5",
-          // colSpan:12,
-        },
-        // {
-        //   type: "textarea",
-        //   label: "长号码",
-        //   key: "smsLongNum",
-        //   defaultValue: "",
-        //   maxlength: 4000,
-        //   // rules: [
-        //   //   {
-        //   //     required: true,
-        //   //     message: "请输入必填项",
-        //   //     trigger: ['blur', 'change']
-        //   //   }
-        //   // ]
-        // },
       ],
       id: "",
     };

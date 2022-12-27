@@ -300,6 +300,14 @@ const constRouterList = [
           title: '坐席权限',
         },
       },
+      {
+        path: '/seats/skillGroups',
+        name: 'skillGroups',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/seats/skillGroups/index.vue'),
+        meta: {
+          title: '技能组',
+        },
+      },
     ]
   },
   {

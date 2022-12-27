@@ -449,13 +449,14 @@ export default {
     },
     rechargeSubmit(){
       const form = Object.assign({},this.$refs.rechargeForm.formData)
-      let params = Object.assign(form,{corpId:this.row.corpId,userId:this.row.userId})
+      let params = Object.assign(form,{corpId:this.row.corpId,userId:this.row.userId,agentId:this.row.agentId})
       // console.log(,'====')
       this.$http.corpUser.cropUserRecharge(params).then(res=>{ 
         if(res.state === '200'){
           this.rechargeVisible = false;
           this.$message.success('充值成功')
           this._mxGetList();
+          this.row = {}
         }
       })
     },
