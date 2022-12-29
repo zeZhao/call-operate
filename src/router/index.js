@@ -214,12 +214,20 @@ const constRouterList = [
       title: '批量外呼',
     },
     children: [
+      // {
+      //   path: '/B-Call/outbound',
+      //   name: 'outbound',
+      //   component: () => import(/* webpackChunkName: "about" */ '@/views/B-Call/outbound/index.vue'),
+      //   meta: {
+      //     title: '外呼任务',
+      //   },
+      // },
       {
-        path: '/B-Call/outbound',
-        name: 'outbound',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/B-Call/outbound/index.vue'),
+        path: '/B-Call/incomeCallManage',
+        name: 'incomeCallManage',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/B-Call/incomeCallManage/index.vue'),
         meta: {
-          title: '外呼任务',
+          title: '任务管理',
         },
       },
     ]

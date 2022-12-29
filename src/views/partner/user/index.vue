@@ -457,6 +457,8 @@ export default {
           this.$message.success('充值成功')
           this._mxGetList();
           this.row = {}
+        }else{
+          this.$message.error(res.msg)
         }
       })
     },

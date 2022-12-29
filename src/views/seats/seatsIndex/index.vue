@@ -14,7 +14,7 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="userId" label="商家账号" />
+      <el-table-column prop="userName" label="商家账号" />
       <el-table-column prop="attendName" label="座席姓名" />
       <el-table-column prop="jobNumber" label="工号" />
       <el-table-column prop="pwd" label="座席密码" />
@@ -128,10 +128,11 @@ export default {
       // 表单配置
       formConfig: [
         {
-          type: "input",
+          type: "select",
           label: "商家名称",
           key: "userId",
           defaultValue: "",
+          optionData:[]
         },
         {
           type: "input",
@@ -176,9 +177,18 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType()
+  },
   computed: {},
-  methods: {},
+  methods: {
+    //获取公司下拉
+    queryCorpByCorpType(){
+      this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'userId','corpId','corpName')
+      })
+    },
+  },
   watch: {},
 };
 </script>

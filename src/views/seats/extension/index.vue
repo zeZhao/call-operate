@@ -14,7 +14,7 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="userId" label="商家账户" />
+      <el-table-column prop="userName" label="商家账户" />
       <el-table-column prop="ext" label="分机号" />
       <el-table-column prop="pwd" label="分机密码" />
       <el-table-column prop="extType" label="分机类型" >
@@ -161,10 +161,11 @@ export default {
       // 表单配置
       formConfig: [
         {
-          type: "input",
+          type: "select",
           label: "商家名称",
           key: "userId",
           defaultValue: "",
+          optionData:[]
         },
         {
           type: "input",
@@ -288,9 +289,17 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType()
+  },
   computed: {},
   methods: {
+    //获取公司下拉
+    queryCorpByCorpType(){
+      this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'userId','corpId','corpName')
+      })
+    },
     _mxCreate(){
       this.addChannel = true;
       this.formTit = "新增";

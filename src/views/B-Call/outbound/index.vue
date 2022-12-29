@@ -21,11 +21,11 @@
           <span v-if="row.taskType === 2">呼通后转人工</span>
         </template>
       </el-table-column>
-      <el-table-column prop="corpId" label="服务流程/班组" />
-      <el-table-column prop="corpId" label="主叫/线路" />
-      <el-table-column prop="corpId" label="并发上限" />
-      <el-table-column prop="corpId" label="总号码数" />
-      <el-table-column prop="corpId" label="剩余号码数" />
+      <el-table-column prop="sceneName" label="服务流程/班组" />
+      <el-table-column prop="extName" label="主叫/线路" />
+      <el-table-column prop="concurrency" label="并发上限" />
+      <el-table-column prop="callNum" label="总号码数" />
+      <el-table-column prop="surplusCallNum" label="剩余号码数" />
       <el-table-column prop="state" label="任务状态" >
         <template slot-scope="{row}">
           <span v-if="row.state === 3">未开始</span>
@@ -222,7 +222,7 @@ export default {
         {
           type:"select",
           label:'主叫/线路',
-          key:"supplier2",
+          key:"extId",
           colSpan:12,
           optionData:[
             { key: 1, value: "自动语音" },
@@ -232,7 +232,7 @@ export default {
         {
           type:"select",
           label:'服务流程/班组',
-          key:"supplier3",
+          key:"sceneId",
           colSpan:12,
           optionData:[
             { key: 1, value: "自动语音" },
@@ -242,13 +242,13 @@ export default {
         {
           type:"input",
           label:'并发数',
-          key:"supplier4",
+          key:"concurrency",
           colSpan:12,
         },
         {
           type:"uploadXlsx",
           label:'外呼号码',
-          key:"supplier5",
+          key:"extId",
           // colSpan:12,
         },
         // {
@@ -270,9 +270,17 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getUser()
+  },
   computed: {},
   methods: {
+    //获取商家公司下拉
+    getUser(){
+      this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'corpId','corpId','corpName')
+      })
+    },
     _mxHandleSubmit(form){
       console.log(form,'----')
     }

@@ -103,12 +103,12 @@ export default {
   components: {},
   data() {
     const generateData = _ => {
-        const data = [];
+        const data = []; 
         for (let i = 1; i <= 8; i++) {
           data.push({
             key: i,
-            label: `备选项 ${ i }`,
-            disabled: i % 4 === 0
+            label: `000${ i }张三`,
+            // disabled: i % 4 === 0
           });
         }
         return data;
