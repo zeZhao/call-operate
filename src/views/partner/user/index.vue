@@ -109,8 +109,8 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         { type: "input", label: "公司名称", key: "corpName" },
-        { type: "input", label: "费率", key: "corpName" },
-        { type: "input", label: "代理商", key: "corpName" },
+        { type: "input", label: "费率", key: "rateName" },
+        { type: "input", label: "代理商", key: "agentName" },
 
         // { type: "input", label: "定购套餐", key: "corpName" },
         {

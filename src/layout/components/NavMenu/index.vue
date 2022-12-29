@@ -8,7 +8,7 @@
             <!-- <img src="@/assets/images/name_icon@2x.png" alt="" /> -->
           </div>
 
-          <span class="name_txt">管理员：{{ name }}</span>
+          <!-- <span class="name_txt">管理员：{{ name }}</span> -->
         </div>
         <span>账号名：{{ account }}</span>
         <el-dropdown @command="handleCommand" trigger="click">
