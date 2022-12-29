@@ -360,28 +360,28 @@ export default {
     //  场景详情话术设置选项       文本配置
     listOptionMatchRule(params) {
       return request(
-        "/scene/branch/option/matchRule/listOptionMatchRule", 'post',
+        "/sceneOptionMatchRule/listOptionMatchRule", 'post',
         params
       );
     },
     //  场景详情话术设置选项规则       文本配置添加
     addOptionMatchRule(params) {
       return request(
-        "/scene/branch/option/matchRule/addOptionMatchRule", 'post',
+        "/sceneOptionMatchRule/addOptionMatchRule", 'post',
         params
       );
     },
     //  场景详情话术设置选项规则       文本配置校验
     checkOptionRuleExist(params) {
       return request(
-        "/scene/branch/option/matchRule/checkOptionRuleExist", 'post',
+        "/sceneOptionMatchRule/checkOptionRuleExist", 'post',
         params
       );
     },
     //  场景详情话术设置选项规则       文本配置删除
     deleteOptionMatchRule(params) {
       return request(
-        "/scene/branch/option/matchRule/deleteOptionMatchRule", 'post',
+        "/sceneOptionMatchRule/deleteOptionMatchRule", 'post',
         params
       );
     },

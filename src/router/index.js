@@ -190,6 +190,7 @@ const constRouterList = [
       {
         path: '/IVR/AI',
         name: 'AI',
+        hidden: true,
         component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/AI/index.vue'),
         meta: {
           title: 'AI机器学习',
@@ -199,7 +200,7 @@ const constRouterList = [
         path: '/IVR/AI/detail',
         name: 'AIDetail',
         hidden:true,
-        component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/AI/components/details.vue'),
+        component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/IVRIndex/components/details.vue'),
         meta: {
           title: 'AI机器学习',
         },
