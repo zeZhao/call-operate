@@ -42,7 +42,7 @@
               <el-option label="已拒绝" value="4"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="审核时间：">
+          <!-- <el-form-item label="审核时间：">
             <el-date-picker
               size="small"
               :clearable="false"
@@ -53,7 +53,7 @@
               end-placeholder="结束日期"
               :default-time="['00:00:00', '23:59:59']"
             ></el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
 
           <el-form-item>
             <el-button type="primary" @click="List('query')">查询</el-button>
@@ -76,8 +76,8 @@
           ref="filterTable"
           :data="tableData"
           max-height="500"
+          border
           style="width: 100%"
-          :header-cell-style="styleObj"
         >
           <el-table-column
             align="center"
@@ -94,13 +94,13 @@
             min-width="150"
             :show-overflow-tooltip="true"
           ></el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             prop="applyIndustry"
             label="适用行业"
             min-width="150"
             :show-overflow-tooltip="true"
-          ></el-table-column>
+          ></el-table-column> -->
           <!--<el-table-column-->
           <!--align="center"-->
           <!--prop="sceneDesc"-->
@@ -122,13 +122,13 @@
           <!--width="100"-->
           <!--:show-overflow-tooltip="true"-->
           <!--&gt;</el-table-column>-->
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             prop="auditTime"
             label="审核时间"
             min-width="170"
             :show-overflow-tooltip="true"
-          ></el-table-column>
+          ></el-table-column> -->
           <el-table-column
             align="center"
             prop="status"
@@ -144,13 +144,13 @@
               <span v-else>停用</span>
             </template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             prop="refuseReason"
             label="拒绝理由"
             min-width="120"
             :show-overflow-tooltip="true"
-          ></el-table-column>
+          ></el-table-column> -->
           <!--<el-table-column-->
           <!--align="center"-->
           <!--prop="updateUserName"-->
@@ -511,11 +511,6 @@ export default {
       loading: false,
       SubmitLoading: false,
       title: "",
-      styleObj: {
-        background: "#eeeeee",
-        color: "black",
-        padding: "15",
-      },
       clientList: [],
       tableData: [{ corpName: "11" }, { corpName: "22" }],
       page: 1,
@@ -1183,9 +1178,9 @@ export default {
   #listBox {
     width: 100%;
   }
-  /deep/ .el-table td {
-    padding: 7px 0;
-  }
+  // /deep/ .el-table td {
+  //   padding: 7px 0;
+  // }
 }
 .demo-drawer__footer {
   width: 30%;

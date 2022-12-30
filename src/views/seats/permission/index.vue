@@ -17,7 +17,7 @@
       <el-table-column prop="corpId" label="描述" />
       <el-table-column prop="corpId" label="状态" />
       <el-table-column prop="corpId" label="创建时间" />
-      <el-table-column label="操作" width="100" fixed="right">
+      <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'templateId')"
@@ -26,13 +26,12 @@
             >编辑</el-button
           >
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
             type="text"
             size="small"
             >权限</el-button
           >
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click="_mxDeleteItem('extId', scope.row.extId, false, false)"
             type="text"
             size="small"
             >删除</el-button
@@ -124,7 +123,7 @@ export default {
       formConfig: [
         {
           type: "input",
-          label: "账户编号",
+          label: "角色名称",
           key: "userId",
           defaultValue: "",
           rules: [
@@ -137,7 +136,7 @@ export default {
         },
         {
           type: "textarea",
-          label: "长号码",
+          label: "描述",
           key: "smsLongNum",
           defaultValue: "",
           maxlength: 4000,

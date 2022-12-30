@@ -8,7 +8,7 @@
       <!-- <img class="loginImg" src="../../../src/image/login_bg.png" alt /> -->
       <div class="loginFormStyle">
         <div class="login_name">
-          <h2>呼叫中心运营平台1</h2>
+          <h2>呼叫中心运营平台</h2>
           <p>
             <!-- <span>|</span>短信系统 -->
           </p>

@@ -13,9 +13,9 @@
       :height="tableHeight"
     >
       <el-table-column type="index" label="序号" align="center" />
-      <el-table-column prop="corpName" label="公司名称" />
+      <el-table-column prop="corpName" label="公司名称" width="120"/>
       <el-table-column prop="userName" label="账户名称" />
-      <el-table-column prop="rateName" label="费率" />
+      <el-table-column prop="rateName" label="费率"  show-overflow-tooltip/>
       <el-table-column prop="chargeType" label="计费类型">
         <template slot-scope="{row}">
           <span v-if="row.chargeType == 0">预付</span>
@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column prop="balance" label="账户余额（元）" />
       <el-table-column prop="overdraft" label="透支额度（元" />
-      <el-table-column prop="comboName" label="通话套餐" />
+      <el-table-column prop="comboName" label="通话套餐"  show-overflow-tooltip/>
       <el-table-column prop="comboLeft" label="套餐时长（秒）" />
       <el-table-column prop="smsCount" label="短信条数" />
       <el-table-column prop="recordLimit" label="录音上限(个）" />
@@ -35,7 +35,7 @@
           <span v-if="row.status == 1">使用</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="开户时间" />
+      <el-table-column prop="createTime" label="开户时间" width="150"/>
       <el-table-column label="操作" width="130" fixed="right">
         <template slot-scope="scope">
           <el-button

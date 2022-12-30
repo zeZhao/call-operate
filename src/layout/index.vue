@@ -43,7 +43,7 @@ export default {
     background: #F0F2F5;
     position: relative;
     height: calc(100vh - 60px);
-    overflow-y: auto;
+    overflow-y: hidden;
     // min-height: 100%;
     .content_side {
       width: 175px;

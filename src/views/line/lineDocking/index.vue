@@ -18,9 +18,9 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="lineName" label="线路名称" />
-      <el-table-column prop="corpName" label="供应商名称" />
-      <el-table-column prop="supplyAccountName" label="供应商账户" />
+      <el-table-column prop="lineName" label="线路名称" width="120" show-overflow-tooltip/>
+      <el-table-column prop="corpName" label="供应商名称" width="120"/>
+      <el-table-column prop="supplyAccountName" label="供应商账户" width="120"/>
       <el-table-column prop="linkType" label="对接方式">
         <template slot-scope="{row}">
           <span v-if="row.linkType === 0">SIP对接</span>
@@ -28,7 +28,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="concurrentCount" label="线路并发数" />
-      <el-table-column prop="ip" label="服务器IP地址" />
+      <el-table-column prop="ip" label="服务器IP地址" width="120"/>
       <el-table-column prop="port" label="端口" />
       <el-table-column prop="sipAccount" label="注册账号" />
       <el-table-column prop="status" label="可用状态" >
@@ -57,7 +57,7 @@
           <span v-if="row.lineType === 1">第三方</span>
         </template>
       </el-table-column>
-      <el-table-column prop="remarks" label="备注" />
+      <el-table-column prop="remarks" label="备注" show-overflow-tooltip />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button

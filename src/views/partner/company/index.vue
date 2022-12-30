@@ -13,17 +13,17 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpName" label="公司名称" />
+      <el-table-column prop="corpName" label="公司名称" width="120" />
       <el-table-column prop="shortName" label="公司简称" />
       <el-table-column prop="corpTypename" label="类别" />
       <el-table-column prop="sells" label="销售" />
       <el-table-column prop="linkman" label="联系人" />
-      <el-table-column prop="tel" label="联系电话" />
+      <el-table-column prop="tel" label="联系电话"  width="150"/>
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="cardno" label="银行账户" />
       <el-table-column prop="sells" label="地址" />
       <!-- <el-table-column prop="corpId" label="状态" /> -->
-      <el-table-column prop="createTime" label="开户时间" />
+      <el-table-column prop="createTime" label="开户时间" width="150" />
       <el-table-column prop="remarks" label="备注" />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">

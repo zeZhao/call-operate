@@ -13,7 +13,7 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="comboName" label="套餐名称" />
+      <el-table-column prop="comboName" label="套餐名称" width="120" show-overflow-tooltip/>
       <el-table-column prop="comboType" label="套餐类型" >
         <template slot-scope="{ row }">
           <span v-if="row.comboType == 0">通话</span>
@@ -29,7 +29,7 @@
           <span v-if="row.status == 1">可用</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="createTime" label="创建时间"  show-overflow-tooltip/>
       <el-table-column prop="createrType" label="创建人类别">
         <template slot-scope="{ row }">
           <span v-if="row.createrType == 0">运营</span>
@@ -37,7 +37,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="createrBy" label="创建人" />
-      <el-table-column prop="remarks" label="备注" />
+      <el-table-column prop="remarks" label="备注"  show-overflow-tooltip/>
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button

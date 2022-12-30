@@ -70,7 +70,7 @@
           :data="tableData"
           max-height="500"
           style="width: 100%;"
-          :header-cell-style="styleObj"
+          border
           empty-text="请先选择数据表名称"
         >
           <el-table-column
@@ -252,11 +252,6 @@ export default {
       loading: false,
       SubmitLoading: false,
       title: "",
-      styleObj: {
-        background: "#eeeeee",
-        color: "black",
-        padding: "15",
-      },
       clientList: [],
       tableData: [],
       columnList: [],
@@ -656,15 +651,15 @@ export default {
 <style lang="scss" scoped>
 #outsideBox {
   width: 100%;
-  padding: 20px;
+  // padding: 20px;
 
   box-sizing: border-box;
   #listBox {
     width: 100%;
   }
-  /deep/ .el-table td {
-    padding: 7px 0;
-  }
+  // /deep/ .el-table td {
+  //   padding: 7px 0;
+  // }
 }
 .demo-drawer__footer {
   width: 40%;
@@ -697,7 +692,7 @@ export default {
 ::v-deep .el-drawer__body {
   overflow-y: auto;
 }
-::v-deep .el-form {
-  margin-bottom: 60px;
-}
+// ::v-deep .el-form {
+//   margin-bottom: 60px;
+// }
 </style>

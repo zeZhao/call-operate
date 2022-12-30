@@ -24,7 +24,7 @@
         ref="filterTable"
         :data="tableData"
         style="width: 100%;"
-        :header-cell-style="styleObj"
+        border
       >
         <el-table-column
           align="center"
@@ -159,11 +159,6 @@ export default {
     return {
       title: "创建标签",
       loading: true,
-      styleObj: {
-        background: "#eeeeee",
-        color: "black",
-        padding: "15",
-      },
       isNew: false,
       newRules: {
         tagName: [

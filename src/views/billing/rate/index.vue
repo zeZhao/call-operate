@@ -14,7 +14,7 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center"/>
-      <el-table-column prop="rateName" label="费率名称" />
+      <el-table-column prop="rateName" label="费率名称" width="120" show-overflow-tooltip/>
       <el-table-column prop="period" label="计费周期（秒）" /> 
       <el-table-column prop="unitPrice" label="单价（元）" />
       <el-table-column prop="status" label="费率状态">
@@ -23,7 +23,7 @@
           <span v-if="row.status == 1">可用</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="createTime" label="创建时间"  show-overflow-tooltip/>
       <el-table-column prop="createrType" label="创建人类别">
         <template slot-scope="{row}">
           <span v-if="row.createrType == 0">运营</span>

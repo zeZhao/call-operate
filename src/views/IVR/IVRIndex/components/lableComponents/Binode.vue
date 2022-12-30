@@ -40,8 +40,8 @@
         v-loading="loading"
         ref="filterTable"
         :data="tableData"
+        
         style="width: 100%;margin-top:20px"
-        :header-cell-style="styleObj"
       >
         <el-table-column class-name="my-handle" width="50px" align="center">
           <template>

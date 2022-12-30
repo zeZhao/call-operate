@@ -19,22 +19,20 @@
       <el-table-column prop="corpId" label="语音文件名" />
       <el-table-column prop="corpId" label="语音文字" />
       <el-table-column prop="corpId" label="创建时间" />
-      <el-table-column label="操作" width="100" fixed="right">
+      <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
             type="text"
             size="small"
             >上传</el-button
           >
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
             type="text"
             size="small"
             >试听</el-button
           >
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click=" _mxDeleteItem('agentId', scope.row.agentId, false, false)"
             type="text"
             size="small"
             >删除</el-button
@@ -74,27 +72,27 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商户名称", key: "corpName" },
-        { type: "input", label: "任务名称", key: "corpNames" },
-        { type: "inputNum", label: "主叫号码", key: "userId" },
-        {
-          type: "select",
-          label: "任务类型",
-          key: "sign",
-          optionData: [
-            { key: "1", value: "自动语音" },
-            { key: "2", value: "呼通后转人工" },
-          ],
-        },
-        {
-          type: "select",
-          label: "任务状态",
-          key: "sign",
-          optionData: [
-            { key: "1", value: "已停止" },
-            { key: "2", value: "运行中" },
-          ],
-        },
+        { type: "input", label: "商家名称", key: "corpName" },
+        { type: "input", label: "应用场景", key: "corpNames" },
+        { type: "inputNum", label: "语音名称", key: "userId" },
+        // {
+        //   type: "select",
+        //   label: "任务类型",
+        //   key: "sign",
+        //   optionData: [
+        //     { key: "1", value: "自动语音" },
+        //     { key: "2", value: "呼通后转人工" },
+        //   ],
+        // },
+        // {
+        //   type: "select",
+        //   label: "任务状态",
+        //   key: "sign",
+        //   optionData: [
+        //     { key: "1", value: "已停止" },
+        //     { key: "2", value: "运行中" },
+        //   ],
+        // },
         // {
         //   type: "select",
         //   label: "类别",

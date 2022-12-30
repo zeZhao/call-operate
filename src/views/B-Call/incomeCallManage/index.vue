@@ -103,7 +103,7 @@
           :data="tableData"
           style="width: 100%"
           max-height="500"
-          :header-cell-style="styleObj"
+          border
         >
           <el-table-column
             align="center"
@@ -1343,15 +1343,15 @@ export default {
 <style lang="scss" scoped>
 #noteBox {
   width: 100%;
-  padding: 20px;
+  // padding: 20px;
 
   box-sizing: border-box;
   #listBox {
     width: 100%;
   }
-  /deep/ .el-table td {
-    padding: 7px 0;
-  }
+  // /deep/ .el-table td {
+  //   padding: 7px 0;
+  // }
   /deep/ .el-dialog__body {
     padding: 15px 20px;
   }
