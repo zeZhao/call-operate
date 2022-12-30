@@ -10,7 +10,7 @@
 
           <!-- <span class="name_txt">管理员：{{ name }}</span> -->
         </div>
-        <span>账号名：{{ account }}</span>
+        <!-- <span>账号名：{{ account }}</span> -->
         <el-dropdown @command="handleCommand" trigger="click">
           <span class="el-dropdown-link">
             <div class="link_img">
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       name: "xxx",
-      account: "xxx",
+      account: "账号名",
       confirmVisible: false,
     };
   },
