@@ -291,6 +291,7 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType()
+    this.linecfgList()
   },
   computed: {},
   methods: {
@@ -298,6 +299,12 @@ export default {
     queryCorpByCorpType(){
       this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data.records,'userId','corpId','corpName')
+      })
+    },
+    //获取线路下拉
+    linecfgList(){
+      this.$http.linecfg.get({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'lineId','lineId','lineName')
       })
     },
     _mxCreate(){
