@@ -352,6 +352,14 @@ export default {
           defaultValue: "",
           colSpan:12
         },
+        {
+          type: "textarea",
+          label: "备注",
+          key: "remarks",
+          defaultValue: "",
+          colSpan:12
+        },
+        
       ],
       id: "",
       dialogVisible: false,
