@@ -313,7 +313,7 @@ export default {
     //获取坐席下拉
     listAllAttend(){
       this.$http.select.listAll().then(res=>{
-        this._setDefaultValue(this.formConfig,res.data,'attendId','attendId','attendName')
+        this._setDefaultValue(this.formConfig,res.data,'attendId','attendId','attendName','state')
         this._setDefaultValue(this.searchFormConfig,res.data,'attendId','attendId','attendName')
       })
     },

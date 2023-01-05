@@ -621,7 +621,7 @@ export default {
      * @param optionVal 设置value的值
      * @private
      */
-    _setDefaultValue(list, data, key, optionKey, optionVal) {
+    _setDefaultValue(list, data, key, optionKey, optionVal, disabled) {
       let arr = []
       list.forEach(item => {
         if (item.key === key) {
@@ -630,7 +630,8 @@ export default {
             data.forEach(t => {
               let obj = {
                 key: t[optionKey],
-                value: t[optionVal]
+                value: t[optionVal],
+                disabled: t[disabled] === 1 ? true : false || false
               };
               item.optionData.push(obj)
             });
