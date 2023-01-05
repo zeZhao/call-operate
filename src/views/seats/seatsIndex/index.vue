@@ -19,7 +19,7 @@
       <el-table-column prop="attendName" label="座席姓名" />
       <el-table-column prop="jobNumber" label="工号" />
       <el-table-column prop="pwd" label="座席密码" />
-      <el-table-column prop="attendroleId" label="角色" />
+      <el-table-column prop="roleName" label="角色" />
       <el-table-column prop="skillgroupId" label="归属技能组" />
       <el-table-column prop="status" label="状态">
         <template slot-scope="{row}">
@@ -86,9 +86,8 @@ export default {
           label: "角色",
           key: "attendroleId",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "普通坐席" },
-            { key: "3", value: "企业管理员" },
+            { key: 2, value: "普通坐席" },
+            { key: 1, value: "企业管理员" },
           ],
         },
         {
@@ -159,8 +158,8 @@ export default {
           key: "attendroleId",
           defaultValue: "",
           optionData:[
-            {key:'1',value:'普通坐席'},
-            {key:'2',value:'企业管理员'},
+            {key:2,value:'普通坐席'},
+            {key:1,value:'企业管理员'},
           ],
         },
         {
