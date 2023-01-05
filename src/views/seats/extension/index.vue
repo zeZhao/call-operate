@@ -108,9 +108,6 @@ export default {
           label: "外呼线路",
           key: "lineId",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "线路A" },
-            { key: "3", value: "线路B" },
           ],
         },
         {
@@ -136,9 +133,6 @@ export default {
           label: "绑定座席",
           key: "attendId",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "张三" },
-            { key: "3", value: "李四" },
           ],
         },
       ],
@@ -236,8 +230,6 @@ export default {
           key: "lineId",
           defaultValue: "",
           optionData:[
-            { key: 1, value: "外呼线路1" },
-            { key: 0, value: "外呼线路2" },
           ],
           colSpan:12
         },
@@ -246,6 +238,15 @@ export default {
           label: "外呼主叫",
           key: "caller",
           defaultValue: "",
+          colSpan:12
+        },
+        {
+          type: "select",
+          label: "绑定坐席",
+          key: "attendId",
+          defaultValue: "",
+          optionData:[
+          ],
           colSpan:12
         },
         {
@@ -292,6 +293,7 @@ export default {
   mounted() {
     this.queryCorpByCorpType()
     this.linecfgList()
+    this.listAllAttend()
   },
   computed: {},
   methods: {
@@ -305,6 +307,14 @@ export default {
     linecfgList(){
       this.$http.linecfg.get({enablePage:false}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data.list,'lineId','lineId','lineName')
+        this._setDefaultValue(this.searchFormConfig,res.data.list,'lineId','lineId','lineName')
+      })
+    },
+    //获取坐席下拉
+    listAllAttend(){
+      this.$http.select.listAll({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data,'attendId','attendId','attendName')
+        this._setDefaultValue(this.searchFormConfig,res.data,'attendId','attendId','attendName')
       })
     },
     _mxCreate(){
@@ -317,6 +327,7 @@ export default {
         this._setDisplayShow(this.formConfig,'jobNumberStart',true)
         this._setDisplayShow(this.formConfig,'status',true)
         this._setDisplayShow(this.formConfig,'ext',true)
+        this._setDisplayShow(this.formConfig,'attendId',true)
         this._setDisplayShow(this.formConfig,'isBatchcaller',false)
         this._setDisplayShow(this.formConfig,'autogeneration',false)
         this._setDisplayShow(this.formConfig,'extNum',false)
@@ -347,6 +358,7 @@ export default {
       this._setDisplayShow(this.formConfig,'status',false)
       this._setDisplayShow(this.formConfig,'ext',false)
       this._setDisplayShow(this.formConfig,'extName',false)
+      this._setDisplayShow(this.formConfig,'attendId',false)
       
       setTimeout(() => {
         this.$refs.formItem.clearValidate();

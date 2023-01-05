@@ -22,6 +22,10 @@ export default {
     provincecity(data) {
       return request('/provincecity/get', 'post', data)
     },
+    // 获取坐席
+    listAll(data) {
+      return request('/attend/listAll', 'post', data)
+    },
   },
   //账户
   sysUser: {
