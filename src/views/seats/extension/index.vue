@@ -312,7 +312,7 @@ export default {
     },
     //获取坐席下拉
     listAllAttend(){
-      this.$http.select.listAll({enablePage:false}).then(res=>{
+      this.$http.select.listAll().then(res=>{
         this._setDefaultValue(this.formConfig,res.data,'attendId','attendId','attendName')
         this._setDefaultValue(this.searchFormConfig,res.data,'attendId','attendId','attendName')
       })
@@ -335,6 +335,7 @@ export default {
       }, 0);
     },
     _mxEdit(row, ID) {
+      this.listAllAttend()
       row = this._mxArrangeEditData(row);
       this.id = row[ID];
       this.editId = ID;
