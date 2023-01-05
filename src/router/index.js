@@ -259,24 +259,24 @@ const constRouterList = [
       },
     ]
   },
-  {
-    path: '/warningTone',
-    name: 'warningTone',
-    component: Layout,
-    meta: {
-      title: '提示音管理',
-    },
-    children: [
-      {
-        path: '/warningTone/tone',
-        name: 'tone',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/warningTone/tone/index.vue'),
-        meta: {
-          title: '系统提示音',
-        },
-      },
-    ]
-  },
+  // {
+  //   path: '/warningTone',
+  //   name: 'warningTone',
+  //   component: Layout,
+  //   meta: {
+  //     title: '提示音管理',
+  //   },
+  //   children: [
+  //     {
+  //       path: '/warningTone/tone',
+  //       name: 'tone',
+  //       component: () => import(/* webpackChunkName: "about" */ '@/views/warningTone/tone/index.vue'),
+  //       meta: {
+  //         title: '系统提示音',
+  //       },
+  //     },
+  //   ]
+  // },
   {
     path: '/seats',
     name: 'seats',
@@ -304,6 +304,7 @@ const constRouterList = [
       {
         path: '/seats/permission',
         name: 'permission',
+        hidden: true,
         component: () => import(/* webpackChunkName: "about" */ '@/views/seats/permission/index.vue'),
         meta: {
           title: '坐席权限',
@@ -312,6 +313,7 @@ const constRouterList = [
       {
         path: '/seats/skillGroups',
         name: 'skillGroups',
+        hidden: true,
         component: () => import(/* webpackChunkName: "about" */ '@/views/seats/skillGroups/index.vue'),
         meta: {
           title: '技能组',
