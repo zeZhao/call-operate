@@ -21,7 +21,7 @@
       <el-table-column prop="tel" label="联系电话"  width="150"/>
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="cardno" label="银行账户" />
-      <el-table-column prop="sells" label="地址" />
+      <el-table-column prop="address" label="地址" />
       <!-- <el-table-column prop="corpId" label="状态" /> -->
       <el-table-column prop="createTime" label="开户时间" width="150" />
       <el-table-column prop="remarks" label="备注" />

@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="balance" label="账户余额（元）" />
-      <el-table-column prop="overdraft" label="透支额度（元" />
+      <el-table-column prop="overdraft" label="透支额度（元）" />
       <el-table-column prop="comboName" label="通话套餐"  show-overflow-tooltip/>
       <el-table-column prop="comboLeft" label="套餐时长（秒）" />
       <el-table-column prop="smsCount" label="短信条数" />

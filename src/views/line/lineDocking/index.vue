@@ -120,7 +120,7 @@
             </el-input>
           </div>
           <div>
-            <el-button type="text" @click="deteleZj(index)">删除</el-button>
+            <el-button type="text" @click="deteleZj(index)" v-if="index > 0">删除</el-button>
             <el-button type="text" @click="addZj">增加</el-button>
           </div>
         </div>
@@ -142,7 +142,7 @@
             </el-input>
           </div>
           <div>
-            <el-button type="text" @click="deteleBj(index)">删除</el-button>
+            <el-button type="text" @click="deteleBj(index)" v-if="index > 0">删除</el-button>
             <el-button type="text" @click="addBj">增加</el-button>
           </div>
         </div>
@@ -363,8 +363,8 @@ export default {
       ],
       id: "",
       dialogVisible: false,
-      zj: [],
-      bj: [],
+      zj: [{ preFix: "", preFixCorrection: "",callType:1 }],
+      bj: [{ preFix: "", preFixCorrection: "",callType:2 }],
     };
   },
   created() {},
@@ -395,7 +395,6 @@ export default {
           res.data.list.forEach(item=>{
             this.$nextTick(()=>{
               if(item.callType === 1){
-                console.log(item)
                 this.zj.push(item)
               }else{
                 this.bj.push(item)
@@ -459,7 +458,14 @@ export default {
     },
     advanced() {
       this.dialogVisible = true;
-      // this.zj = [{ val: "", newVal: "" }];
+      this.callruleGet()
+      if(this.zj.length === 0){
+        this.zj = [{ preFix: "", preFixCorrection: "",callType:1 }];
+      }
+      if(this.bj.length === 0){
+        this.bj = [{ preFix: "", preFixCorrection: "",callType:2 }];
+      }
+      
       // this.bj = [{ val: "", newVal: "" }];
     },
     handleClose() {

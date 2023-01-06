@@ -13,14 +13,26 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="comboName" label="套餐名称" width="120" show-overflow-tooltip/>
-      <el-table-column prop="comboType" label="套餐类型" >
+      <el-table-column
+        prop="comboName"
+        label="套餐名称"
+        width="120"
+        show-overflow-tooltip
+      />
+      <el-table-column prop="comboType" label="套餐类型">
         <template slot-scope="{ row }">
           <span v-if="row.comboType == 0">通话</span>
           <span v-if="row.comboType == 1">录音</span>
         </template>
       </el-table-column>
-      <el-table-column prop="cycle" label="租用周期" />
+      <el-table-column prop="cycle" label="租用周期">
+        <template slot-scope="{ row }">
+          <span v-if="row.cycle == 0">一次性</span>
+          <span v-if="row.cycle == 1">每周</span>
+          <span v-if="row.cycle == 2">每月</span>
+          <span v-if="row.cycle == 3">每年</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="amount" label="租金（元）" />
       <el-table-column prop="comboLeft" label="套餐时长（秒）" />
       <el-table-column prop="status" label="状态"
@@ -29,7 +41,11 @@
           <span v-if="row.status == 1">可用</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间"  show-overflow-tooltip/>
+      <el-table-column
+        prop="createTime"
+        label="创建时间"
+        show-overflow-tooltip
+      />
       <el-table-column prop="createrType" label="创建人类别">
         <template slot-scope="{ row }">
           <span v-if="row.createrType == 0">运营</span>
@@ -37,7 +53,7 @@
         </template>
       </el-table-column>
       <!-- <el-table-column prop="createrBy" label="创建人" /> -->
-      <el-table-column prop="remarks" label="备注"  show-overflow-tooltip/>
+      <el-table-column prop="remarks" label="备注" show-overflow-tooltip />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
@@ -143,10 +159,16 @@ export default {
           ],
         },
         {
-          type: "inputNum",
+          type: "select",
           label: "租用周期",
           key: "cycle",
           defaultValue: "",
+          optionData: [
+            { key: 0, value: "一次性" },
+            { key: 1, value: "每周" },
+            { key: 2, value: "每月" },
+            { key: 3, value: "每年" },
+          ],
         },
         {
           type: "inputNum",
