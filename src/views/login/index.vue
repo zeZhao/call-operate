@@ -143,7 +143,7 @@ export default {
             if(res.state == '200'){
               
               setStorage('token',res.msg)
-              // setStorage('info',res.data)
+              setStorage('info',res.data)
               this.$router.push("/");
               
               this.$message.success("登录成功");
