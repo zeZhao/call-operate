@@ -322,6 +322,12 @@ export default {
     this.costRateList()
     this.comboList()
   },
+  activated(){
+    this.queryCorpByCorpType()
+    this.corpAgentList()
+    this.costRateList()
+    this.comboList()
+  },
   computed: {},
   methods: {
     //获取公司下拉

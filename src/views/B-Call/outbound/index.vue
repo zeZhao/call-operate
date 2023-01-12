@@ -273,6 +273,9 @@ export default {
   mounted() {
     this.getUser()
   },
+  activated(){
+    this.getUser()
+  },
   computed: {},
   methods: {
     //获取商家公司下拉

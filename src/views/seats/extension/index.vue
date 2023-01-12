@@ -295,6 +295,11 @@ export default {
     this.linecfgList()
     this.listAllAttend()
   },
+  activated(){
+    this.queryCorpByCorpType()
+    this.linecfgList()
+    this.listAllAttend()
+  },
   computed: {},
   methods: {
     //获取公司下拉

@@ -153,7 +153,7 @@ export default {
           defaultValue: "",
         },
         {
-          type: "input",
+          type: "password",
           label: "密码",
           key: "pwd",
           defaultValue: "",
@@ -194,6 +194,9 @@ export default {
   },
   created() {},
   mounted() {
+    this.queryCorpByCorpType()
+  },
+  activated(){
     this.queryCorpByCorpType()
   },
   computed: {},

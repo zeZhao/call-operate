@@ -339,7 +339,12 @@ export default {
   },
   created() {},
   mounted() {
-     this.queryCorpByCorpType()
+    this.queryCorpByCorpType()
+    this.costRateList()
+    this.comboList()
+  },
+  activated(){
+    this.queryCorpByCorpType()
     this.costRateList()
     this.comboList()
   },

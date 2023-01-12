@@ -2409,7 +2409,8 @@ export default {
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
-  min-height: calc(100% - 273px) !important;
+  height: calc(100vh - 273px) !important;
+  overflow-y: auto;
   // overflow-y: scroll !important;
   /deep/ .el-drawer__container .el-drawer__body {
     overflow-y: scroll !important;

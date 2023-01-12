@@ -631,7 +631,7 @@ export default {
               let obj = {
                 key: t[optionKey],
                 value: t[optionVal],
-                disabled: t[disabled] === 1 ? true : false || false
+                disabled: t[disabled] === 0 ? true : false || false
               };
               item.optionData.push(obj)
             });
