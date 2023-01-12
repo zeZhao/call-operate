@@ -21,6 +21,12 @@
       <el-table-column prop="pwd" label="座席密码" />
       <el-table-column prop="roleName" label="角色" />
       <el-table-column prop="skillgroupId" label="归属技能组" />
+      <el-table-column prop="loginMode" label="坐席登录方式" >
+        <template slot-scope="{row}">
+          <span v-if="row.loginMode == 0">人工</span>
+          <span v-if="row.loginMode == 1">自动</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="status" label="状态">
         <template slot-scope="{row}">
           <span v-if="row.status == 0">禁用</span>
@@ -160,6 +166,16 @@ export default {
           optionData:[
             {key:2,value:'普通坐席'},
             {key:1,value:'企业管理员'},
+          ],
+        },
+        {
+          type: "select",
+          label: "坐席登录方式",
+          key: "loginMode",
+          defaultValue: "",
+          optionData:[
+            {key:0,value:'人工'},
+            {key:1,value:'自动'},
           ],
         },
         {

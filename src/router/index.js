@@ -203,6 +203,7 @@ const constRouterList = [
         component: () => import(/* webpackChunkName: "about" */ '@/views/IVR/IVRIndex/components/details.vue'),
         meta: {
           title: 'AI机器学习',
+          keepAliveNo:true,
         },
       },
     ]

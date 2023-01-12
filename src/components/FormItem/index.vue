@@ -637,11 +637,11 @@ export default {
       dialogImageUrl: "",
       submitDisabled: false,
       itemRules: [
-        // {
-        //   required: true,
-        //   message: "请输入必填项",
-        //   trigger: ["blur", "change"],
-        // },
+        {
+          required: true,
+          message: "请输入必填项",
+          trigger: ["blur", "change"],
+        },
       ],
     };
   },

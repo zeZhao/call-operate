@@ -1468,7 +1468,7 @@ export default {
           branchText: row.branchText == null ? "" : row.branchText, //分支内容
           seqNum: row.seqNum == null ? "" : row.seqNum,
           cusPhone: row.cusPhone == null ? "" : row.cusPhone, //人工电话
-          dataTag: row.dataTag == null ? 0 : row.dataTag, //标签id
+          dataTag: row.dataTag == null ? 0 : Number(row.dataTag), //标签id
           overtimeType: row.overtimeType == null ? "" : row.overtimeType + "", //超时下一题选项 '1. 知识库,2. 此场景中的分支(为空时为重复播当前题目)设置
           overtimeNext: row.overtimeNext == null ? "" : row.overtimeNext, //超时下一题
           unrecogNext: row.unrecogNext == null ? "" : row.unrecogNext, //未识别下一题目
