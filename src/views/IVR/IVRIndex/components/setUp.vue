@@ -1254,8 +1254,8 @@ export default {
     };
   },
   mounted() {
-    this.RuleForm.sceneId = this.$route.query.sceneId;
-    this.RuleForm.corpId = this.$route.query.corpId;
+    this.RuleForm.sceneId = this.$route.query.sceneId || 0;
+    this.RuleForm.corpId = this.$route.query.corpId || 0;
     this.asrEnable = this.$route.query.asrEnable;
     this.List(); //列表
     this.TagList(); //标签选项列表
@@ -1328,7 +1328,7 @@ export default {
 
       var data = {
         data: {
-          sceneId: self.RuleForm.sceneId,
+          sceneId: self.RuleForm.sceneId || 0,
           varType: 2,
         },
         version: "1.0",
@@ -2037,7 +2037,7 @@ export default {
       const self = this;
       var data = {
         data: {
-          sceneId: this.RuleForm.sceneId,
+          sceneId: this.RuleForm.sceneId || 0,
         },
         version: "1.0",
       };
@@ -2409,7 +2409,8 @@ export default {
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
-  height: 100%;
+  min-height: calc(100% - 273px) !important;
+  // overflow-y: scroll !important;
   /deep/ .el-drawer__container .el-drawer__body {
     overflow-y: scroll !important;
   }

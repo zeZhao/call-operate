@@ -235,6 +235,7 @@ export default {
             { key: 1, value: "通话套餐B" },
             { key: 2, value: "通话套餐C" },
           ],
+          rules:[],
           colSpan:12
         },
         {
@@ -247,6 +248,7 @@ export default {
             { key: 1, value: "录音套餐B" },
             { key: 2, value: "录音套餐C" },
           ],
+          rules:[],
           colSpan:12
         },
         {
@@ -254,6 +256,7 @@ export default {
           label: "透支额度（元）",
           key: "overdraft",
           defaultValue: "",
+          rules:[],
           colSpan:12
         },
         {
@@ -261,6 +264,7 @@ export default {
           label: "录音上限",
           key: "recordLimit",
           defaultValue: "",
+          rules:[],
           colSpan:12
         },
         

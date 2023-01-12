@@ -375,7 +375,7 @@ export default {
     selectChange({val,item}){
       if(item.key === 'corpId'){
         if(val){
-          this.listAll(val)
+          this.corpListAll(val)
         }else{
           this._setDefaultValue(this.formConfig,[],'userId','supplyId','userName')
           this._deleteDefaultValue(this.formConfig,'userId')

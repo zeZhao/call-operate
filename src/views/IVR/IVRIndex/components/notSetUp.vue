@@ -1254,8 +1254,8 @@ export default {
     };
   },
   mounted() {
-    this.RuleForm.sceneId = this.$route.query.sceneId;
-    this.RuleForm.corpId = this.$route.query.corpId;
+    this.RuleForm.sceneId = this.$route.query.sceneId || 0;
+    this.RuleForm.corpId = this.$route.query.corpId || 0;
     this.asrEnable = this.$route.query.asrEnable;
     this.List(); //列表
     this.TagList(); //标签选项列表

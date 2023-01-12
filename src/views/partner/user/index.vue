@@ -175,6 +175,7 @@ export default {
           optionData:[
             { key: 0, value: "自营" },
           ],
+          rules:[],
           colSpan:12
         },
         {
@@ -215,6 +216,7 @@ export default {
           defaultValue: "",
           optionData:[
           ],
+          rules:[],
           colSpan:12
         },
         {
@@ -224,6 +226,7 @@ export default {
           defaultValue: "",
           optionData:[
           ],
+          rules:[],
           colSpan:12
         },
         {
@@ -231,6 +234,7 @@ export default {
           label: "透支额度（元）",
           key: "overdraft",
           defaultValue: "",
+          rules:[],
           colSpan:12
         },
         {
@@ -238,6 +242,7 @@ export default {
           label: "录音上限",
           key: "recordLimit",
           defaultValue: "",
+          rules:[],
           colSpan:12
         },
         

@@ -187,7 +187,7 @@ export default {
     };
   },
   created() {
-    this.sceneId = this.$route.query.sceneId;
+    this.sceneId = this.$route.query.sceneId || 0;
     this.LabelLis();
   },
   components: {},

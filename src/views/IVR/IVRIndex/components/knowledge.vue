@@ -80,10 +80,11 @@
           <!-- <span type="primary">上传</span> -->
           <el-upload
             style="width:28px;float:left"
-            action="/rob/voicelib/sentence/uploadWav"
+            action="/api/scene/branch/uploadWav"
             :show-file-list="false"
             :limit="1"
             ref="my_upload"
+            :headers="header"
             :on-success="uploadWavSuccess"
             :on-error="uploadWavError"
             :disabled="auditStatus"
@@ -99,6 +100,12 @@
             @click="statusSubmit(item, 2)"
             >禁用</el-link
           >
+          <el-divider
+            direction="vertical"
+            v-if="
+              item.status == 1
+            "
+          ></el-divider>
           <el-link
             type="primary"
             :disabled="auditStatus"
@@ -110,7 +117,7 @@
           <el-divider
             direction="vertical"
             v-if="
-              (item.status == 2 || item.status == 1) &&
+              (item.status == 2 ) &&
                 item.knowledgeVoiceFileUrl
             "
           ></el-divider>
@@ -248,6 +255,7 @@
 
 <script>
 import { setTimeout } from "timers";
+import { getStorage } from "@/utils/auth";
 export default {
   props: {
     auditStatus: {
@@ -303,6 +311,9 @@ export default {
       quertForm: {
         kbItemTitle: "",
         classId: "",
+      },
+      header:{
+        token:getStorage('token')
       },
       sceneId: "",
       KnowledgePointsData: [],

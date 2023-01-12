@@ -299,8 +299,8 @@ export default {
   methods: {
     //获取公司下拉
     queryCorpByCorpType(){
-      this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data.records,'userId','corpId','corpName')
+      this.$http.select.userListAll({}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.records,'userId','userId','userName')
       })
     },
     //获取线路下拉
@@ -312,7 +312,7 @@ export default {
     },
     //获取坐席下拉
     listAllAttend(){
-      this.$http.select.listAll().then(res=>{
+      this.$http.select.attendlistAll().then(res=>{
         this._setDefaultValue(this.formConfig,res.data,'attendId','attendId','attendName','state')
         this._setDefaultValue(this.searchFormConfig,res.data,'attendId','attendId','attendName')
       })

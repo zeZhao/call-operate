@@ -191,6 +191,7 @@ export default {
           label: "备注",
           key: "remarks",
           defaultValue: "",
+          rules:[],
           maxlength: 4000,
         },
       ],

@@ -15,15 +15,23 @@ export default {
       return request('/corp/queryCorpByCorpType', 'get', data)
     },
     // 获取供应商
-    listAll(data) {
+    corpListAll(data) {
       return request('/corpSupply/listAll', 'post', data)
+    },
+    // 获取商户
+    userListAll(data) {
+      return request('/corpUser/listAll', 'post', data)
+    },
+    // 获取代理商
+    agentListAll(data) {
+      return request('/corpAgent/listAll', 'post', data)
     },
     // 获取省份
     provincecity(data) {
       return request('/provincecity/get', 'post', data)
     },
     // 获取坐席
-    listAll(data) {
+    attendlistAll(data) {
       return request('/attend/listAll', 'post', data)
     },
   },

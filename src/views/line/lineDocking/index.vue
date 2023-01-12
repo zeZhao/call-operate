@@ -404,7 +404,6 @@ export default {
           })
         }
       })
-      console.log(this.zj,'======')
     },
     //获取公司下拉
     queryCorpByCorpType(){
@@ -412,8 +411,8 @@ export default {
         this._setDefaultValue(this.formConfig,res.data.records,'supplyId','corpId','corpName')
       })
     },
-    listAll(corpId){
-      this.$http.select.listAll({corpId}).then(res=>{
+    corpListAll(corpId){
+      this.$http.select.corpListAll({corpId}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data.records,'userId','supplyId','userName')
       })
     },
@@ -421,6 +420,37 @@ export default {
       this.$http.select.provincecity({province}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data,'province','province','province')
       })
+    },
+    /**
+     * 编辑表单
+     * @param row  当前行数据
+     * @param ID  当前行ID
+     * @private
+     */
+
+    _mxEdit(row, ID) {
+      row = this._mxArrangeEditData(row);
+      this.id = row[ID];
+      this.editId = ID;
+      this.formTit = "修改";
+      this.formConfig.forEach(item => {
+        for (let key in row) {
+          if (item.key === key && row[key] !== "-") {
+            this.$set(item, "defaultValue", row[key]);
+          }
+        }
+        if (!Object.keys(row).includes(item.key)) {
+          this.$set(item, "defaultValue", "");
+        }
+        if(item.key === 'supplyId'){
+          this.corpListAll(item.defaultValue)
+        }
+      });
+      
+      setTimeout(() => {
+        this.$refs.formItem.clearValidate();
+      }, 0);
+      this.addChannel = true;
     },
     selectChange({val,item}){
       if(item.key === 'lineType'){
@@ -448,7 +478,7 @@ export default {
       }
       if(item.key === 'supplyId'){
         if(val){
-          this.listAll(val)
+          this.corpListAll(val)
         }else{
           this._setDefaultValue(this.formConfig,[],'userId','supplyId','userName')
           this._deleteDefaultValue(this.formConfig,'userId')
