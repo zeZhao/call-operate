@@ -470,6 +470,7 @@ export default {
         if(val){
           this.$http.select.provincecity({province:val}).then(res=>{
             this._setDefaultValue(this.formConfig,res.data[0].cityList,'city','city','city')
+            this._deleteDefaultValue(this.formConfig,'city')
           })
         }else{
           this._setDefaultValue(this.formConfig,[],'city','city','city')
@@ -479,9 +480,10 @@ export default {
       if(item.key === 'supplyId'){
         if(val){
           this.corpListAll(val)
+          this._deleteDefaultValue(this.formConfig, 'userId')
         }else{
           this._setDefaultValue(this.formConfig,[],'userId','supplyId','userName')
-          this._deleteDefaultValue(this.formConfig,'userId')
+          this._deleteDefaultValue(this.formConfig, 'userId')
         }
       }
       

@@ -786,6 +786,8 @@ export default {
     changeClient() {
       this.getExtList();
       this.listScene();
+      this.RuleForm.sceneId = ''
+      this.RuleForm.extId = ''
     },
     // 获取分机接口
     getExtList() {

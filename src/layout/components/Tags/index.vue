@@ -42,7 +42,6 @@ export default {
         let pathList = this.tags.map((item) => item.path);
         if (!pathList.includes(tag.path)) {
           if (indexPath !== tag.path && !tag.meta.keepAliveNo) {
-            console.log(tag,'-----')
             this.tags.push(tag);
           }
         }
