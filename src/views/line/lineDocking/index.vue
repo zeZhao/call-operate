@@ -357,6 +357,7 @@ export default {
           label: "备注",
           key: "remarks",
           defaultValue: "",
+          rules:[],
           colSpan:12
         },
         

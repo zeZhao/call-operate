@@ -59,6 +59,12 @@
 .el-table th.is-leaf {
   background: rgba(0, 0, 0, 0.02);
 }
+::v-deep .el-table__fixed-right {
+  height: 100% !important;
+}
+::v-deep .el-table__fixed-body-wrapper {
+  max-height: 100% !important;
+}
 
 /* 表单 */
 ::v-deep .el-form-item--medium .el-form-item__label {

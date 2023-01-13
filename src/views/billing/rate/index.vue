@@ -169,6 +169,7 @@ export default {
           type: "textarea",
           label: "备注",
           key: "remarks",
+          rules:[],
           defaultValue: "",
         },
       ],

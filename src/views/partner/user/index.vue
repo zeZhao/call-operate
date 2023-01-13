@@ -309,6 +309,7 @@ export default {
           label: "备注",
           key: "remark",
           defaultValue: "",
+          rules:[],
           maxlength: 4000,
         },
       ],
