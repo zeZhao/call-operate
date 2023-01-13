@@ -33,14 +33,14 @@
             size="small"
             >修改</el-button
           >
-          <el-button
+          <!-- <el-button
             @click="
               _mxDeleteItem('corpId', scope.row.corpId, false, false)
             "
             type="text"
             size="small"
             >删除
-          </el-button>
+          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
