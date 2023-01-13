@@ -402,6 +402,8 @@ export default {
           this.rechargeVisible = false;
           this.$message.success('充值成功')
           this._mxGetList();
+        }else{
+          this.$message.error(res.msg)
         }
       })
     },

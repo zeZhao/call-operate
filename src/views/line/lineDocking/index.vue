@@ -168,7 +168,7 @@ export default {
       searchFormConfig: [
         { type: "input", label: "供应商名称", key: "corpName" },
         { type: "input", label: "线路名称", key: "corpNames" },
-        { type: "inputNum", label: "供应商账户", key: "userId" },
+        { type: "inputNum", label: "供应商账户", key: "supplyId" },
         {
           type: "select",
           label: "对接方式",
@@ -239,14 +239,14 @@ export default {
         {
           type: "select",
           label: "供应商名称",
-          key: "supplyId",
+          key: "corpId",
           defaultValue: "",
           optionData:[]
         },
         {
           type: "select",
           label: "供应商账户",
-          key: "userId",
+          key: "supplyId",
           defaultValue: "",
           optionData:[]
         },
@@ -408,12 +408,12 @@ export default {
     //获取公司下拉
     queryCorpByCorpType(){
       this.$http.select.queryCorpByCorpType({corpType:2}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data.records,'supplyId','corpId','corpName')
+        this._setDefaultValue(this.formConfig,res.data.records,'corpId','corpId','corpName')
       })
     },
     corpListAll(corpId){
       this.$http.select.corpListAll({corpId}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data.records,'userId','supplyId','userName')
+        this._setDefaultValue(this.formConfig,res.data.records,'supplyId','supplyId','userName')
       })
     },
     provincecity(province){
@@ -442,7 +442,7 @@ export default {
         if (!Object.keys(row).includes(item.key)) {
           this.$set(item, "defaultValue", "");
         }
-        if(item.key === 'supplyId'){
+        if(item.key === 'corpId'){
           this.corpListAll(item.defaultValue)
         }
       });
@@ -477,13 +477,13 @@ export default {
           this._deleteDefaultValue(this.formConfig,'city')
         }
       }
-      if(item.key === 'supplyId'){
+      if(item.key === 'corpId'){
         if(val){
           this.corpListAll(val)
-          this._deleteDefaultValue(this.formConfig, 'userId')
+          this._deleteDefaultValue(this.formConfig, 'supplyId')
         }else{
-          this._setDefaultValue(this.formConfig,[],'userId','supplyId','userName')
-          this._deleteDefaultValue(this.formConfig, 'userId')
+          this._setDefaultValue(this.formConfig,[],'supplyId','supplyId','userName')
+          this._deleteDefaultValue(this.formConfig, 'supplyId')
         }
       }
       
