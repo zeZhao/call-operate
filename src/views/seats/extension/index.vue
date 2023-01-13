@@ -190,6 +190,7 @@ export default {
           label: "密码",
           key: "pwd",
           isShow:true,
+          rules:[],
           defaultValue: "",
         },
         {
@@ -238,6 +239,7 @@ export default {
           label: "外呼主叫",
           key: "caller",
           defaultValue: "",
+          rules:[],
           colSpan:12
         },
         {
@@ -247,6 +249,7 @@ export default {
           defaultValue: "",
           optionData:[
           ],
+          rules:[],
           colSpan:12
         },
         {
@@ -254,6 +257,7 @@ export default {
           label: "",
           key: "isBatchcaller",
           defaultValue: "",
+          rules:[],
           optionData:[
             { key: 1, value: "作为批量外呼主叫" },
           ],
@@ -264,6 +268,7 @@ export default {
           label: "",
           key: "autogeneration",
           defaultValue: "",
+          rules:[],
           optionData:[
             { key: 1, value: "自动生成并绑定座席" },
           ],
@@ -275,6 +280,7 @@ export default {
           key: "extName",
           defaultValue: "",
           isShow:true,
+          rules:[],
           colSpan:12
         },
         
@@ -284,6 +290,7 @@ export default {
           key: "jobNumberStart",
           defaultValue: "",
           isShow:true,
+          rules:[],
           colSpan:12
         },
       ],
