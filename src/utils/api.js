@@ -36,7 +36,7 @@ export default {
     },
     // 获取IVR流程下拉
     IVRlistAll(data) {
-      return request('/skillGroup/listAll ', 'get', data)
+      return request('/skillGroup/listAll', 'get', data)
     },
   },
   //账户

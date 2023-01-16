@@ -2208,8 +2208,8 @@ export default {
     },
     //获取技能组数据
     getIVRlistAll(){
-      // let data = {corpId:this.RuleForm.corpId}
-      this.$http.select.IVRlistAll().then(res=>{
+      let data = {corpId:this.RuleForm.corpId}
+      this.$http.select.IVRlistAll(data).then(res=>{
         if(res.state == '200'){
           this.IVRlistAll = res.data
         }
