@@ -419,19 +419,7 @@
                 </el-col>
 
                 <div v-if="RuleForm.branchType != 5">
-                  <el-form-item
-                    label="客服电话："
-                    prop="cusPhone"
-                    v-if="
-                      RuleForm.branchType == 4 || RuleForm.branchType == '4'
-                    "
-                  >
-                    <el-input
-                      v-model="RuleForm.cusPhone"
-                      placeholder="请输入人工电话"
-                    ></el-input>
-                    <p>可输入多个电话中间用英文逗号分隔</p>
-                  </el-form-item>
+                  
                   <el-form-item
                     label="指定下一题："
                     v-if="
@@ -456,7 +444,7 @@
                   <el-form-item
                     label="下一题："
                     v-if="
-                      RuleForm.branchType == 1 || RuleForm.branchType == '1'
+                      RuleForm.branchType == '4' || RuleForm.branchType == '1'
                     "
                   >
                     <el-select
@@ -472,6 +460,27 @@
                         :key="index"
                       ></el-option>
                     </el-select>
+                  </el-form-item>
+                  <el-form-item
+                    label="技能组："
+                    prop="cusPhone"
+                    v-if="
+                      RuleForm.branchType == 4 || RuleForm.branchType == '4'
+                    "
+                  >
+                    <el-select
+                      v-model="RuleForm.cusPhone"
+                      placeholder="请输入技能组"
+                    >
+                    <el-option
+                    v-for="(item, index) in IVRlistAll"
+                        :label="item.skillGroupName"
+                        :value="item.sgId"
+                        :key="index">
+
+                    </el-option>
+                    </el-select>
+                    <!-- <p>可输入多个电话中间用英文逗号分隔</p> -->
                   </el-form-item>
                   <el-form-item
                     label="人机交互形式："
@@ -1211,6 +1220,7 @@ export default {
       RetainovertimeTopicData: [], //临时存储超时下一题列表数据
       trackTopicData: [], //未识别下一题列表数据
       appointTopicData: [], //指定下一题列表数据
+      IVRlistAll: [], //技能组数据
       content: "", //指定下一题列表数据
       variableData: [], //变量列表数据
       matchingData: [], //匹配文本数据
@@ -1265,6 +1275,7 @@ export default {
     this.getKnowledgeBase(2);
     this.VallLis();
     this.listClientTable();
+    this.getIVRlistAll() // 获取技能组数据
   },
 
   components: { Voice },
@@ -2194,6 +2205,15 @@ export default {
           self.$message.error(res.msg);
         }
       });
+    },
+    //获取技能组数据
+    getIVRlistAll(){
+      // let data = {corpId:this.RuleForm.corpId}
+      this.$http.select.IVRlistAll().then(res=>{
+        if(res.state == '200'){
+          this.IVRlistAll = res.data
+        }
+      })
     },
 
     /*

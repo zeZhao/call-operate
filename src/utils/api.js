@@ -34,6 +34,10 @@ export default {
     attendlistAll(data) {
       return request('/attend/listAll', 'post', data)
     },
+    // 获取IVR流程下拉
+    IVRlistAll(data) {
+      return request('/skillGroup/listAll ', 'get', data)
+    },
   },
   //账户
   sysUser: {
