@@ -103,48 +103,48 @@ const constRouterList = [
       },
     ]
   },
-  // {
-  //   path: '/dataQuery',
-  //   name: 'dataQuery',
-  //   component: Layout,
-  //   meta: {
-  //     title: '数据查询',
-  //   },
-  //   children: [
-  //     {
-  //       path: '/dataQuery/callList',
-  //       name: 'callList',
-  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/callList/index.vue'),
-  //       meta: {
-  //         title: '通话详单',
-  //       },
-  //     },
-  //     {
-  //       path: '/dataQuery/PhoneLog',
-  //       name: 'PhoneLog',
-  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/PhoneLog/index.vue'),
-  //       meta: {
-  //         title: '短信记录',
-  //       },
-  //     },
-  //     {
-  //       path: '/dataQuery/AIrecord',
-  //       name: 'AIrecord',
-  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/AIrecord/index.vue'),
-  //       meta: {
-  //         title: 'AI对话记录',
-  //       },
-  //     },
-  //     {
-  //       path: '/dataQuery/recording',
-  //       name: 'recording',
-  //       component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/recording/index.vue'),
-  //       meta: {
-  //         title: '录音记录',
-  //       },
-  //     },
-  //   ]
-  // },
+  {
+    path: '/dataQuery',
+    name: 'dataQuery',
+    component: Layout,
+    meta: {
+      title: '数据查询',
+    },
+    children: [
+      {
+        path: '/dataQuery/callList',
+        name: 'callList',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/callList/index.vue'),
+        meta: {
+          title: '通话详单',
+        },
+      },
+      {
+        path: '/dataQuery/PhoneLog',
+        name: 'PhoneLog',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/PhoneLog/index.vue'),
+        meta: {
+          title: '短信记录',
+        },
+      },
+      {
+        path: '/dataQuery/AIrecord',
+        name: 'AIrecord',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/AIrecord/index.vue'),
+        meta: {
+          title: 'AI对话记录',
+        },
+      },
+      {
+        path: '/dataQuery/recording',
+        name: 'recording',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/recording/index.vue'),
+        meta: {
+          title: '录音记录',
+        },
+      },
+    ]
+  },
   {
     path: '/line',
     name: 'line',
@@ -260,24 +260,24 @@ const constRouterList = [
       },
     ]
   },
-  // {
-  //   path: '/warningTone',
-  //   name: 'warningTone',
-  //   component: Layout,
-  //   meta: {
-  //     title: '提示音管理',
-  //   },
-  //   children: [
-  //     {
-  //       path: '/warningTone/tone',
-  //       name: 'tone',
-  //       component: () => import(/* webpackChunkName: "about" */ '@/views/warningTone/tone/index.vue'),
-  //       meta: {
-  //         title: '系统提示音',
-  //       },
-  //     },
-  //   ]
-  // },
+  {
+    path: '/warningTone',
+    name: 'warningTone',
+    component: Layout,
+    meta: {
+      title: '提示音管理',
+    },
+    children: [
+      {
+        path: '/warningTone/tone',
+        name: 'tone',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/warningTone/tone/index.vue'),
+        meta: {
+          title: '系统提示音',
+        },
+      },
+    ]
+  },
   {
     path: '/seats',
     name: 'seats',
@@ -305,7 +305,7 @@ const constRouterList = [
       {
         path: '/seats/permission',
         name: 'permission',
-        hidden: true,
+        hidden: false,
         component: () => import(/* webpackChunkName: "about" */ '@/views/seats/permission/index.vue'),
         meta: {
           title: '坐席权限',
@@ -314,7 +314,7 @@ const constRouterList = [
       {
         path: '/seats/skillGroups',
         name: 'skillGroups',
-        hidden: true,
+        hidden: false,
         component: () => import(/* webpackChunkName: "about" */ '@/views/seats/skillGroups/index.vue'),
         meta: {
           title: '技能组',
