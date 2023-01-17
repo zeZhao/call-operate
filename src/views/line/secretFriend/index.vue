@@ -90,7 +90,6 @@
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
         @changeFileUpload="changeFileUpload"
-        
       ></FormItem>
     </el-dialog>
     <el-dialog
@@ -192,23 +191,20 @@ export default {
           type: "select",
           label: "供应商名称",
           key: "supplyId",
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
           label: "线路名称",
           key: "lineId",
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
           label: "号码归属地区",
           key: "privince",
           colSpan: 12,
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
@@ -250,16 +246,14 @@ export default {
           label: "供应商名称",
           key: "supplyId",
           disabled: true,
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
           label: "线路名称",
           key: "lineId",
           disabled: true,
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
@@ -276,7 +270,7 @@ export default {
           colSpan: 12,
           disabled: true,
           optionData: [
-             { key: 1, value: "移动" },
+            { key: 1, value: "移动" },
             { key: 2, value: "联通" },
             { key: 3, value: "电信" },
           ],
@@ -295,15 +289,13 @@ export default {
           type: "select",
           label: "使用商家",
           key: "corpId",
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
           label: "商家账户",
           key: "userId",
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
@@ -329,90 +321,148 @@ export default {
   },
   created() {},
   mounted() {
-    this.queryCorpByCorpType()
-    this.getUser()
-    this.linecfgList()
-    this.provincecity()
+    this.queryCorpByCorpType();
+    this.getUser();
+    this.linecfgList();
+    this.provincecity();
   },
   computed: {},
   methods: {
     //获取商家公司下拉
-    getUser(){
-      this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
-        this._setDefaultValue(this.allocationConfig,res.data.records,'corpId','corpId','corpName')
-      })
+    getUser() {
+      this.$http.select.queryCorpByCorpType({ corpType: 0 }).then((res) => {
+        this._setDefaultValue(
+          this.allocationConfig,
+          res.data.records,
+          "corpId",
+          "corpId",
+          "corpName"
+        );
+      });
     },
-    listAll(corpId){
-      this.$http.corpUser.list({enablePage:false,corpId}).then(res=>{
-        this._setDefaultValue(this.allocationConfig,res.data.records,'userId','userId','userName')
-      })
+    listAll(corpId) {
+      this.$http.corpUser.list({ enablePage: false, corpId }).then((res) => {
+        this._setDefaultValue(
+          this.allocationConfig,
+          res.data.records,
+          "userId",
+          "userId",
+          "userName"
+        );
+      });
     },
     //获取供应商公司下拉
-    queryCorpByCorpType(){
-      this.$http.select.queryCorpByCorpType({corpType:2}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data.records,'supplyId','corpId','corpName')
-        this._setDefaultValue(this.allocationConfig,res.data.records,'supplyId','corpId','corpName')
-      })
+    queryCorpByCorpType() {
+      this.$http.select.queryCorpByCorpType({ corpType: 2 }).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.records,
+          "supplyId",
+          "corpId",
+          "corpName"
+        );
+        this._setDefaultValue(
+          this.allocationConfig,
+          res.data.records,
+          "supplyId",
+          "corpId",
+          "corpName"
+        );
+      });
     },
     //获取线路下拉
-    linecfgList(){
-      this.$http.linecfg.get({enablePage:false}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data.list,'lineId','lineId','lineName')
-        this._setDefaultValue(this.allocationConfig,res.data.list,'lineId','lineId','lineName')
-      })
+    linecfgList() {
+      this.$http.linecfg.get({ enablePage: false }).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.list,
+          "lineId",
+          "lineId",
+          "lineName"
+        );
+        this._setDefaultValue(
+          this.allocationConfig,
+          res.data.list,
+          "lineId",
+          "lineId",
+          "lineName"
+        );
+      });
     },
-    provincecity(province){
-      this.$http.select.provincecity({province}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data,'privince','province','province')
-        this._setDefaultValue(this.allocationConfig,res.data,'privince','province','province')
-      })
+    provincecity(province) {
+      this.$http.select.provincecity({ province }).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data,
+          "privince",
+          "province",
+          "province"
+        );
+        this._setDefaultValue(
+          this.allocationConfig,
+          res.data,
+          "privince",
+          "province",
+          "province"
+        );
+      });
     },
     // listAll(corpId){
     //   this.$http.select.listAll({corpId}).then(res=>{
     //     this._setDefaultValue(this.formConfig,res.data.records,'userId','supplyId','userName')
     //   })
     // },
-    selectChange({val,item}){
-      if(item.key === 'corpId'){
-        if(val){
-          this.corpListAll(val)
-        }else{
-          this._setDefaultValue(this.formConfig,[],'userId','supplyId','userName')
-          this._deleteDefaultValue(this.formConfig,'userId')
+    selectChange({ val, item }) {
+      if (item.key === "corpId") {
+        if (val) {
+          this.listAll(val);
+          this._deleteDefaultValue(this.allocationConfig, "userId");
+        } else {
+          this._setDefaultValue(
+            this.allocationConfig,
+            [],
+            "userId",
+            "supplyId",
+            "userName"
+          );
+          this._deleteDefaultValue(this.allocationConfig, "userId");
         }
       }
-      
     },
     _mxDeleteItem() {
-      if(this.multipleSelection.length === 0){
-        this.$message.error('请选择一条数据')
-        return false
+      if (this.multipleSelection.length === 0) {
+        this.$message.error("请选择一条数据");
+        return false;
       }
       const h = this.$createElement;
       this.$msgbox({
         title: "删除",
         message: h("div", null, [
-          h("p", null, '您确定要删除此项吗？')
+          h("p", null, "您确定要删除此项吗？"),
           // h('p', {
           //     style: 'color: red'
           // }, '删除后，将不再执行重发，请谨慎操作')
         ]),
         showCancelButton: true,
         confirmButtonText: "确定",
-        cancelButtonText: "取消"
-      }).then(action => {
-        let params = this.multipleSelection.map(item => item.inId).join(",");
-        const { namespace, detele } = this.searchAPI;
-        this.$http[namespace][detele](params).then(res => {
-          if (resOk(res)) {
-            this.$message.success("删除成功！");
-            this.pageObj.currentPage = 1;
-            this._mxGetList();
-          } else {
-            this.$message.error(res.msg || "删除失败！");
-          }
-        });
-      }).catch(() => { });
+        cancelButtonText: "取消",
+      })
+        .then((action) => {
+          let params = this.multipleSelection
+            .map((item) => item.inId)
+            .join(",");
+          const { namespace, detele } = this.searchAPI;
+          this.$http[namespace][detele](params).then((res) => {
+            if (resOk(res)) {
+              this.$message.success("删除成功！");
+              this.pageObj.currentPage = 1;
+              this._mxGetList();
+            } else {
+              this.$message.error(res.msg || "删除失败！");
+            }
+          });
+        })
+        .catch(() => {});
     },
     //table 多选
     handleSelectionChange(val) {
@@ -480,7 +530,11 @@ export default {
     addNum() {},
     deteleNum() {},
     exportNum() {
-      this.downloadFileByFile('/api/inboundcfg/exportExcel',this.searchParam,'号码')
+      this.downloadFileByFile(
+        "/api/inboundcfg/exportExcel",
+        this.searchParam,
+        "号码"
+      );
       // this.$http.inboundcfg.exportExcel(this.searchParam).then((res) => {
       //   let fileName = "号码";
       //   let blob = new Blob([res.data], {

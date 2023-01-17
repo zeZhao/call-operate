@@ -372,13 +372,28 @@
             <el-form-item label="日期：" prop="startDate">
               <el-date-picker
                 v-model="RuleForm.startDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                format="yyyy-MM-dd"
+                placeholder="选择开始日期">
+              </el-date-picker>
+              <span style="padding: 0 10px">至</span>
+              <el-date-picker
+                v-model="RuleForm.stopDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                format="yyyy-MM-dd"
+                placeholder="选择结束日期">
+              </el-date-picker>
+              <!-- <el-date-picker
+                v-model="RuleForm.startDate"
                 type="daterange"
                 value-format="yyyy-MM-dd"
                 format="yyyy-MM-dd"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-              ></el-date-picker>
+              ></el-date-picker> -->
             </el-form-item>
             {{ RuleForm.callTime1Star }}
             <el-form-item label="时间段1：" prop="callTime1Start">
@@ -527,7 +542,7 @@ export default {
       if (value === "") {
         return callback(new Error("日期不能为空"));
       } else {
-        if (this.RuleForm.startDate !== "") {
+        if (this.RuleForm.startDate !== "" && this.RuleForm.stopDate !== "") {
           setTimeout(() => {
             callback();
           }, 1000);
@@ -1110,12 +1125,6 @@ export default {
                   this.RuleForm.weekDays.length > 0
                     ? this.RuleForm.weekDays
                     : null,
-                startDate: self.RuleForm.startDate
-                  ? new Date(self.RuleForm.startDate[0]).Format("yyyy-MM-dd")
-                  : null,
-                stopDate: self.RuleForm.startDate
-                  ? new Date(self.RuleForm.startDate[1]).Format("yyyy-MM-dd")
-                  : null,
               },
 
               version: "1.0",
@@ -1145,16 +1154,6 @@ export default {
                   this.RuleForm.weekDays.length > 0
                     ? this.RuleForm.weekDays
                     : null,
-                startDate: self.RuleForm.startDate
-                  ? new Date(self.RuleForm.startDate[0]).Format(
-                      "yyyy-MM-dd hh:mm:ss"
-                    )
-                  : null,
-                stopDate: self.RuleForm.startDate
-                  ? new Date(self.RuleForm.startDate[1]).Format(
-                      "yyyy-MM-dd hh:mm:ss"
-                    )
-                  : null,
               },
 
               version: "1.0",
@@ -1200,13 +1199,13 @@ export default {
           extId: row.extId, //线路ID
           sceneId: row.sceneId, //场景ID
           concurrency: row.concurrency, //并发数
-          startDate: row.startDate
-            ? [new Date(row.startDate), new Date(row.stopDate)]
-            : "", //开始日期
+          startDate: row.startDate,
+            // ? [new Date(row.startDate), new Date(row.stopDate)]
+            // : "", //开始日期
           // startDate: row.startDate
           //   ? [new Date(row.startDate), new Date(row.stopDate)]
           //   : "", //开始日期
-          stopDate: "",
+          stopDate: row.stopDate,
           weekDays: row.weekDays ? eval("(" + row.weekDays + ")") : [], //周天
           // maxCallCount: row.maxCallCount, //最大呼叫次数
           // asrEnable: row.asrEnable, //是否启用识别
