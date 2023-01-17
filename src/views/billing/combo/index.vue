@@ -88,7 +88,7 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
-        @choose="choose"
+        @selectChange="selectChange"
       ></FormItem>
     </el-dialog>
   </div>
@@ -216,7 +216,18 @@ export default {
   created() {},
   mounted() {},
   computed: {},
-  methods: {},
+  methods: {
+    selectChange({ val, item }) {
+      if (item.key === "comboType") {
+        // 录音
+        if (val === 1) {
+          this._setDisplayShow(this.formConfig, "comboLeft", true);
+        } else {
+          this._setDisplayShow(this.formConfig,'comboLeft', false);
+        }
+      }
+    },
+  },
   watch: {},
 };
 </script>
