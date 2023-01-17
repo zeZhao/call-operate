@@ -23,7 +23,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column label="选择" type="selection" align="center" />
-      <el-table-column prop="corpName" label="供应商名称" />
+      <el-table-column prop="supplyName" label="供应商名称" />
       <el-table-column prop="lineName" label="线路名称" />
       <el-table-column prop="privince" label="号码归属地区" />
       <el-table-column prop="operaId" label="运营商">
