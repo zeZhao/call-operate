@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" />
-      <el-table-column label="操作" width="100" fixed="right">
+      <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'attendId')"
