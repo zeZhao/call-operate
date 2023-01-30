@@ -1,0 +1,153 @@
+<template>
+<!-- 角色及权限 -->
+  <div class="permission">
+    <Search
+      :searchFormConfig="searchFormConfig"
+      @search="_mxDoSearch"
+      @create="_mxCreate"
+    ></Search>
+    <el-table
+      :data="listData"
+      border
+      highlight-current-row
+      style="width: 100%"
+      :height="tableHeight"
+    >
+      <el-table-column label="序号" type="index" align="center" />
+      <el-table-column prop="roleName" label="角色名称" />
+      <el-table-column prop="des" label="描述" />
+      <el-table-column prop="status" label="状态">
+        <template slot-scope="{row}">
+          <span v-if="row.status == 0">禁用</span>
+          <span v-if="row.status == 1">启用</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column label="操作" width="100" fixed="right">
+        <template slot-scope="scope">
+          <el-button
+            @click="_mxEdit(scope.row, 'attendId')"
+            type="text"
+            size="small"
+            >修改</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            >权限</el-button
+          >
+          <el-button
+            @click="
+              _mxDeleteItem('attendId', scope.row.attendId, false, false)
+            "
+            type="text"
+            size="small"
+            >删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <Page
+      :pageObj="pageObj"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange"
+    ></Page>
+    <el-dialog
+      :title="formTit"
+      :visible.sync="addChannel"
+      :close-on-click-modal="false"
+      top="45px"
+    >
+      <FormItem
+        ref="formItem"
+        :formConfig="formConfig"
+        :btnTxt="formTit"
+        @submit="_mxHandleSubmit"
+        @cancel="_mxCancel"
+        @choose="choose"
+      ></FormItem>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import listMixin from "@/mixin/listMixin";
+export default {
+  mixins: [listMixin],
+  components: {},
+  data() {
+    return {
+      // 搜索框配置
+      searchFormConfig: [
+        { type: "input", label: "角色名称", key: "roleName" },
+        {
+          type: "select",
+          label: "状态",
+          key: "status",
+          optionData: [
+            { key: 0, value: "禁用" },
+            { key: 1, value: "启用" },
+          ],
+        },
+      ],
+      isParamsNotData: false,
+      submitParamsIsData: false,
+      //搜索框数据
+      searchParam: {},
+      //接口地址
+      searchAPI: {
+        namespace: "sysRole",
+        list: "sysRoleLlist",
+        add: "updateAndSaveAttend",
+        edit: "updateAndSaveAttend",
+        detele: "delete",
+      },
+      // 列表参数
+      namespace: "",
+      namespaceType: "Array",
+      // 表单配置
+      formConfig: [
+        // {
+        //   type: "select",
+        //   label: "角色名称",
+        //   key: "roleName",
+        //   defaultValue: "",
+        //   optionData:[]
+        // },
+        {
+          type: "input",
+          label: "角色名称",
+          key: "roleName",
+          defaultValue: "",
+        },
+        {
+          type: "select",
+          label: "状态",
+          key: "status",
+          defaultValue: "",
+          optionData:[
+            { key: 1, value: "启用" },
+            { key: 0, value: "禁用" },
+          ],
+        },
+        {
+          type: "textarea",
+          label: "备注",
+          key: "des",
+          rules:[],
+          defaultValue: "",
+        },
+      ],
+      id: "",
+    };
+  },
+  created() {},
+  mounted() {
+  },
+  computed: {},
+  methods: {
+  },
+  watch: {},
+};
+</script>
+<style lang="scss" scoped></style>

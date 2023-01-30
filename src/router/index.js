@@ -32,7 +32,7 @@ const constRouterList = [
     component:Layout,
     // redirect: "/partner/company",
     meta: {
-      title: '账户管理',
+      title: '企业管理',
     },
     children:[
       {
@@ -336,6 +336,14 @@ const constRouterList = [
         component: () => import(/* webpackChunkName: "about" */ '@/views/system/account/index.vue'),
         meta: {
           title: '账号管理',
+        },
+      },
+      {
+        path: '/system/permission',
+        name: 'permission',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/system/permission/index.vue'),
+        meta: {
+          title: '角色及权限',
         },
       },
       

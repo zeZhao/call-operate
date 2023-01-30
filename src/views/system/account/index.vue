@@ -141,6 +141,14 @@ export default {
         },
         {
           type: "select",
+          label: "对应角色", 
+          key: "roleId",
+          defaultValue: "",
+          optionData: [
+          ],
+        },
+        {
+          type: "select",
           label: "状态", 
           key: "state",
           defaultValue: "",
@@ -153,10 +161,19 @@ export default {
       id: "",
     };
   },
-  created() {},
-  mounted() {},
+  created() {
+    
+  },
+  mounted() {
+    this.getRoleLlist()
+  },
   computed: {},
   methods: {
+    getRoleLlist(){
+      this.$http.sysUser.sysRoleLlist().then(res=>{
+        this._setDefaultValue(this.formConfig,res.data,'roleId','roleId','roleName')
+      })
+    },
     reset({ suId }) {
       this.$prompt("请输入新密码", "提示", {
         confirmButtonText: "确定",
@@ -183,6 +200,7 @@ export default {
     _mxCreate() {
       this.addChannel = true;
       this.formTit = "新增";
+      this.id = ''
       setTimeout(() => {
         this.$refs.formItem.resetForm();
       }, 0);
@@ -214,6 +232,71 @@ export default {
         this.$refs.formItem.clearValidate();
       }, 0);
       this.addChannel = true;
+    },
+    /**
+     * 提交表单操作
+     * @param form    表单数据
+     * @param editId        编辑修改id
+     * @private
+     */
+    _mxHandleSubmit(form, editId, hasData = true) {
+      editId = this.editId;
+      form = this._mxArrangeSubmitData(form);
+      const { namespace, add, edit } = this.searchAPI;
+      let params = {};
+
+      if (hasData && this.submitParamsIsData) {
+        params = {
+          data: {
+            ...form
+          }
+        };
+      } else {
+        params = {
+          ...form
+        };
+      }
+
+      if (this.formTit == "新增") {
+        this.$http[namespace][add](params).then(res => {
+          this._mxSuccess(res, hasData && this.submitParamsIsData ? params.data : params);
+        });
+      } else {
+        if (hasData && this.submitParamsIsData) {
+          params.data = Object.assign(params.data, {
+            [editId]: this.id
+          });
+        } else {
+          params = Object.assign(params, {
+            [editId]: this.id
+          });
+        }
+
+        // params.data[editId] = this.id
+        // this.$set(params.data, editId, this.id)
+        this.$http[namespace][edit](params).then(res => {
+          this._mxSuccess(res, hasData && this.submitParamsIsData ? params.data : params);
+        });
+      }
+    },
+    /**
+     * 提交成功后执行
+     * @param res
+     */
+    _mxSuccess(res, params) {
+      if (resOk(res)) {
+        this.$http.sysUser.addOrUpdateRole({roleId:params.roleId,userId:res.data}).then(res=>{
+          if(resOk(res)){
+            this.$message.success(res.msg || res.data);
+            this._mxGetList();
+            this.addChannel = false;
+            
+          }
+        })
+      } else {
+        // console.log(111)
+        this.$message.error(res.msg || res.data);
+      }
     },
   },
   watch: {},

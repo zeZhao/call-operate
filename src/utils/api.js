@@ -57,6 +57,21 @@ export default {
     updatePwd(data) {
       return request('/sysUser/updatePwd', 'post', data)
     },
+    //获取角色
+    sysRoleLlist(data) {
+      return request('/sysRole/list', 'post', data)
+    },
+    //修改角色
+    addOrUpdateRole(data) {
+      return request('/sysUserRole/addOrUpdate', 'post', data)
+    },
+  },
+  // 权限
+  sysRole:{
+    //获取角色
+    sysRoleLlist(data) {
+      return request('/sysRole/list', 'post', data)
+    },
   },
   //坐席
   attend: {
@@ -280,6 +295,37 @@ export default {
     //场景审核
     updateAuditStatus(params) {
       return request("/scene/updateAuditStatus", 'post', params);
+    },
+  },
+  // 技能组
+  skillGroup: {
+    //获取技能组列表
+    listAll(params) {
+      return request("/skillGroup/listAll", 'get', params);
+    },
+    // 获取本企业所有坐席
+    listAttendAll(params) {
+      return request("/skillGroup/listAttendAll", 'get', params);
+    },
+    // 获取本技能组所有坐席
+    listAttendAllBySkillGroup(params) {
+      return request("/skillGroup/listAttendAllBySkillGroup", 'get', params);
+    },
+    // 分页查询技能组
+    listByPage(params) {
+      return request("/skillGroup/listByPage", 'post', params);
+    },
+    // 新增技能组
+    save(params) {
+      return request("/skillGroup/save", 'post', params);
+    },
+    // 更新技能组
+    update(params) {
+      return request("/skillGroup/update", 'post', params);
+    },
+    // 更新技能组状态
+    updateState(params) {
+      return request("/skillGroup/updateState", 'post', params);
     },
   },
   // 场景管理

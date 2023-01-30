@@ -14,44 +14,61 @@
     >
       <!-- <el-table-column label="序号" type="index" align="center" /> -->
       <el-table-column prop="corpName" label="商户名称" />
-      <el-table-column prop="taskName" label="技能组名称" />
-      <el-table-column prop="taskType" label="技能组流程" >
+      <el-table-column prop="skillGroupName" label="技能组名称" />
+      <!-- <el-table-column prop="ivrId" label="技能组流程" >
         <template slot-scope="{row}">
           <span v-if="row.taskType === 1">自动语音</span>
           <span v-if="row.taskType === 2">呼通后转人工</span>
         </template>
+      </el-table-column> -->
+      <el-table-column prop="attendCount" label="座席数量" />
+      <el-table-column prop="attendPolicy" label="座席分配策略">
+        <template slot-scope="{ row }">
+          <span v-if="row.attendPolicy === 0">随机</span>
+          <span v-if="row.attendPolicy === 1">轮选</span>
+          <span v-if="row.attendPolicy === 2">共振</span>
+          <span v-if="row.attendPolicy === 3">分机记忆</span>
+          <span v-if="row.attendPolicy === 4">空闲时间最长</span>
+          <span v-if="row.attendPolicy === 5">通话时长最短</span>
+          <span v-if="row.attendPolicy === 6">电话数最少</span>
+        </template>
       </el-table-column>
-      <el-table-column prop="corpId" label="座席数量" />
-      <el-table-column prop="corpId" label="座席分配策略" />
-      <el-table-column prop="corpId" label="满意度流程" />
-      <el-table-column prop="corpId" label="报工号" />
-      <el-table-column prop="corpId" label="报工号语音" />
-      <el-table-column prop="state" label="状态" >
-        <template slot-scope="{row}">
-          <span v-if="row.state === 3">未开始</span>
+      <el-table-column prop="sceneName" label="满意度流程" />
+      <el-table-column prop="isJobnumber" label="报工号">
+        <template slot-scope="{ row }">
+          <span v-if="row.isJobnumber === 0">否</span>
+          <span v-if="row.isJobnumber === 1">是</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="jnSoundId" label="报工号语音" /> -->
+      <el-table-column prop="status" label="状态">
+        <template slot-scope="{ row }">
+          <span v-if="row.status === 0">禁用</span>
+          <span v-if="row.status === 1">启用</span>
+          <!-- <span v-if="row.state === 3">未开始</span>
           <span v-if="row.state === 4">呼叫中</span>
           <span v-if="row.state === 5">自动暂停</span>
           <span v-if="row.state === 6">任务完成</span>
           <span v-if="row.state === 7">任务终止</span>
-          <span v-if="row.state === 8">手动暂停</span>
+          <span v-if="row.state === 8">手动暂停</span> -->
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
-          <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+          <!-- <el-button
+            @click="_mxEdit(scope.row, 'sgId')"
             type="text"
             size="small"
             >查看</el-button
-          >
+          > -->
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click="_mxEdit(scope.row, 'sgId')"
             type="text"
             size="small"
             >编辑</el-button
           >
           <el-button
-            @click=" _mxDeleteItem('extId', scope.row.extId, false, false)"
+            @click="_mxDeleteItem('sgId', scope.row.sgId, false, false)"
             type="text"
             size="small"
             >删除</el-button
@@ -76,22 +93,21 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
+        @selectChange="selectChange"
         :isSubmitBtn="true"
       >
-      <template v-slot:custom = 'formData'>
-        <div style="margin-left:50px;margin-bottom:20px">
-          <el-transfer 
-            v-model="formData.formData.seat" 
-            :data="data" 
-            :titles="['已关联座席', '待关联座席']" 
-            :left-default-checked="[2, 3]"
-            :right-default-checked="[1]"
+        <template v-slot:custom="{formData}">
+          <div style="margin-left: 50px; margin-bottom: 20px">
+            <el-transfer
+              v-model="formData.attendIdList"
+              :data="data"
+              :titles="['已关联座席', '待关联座席']"
+              :left-default-checked="[]"
+              :right-default-checked="[]"
             ></el-transfer>
-        </div>
-        
-      </template>
+          </div>
+        </template>
       </FormItem>
-      
     </el-dialog>
   </div>
 </template>
@@ -102,17 +118,17 @@ export default {
   mixins: [listMixin],
   components: {},
   data() {
-    const generateData = _ => {
-        const data = []; 
-        for (let i = 1; i <= 8; i++) {
-          data.push({
-            key: i,
-            label: `000${ i }张三`,
-            // disabled: i % 4 === 0
-          });
-        }
-        return data;
-      };
+    const generateData = (_) => {
+      const data = [];
+      for (let i = 1; i <= 8; i++) {
+        data.push({
+          key: i,
+          label: `000${i}张三`,
+          // disabled: i % 4 === 0
+        });
+      }
+      return data;
+    };
     return {
       data: generateData(),
       // 搜索框配置
@@ -164,10 +180,14 @@ export default {
       searchParam: {},
       //接口地址
       searchAPI: {
-        namespace: "smslongnum",
-        list: "list",
+        namespace: "skillGroup",
+        list: "listByPage",
         detele: "delete",
+        add: "save",
+        edit: "update",
       },
+      isParamsNotData: false,
+      submitParamsIsData: false,
       // 列表参数
       namespace: "",
       namespaceType: "Array",
@@ -178,30 +198,30 @@ export default {
           label: "商户名称",
           key: "corpId",
           defaultValue: "",
-          optionData:[]
+          optionData: [],
         },
         {
           type: "input",
           label: "技能组名称",
-          key: "taskName",
+          key: "skillGroupName",
           defaultValue: "",
         },
+        // {
+        //   type:"select",
+        //   label:'排队流程',
+        //   key:"taskType",
+        //   colSpan:12,
+        //   optionData:[
+        //     { key: 1, value: "系统默认" },
+        //     { key: 2, value: "呼通后转人工" },
+        //   ]
+        // },
         {
-          type:"select",
-          label:'排队流程',
-          key:"taskType",
-          colSpan:12,
-          optionData:[
-            { key: 1, value: "系统默认" },
-            { key: 2, value: "呼通后转人工" },
-          ]
-        },
-        {
-          type:"select",
-          label:'座席分配策略',
-          key:"supplier2",
-          colSpan:12,
-          optionData:[
+          type: "select",
+          label: "座席分配策略",
+          key: "attendPolicy",
+          colSpan: 12,
+          optionData: [
             { key: 1, value: "轮选" },
             { key: 2, value: "随机" },
             { key: 3, value: "分机记忆" },
@@ -209,33 +229,111 @@ export default {
             { key: 5, value: "空闲时间最长" },
             { key: 6, value: "通话时间最短" },
             { key: 7, value: "电话数量最少" },
-          ]
+          ],
         },
         {
-          type:"select",
-          label:'满意度调查流程',
-          key:"supplier3",
-          colSpan:12,
-          defaultValue:1,
-          optionData:[
+          type: "select",
+          label: "满意度调查流程",
+          key: "satisfactionIvrId",
+          colSpan: 12,
+          defaultValue: 1,
+          optionData: [
             { key: 1, value: "系统默认" },
             { key: 2, value: "呼通后转人工" },
-          ]
+          ],
         },
         {
           type: "divider",
         },
       ],
       id: "",
+      //技能组列表
+      skillGroupList: [],
+      //企业坐席
+      attendAllList: [],
+      //技能组坐席
+      attendSkillGroupList: [],
+      //流程数据
+      sceneList: [],
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType();
+    this.getlistAll();
+    this.getListAttendAll();
+    this.getListAttendAllBySkillGroup();
+  },
   computed: {},
   methods: {
-    _mxHandleSubmit(form){
-      console.log(form,'----')
-    }
+    // 获取场景 、 线路
+    listScene(corpId) {
+      var data = {
+        data: {
+          corpId,
+        },
+        version: "1.0",
+      };
+      this.$http.outbound.listScene(data).then((res) => {
+        if (res.state === "200") {
+          this.sceneList = res.data;
+          this._setDefaultValue(
+          this.formConfig,
+          res.data,
+          "satisfactionIvrId",
+          "sceneId",
+          "sceneName"
+        );
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
+    },
+    //获取公司下拉
+    queryCorpByCorpType() {
+      this.$http.select.userListAll({}).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.records,
+          "corpId",
+          "userId",
+          "userName"
+        );
+      });
+    },
+    // 获取技能组列表
+    getlistAll() {
+      this.$http.skillGroup.listAll().then((res) => {
+        console.log(res);
+      });
+    },
+    // 获取本企业所有坐席
+    getListAttendAll() {
+      this.$http.skillGroup.listAttendAll().then((res) => {
+        console.log(res);
+      });
+    },
+    // 获取本技能组所有坐席
+    getListAttendAllBySkillGroup() {
+      this.$http.skillGroup.listAttendAllBySkillGroup().then((res) => {
+        console.log(res);
+      });
+    },
+    selectChange({ val, item }) {
+      if (item.key === "corpId") {
+        if (val) {
+          this.listScene(val);
+          this._deleteDefaultValue(this.formConfig, 'satisfactionIvrId')
+        }else{
+          this._setDefaultValue(this.formConfig,[],'satisfactionIvrId','sceneId','sceneName')
+          this._deleteDefaultValue(this.formConfig, 'satisfactionIvrId')   
+        }
+      }
+      console.log(val, item);
+    },
+    // _mxHandleSubmit(form) {
+    //   console.log(form, "----");
+    // },
   },
   watch: {},
 };
