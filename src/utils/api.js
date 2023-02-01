@@ -72,6 +72,26 @@ export default {
     sysRoleLlist(data) {
       return request('/sysRole/list', 'post', data)
     },
+    //新增修改角色
+    save(data) {
+      return request('/sysRole/save', 'post', data)
+    },
+    //删除角色
+    delete(data) {
+      return request('/sysRole/delete', 'get', data)
+    },
+    //获取所有菜单列表
+    sysMenuList(data) {
+      return request('/sysMenu/list', 'post', data)
+    },
+    //当前角色对应权限列表
+    sysRoleMenuList(data) {
+      return request('/sysRoleMenu/list', 'get', data)
+    },
+    //更新角色权限
+    sysRoleMenuSave(data) {
+      return request('/sysRoleMenu/save', 'post', data)
+    },
   },
   //坐席
   attend: {
@@ -326,6 +346,10 @@ export default {
     // 更新技能组状态
     updateState(params) {
       return request("/skillGroup/updateState", 'post', params);
+    },
+    // 删除技能组
+    delete(params) {
+      return request("/skillGroup/delete", 'delete', params);
     },
   },
   // 场景管理

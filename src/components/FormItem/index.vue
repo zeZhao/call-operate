@@ -56,6 +56,7 @@
               <span v-if="item.specialSymbols">{{ item.specialSymbols }}</span>
               <div v-if="item.tips" class="item-tips">{{ item.tips }}</div>
             </template>
+            <!-- <template v-if="item.type === "></template> -->
             <!--密码类型-输入框-->
             <template v-if="item.type === 'password'">
               <el-input

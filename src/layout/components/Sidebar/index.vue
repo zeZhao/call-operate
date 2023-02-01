@@ -11,26 +11,26 @@
       text-color="#ffffff"
       active-text-color="#ffffff"
     >
-      <div v-for="item in routeList" :key="item.path">
-        <div v-if="item.children && item.children.length != 0">
-          <el-submenu :index="item.path">
+      <div v-for="item in menuList" :key="item.linkUrl">
+        <div v-if="item.childMenu && item.childMenu.length != 0">
+          <el-submenu :index="item.linkUrl">
             <template slot="title">
               <div class="menu_icon">
                 <i class="el-icon-location"></i>
               </div>
-              <span>{{ item.meta.title }}</span>
+              <span>{{ item.name }}</span>
             </template>
-            <el-menu-item-group v-for="el in item.children" :key="el.path">
-              <el-menu-item :index="el.path" v-if="!el.hidden">{{ el.meta.title }}</el-menu-item>
+            <el-menu-item-group v-for="el in item.childMenu" :key="el.linkUrl">
+              <el-menu-item :index="el.linkUrl">{{ el.name }}</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </div>
         <div v-else>
-          <el-menu-item :index="item.path">
+          <el-menu-item :index="item.linkUrl">
             <div class="menu_icon">
               <i class="el-icon-location"></i>
             </div>
-            <span slot="title">{{ item.meta.title }}</span>
+            <span slot="title">{{ item.name }}</span>
           </el-menu-item>
         </div>
       </div>
@@ -40,6 +40,7 @@
 
 <script>
 import constRouterList from "@/router";
+import { setStorage, getStorage,randomNum, getTime } from "@/utils/auth";
 export default {
   data() {
     return {
@@ -47,6 +48,9 @@ export default {
     };
   },
   computed: {
+    menuList() {
+      return JSON.parse(getStorage('menu'))
+    },
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;

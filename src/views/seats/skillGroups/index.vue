@@ -96,14 +96,14 @@
         @selectChange="selectChange"
         :isSubmitBtn="true"
       >
-        <template v-slot:custom="{formData}">
+        <template v-slot:custom="{ formData }">
           <div style="margin-left: 50px; margin-bottom: 20px">
             <el-transfer
               v-model="formData.attendIdList"
-              :data="data"
-              :titles="['已关联座席', '待关联座席']"
-              :left-default-checked="[]"
-              :right-default-checked="[]"
+              :data="transferData"
+              :titles="['待关联座席', '已关联座席']"
+              :left-default-checked="leftDefaultCheckedList"
+              :right-default-checked="rightDefaultCheckedList"
             ></el-transfer>
           </div>
         </template>
@@ -130,7 +130,9 @@ export default {
       return data;
     };
     return {
-      data: generateData(),
+      transferData: [],
+      leftDefaultCheckedList:[],
+      rightDefaultCheckedList:[],
       // 搜索框配置
       searchFormConfig: [
         { type: "input", label: "商户名称", key: "corpId" },
@@ -237,10 +239,7 @@ export default {
           key: "satisfactionIvrId",
           colSpan: 12,
           defaultValue: 1,
-          optionData: [
-            { key: 1, value: "系统默认" },
-            { key: 2, value: "呼通后转人工" },
-          ],
+          optionData: [],
         },
         {
           type: "divider",
@@ -260,9 +259,9 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType();
-    this.getlistAll();
-    this.getListAttendAll();
-    this.getListAttendAllBySkillGroup();
+    // this.getlistAll();
+    // this.getListAttendAll();
+    // this.getListAttendAllBySkillGroup();
   },
   computed: {},
   methods: {
@@ -278,12 +277,12 @@ export default {
         if (res.state === "200") {
           this.sceneList = res.data;
           this._setDefaultValue(
-          this.formConfig,
-          res.data,
-          "satisfactionIvrId",
-          "sceneId",
-          "sceneName"
-        );
+            this.formConfig,
+            res.data,
+            "satisfactionIvrId",
+            "sceneId",
+            "sceneName"
+          );
         } else {
           this.$message.error(res.msg);
         }
@@ -308,14 +307,38 @@ export default {
       });
     },
     // 获取本企业所有坐席
-    getListAttendAll() {
-      this.$http.skillGroup.listAttendAll().then((res) => {
-        console.log(res);
+    getListAttendAll(corpId) {
+      this.$http.skillGroup.listAttendAll({ corpId }).then((res) => {
+        if (resOk(res)) {
+          this.transferData = [];
+          res.data.forEach((item) => {
+            this.transferData.push({
+              key: item.attendId,
+              label: item.attendName,
+              disabled: item.state == 1 ? true : false,
+            });
+          });
+        }
+        // console.log(res);
       });
     },
     // 获取本技能组所有坐席
-    getListAttendAllBySkillGroup() {
-      this.$http.skillGroup.listAttendAllBySkillGroup().then((res) => {
+    getListAttendAllBySkillGroup(sgId) {
+      this.$http.skillGroup.listAttendAllBySkillGroup({sgId}).then((res) => {
+        if(resOk(res)){
+          res.data.forEach(item=>{
+            this.rightDefaultCheckedList.push(item.attendId)
+            
+          })
+          
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "attendIdList",
+            this.rightDefaultCheckedList
+          );
+          console.log(this.formConfig,'======formConfig')
+        }
         console.log(res);
       });
     },
@@ -323,13 +346,52 @@ export default {
       if (item.key === "corpId") {
         if (val) {
           this.listScene(val);
-          this._deleteDefaultValue(this.formConfig, 'satisfactionIvrId')
-        }else{
-          this._setDefaultValue(this.formConfig,[],'satisfactionIvrId','sceneId','sceneName')
-          this._deleteDefaultValue(this.formConfig, 'satisfactionIvrId')   
+          this.getListAttendAll(val);
+          this._deleteDefaultValue(this.formConfig, "satisfactionIvrId");
+        } else {
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "satisfactionIvrId",
+            "sceneId",
+            "sceneName"
+          );
+          this._deleteDefaultValue(this.formConfig, "satisfactionIvrId");
         }
       }
-      console.log(val, item);
+    },
+
+    /**
+     * 编辑表单
+     * @param row  当前行数据
+     * @param ID  当前行ID
+     * @private
+     */
+
+    async _mxEdit(row, ID) {
+      row = this._mxArrangeEditData(row);
+      this.id = row[ID];
+      this.editId = ID;
+      this.formTit = "修改";
+      this.formConfig.forEach((item) => {
+        for (let key in row) {
+          if (item.key === key && row[key] !== "-") {
+            this.$set(item, "defaultValue", row[key]);
+          }
+        }
+        if (!Object.keys(row).includes(item.key)) {
+          this.$set(item, "defaultValue", "");
+        }
+        if (item.key === "corpId") {
+          this.listScene(item.defaultValue);
+          this.getListAttendAll(item.defaultValue);
+        }
+      });
+      setTimeout(() => {
+        this.$refs.formItem.clearValidate();
+      }, 0);
+      await this.getListAttendAllBySkillGroup(row.sgId)
+      this.addChannel = true;
     },
     // _mxHandleSubmit(form) {
     //   console.log(form, "----");

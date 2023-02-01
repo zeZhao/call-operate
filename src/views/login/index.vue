@@ -144,6 +144,7 @@ export default {
               
               setStorage('token',res.msg)
               setStorage('info',res.data)
+              setStorage('menu',res.data.list)
               this.$router.push("/");
               
               this.$message.success("登录成功");

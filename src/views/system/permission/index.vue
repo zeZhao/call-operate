@@ -1,5 +1,5 @@
 <template>
-<!-- 角色及权限 -->
+  <!-- 角色及权限 -->
   <div class="permission">
     <Search
       :searchFormConfig="searchFormConfig"
@@ -17,7 +17,7 @@
       <el-table-column prop="roleName" label="角色名称" />
       <el-table-column prop="des" label="描述" />
       <el-table-column prop="status" label="状态">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <span v-if="row.status == 0">禁用</span>
           <span v-if="row.status == 1">启用</span>
         </template>
@@ -26,20 +26,19 @@
       <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="_mxEdit(scope.row, 'attendId')"
+            @click="_mxEdit(scope.row, 'roleId')"
             type="text"
             size="small"
             >修改</el-button
           >
           <el-button
+            @click="jurisdictionBtn(scope.row)"
             type="text"
             size="small"
             >权限</el-button
           >
           <el-button
-            @click="
-              _mxDeleteItem('attendId', scope.row.attendId, false, false)
-            "
+            @click="_mxDeleteItem('roleId', scope.row.roleId, false, false)"
             type="text"
             size="small"
             >删除
@@ -66,6 +65,25 @@
         @cancel="_mxCancel"
         @choose="choose"
       ></FormItem>
+    </el-dialog>
+    <el-dialog
+      title="权限分配"
+      :visible.sync="jurisdictionVisible"
+      :close-on-click-modal="false"
+      top="45px"
+    >
+      <el-tree
+        ref="tree"
+        :data="treeData"
+        :props="defaultProps"
+        node-key="menuId"
+        :default-checked-keys="defaultCheckedList"
+        show-checkbox
+      ></el-tree>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="jurisdictionVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitTree">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -98,8 +116,8 @@ export default {
       searchAPI: {
         namespace: "sysRole",
         list: "sysRoleLlist",
-        add: "updateAndSaveAttend",
-        edit: "updateAndSaveAttend",
+        add: "save",
+        edit: "save",
         detele: "delete",
       },
       // 列表参数
@@ -125,7 +143,7 @@ export default {
           label: "状态",
           key: "status",
           defaultValue: "",
-          optionData:[
+          optionData: [
             { key: 1, value: "启用" },
             { key: 0, value: "禁用" },
           ],
@@ -134,18 +152,73 @@ export default {
           type: "textarea",
           label: "备注",
           key: "des",
-          rules:[],
+          rules: [],
           defaultValue: "",
         },
       ],
       id: "",
+      jurisdictionVisible: false,
+      treeData: [],
+      defaultCheckedList: [],
+      defaultProps: {
+        children: "childMenu",
+        label: "name",
+      },
+      roleId:""
     };
   },
   created() {},
   mounted() {
+    this.getSysMenuList();
+    // this.sysRoleMenuList()
   },
   computed: {},
   methods: {
+    getSysMenuList() {
+      this.$http.sysRole.sysMenuList().then((res) => {
+        this.treeData = res.data;
+        console.log(res);
+      });
+    },
+    sysRoleMenuList(roleId) {
+      this.defaultCheckedList = []
+      this.$http.sysRole.sysRoleMenuList({ roleId }).then((res) => {
+        this.defaultCheckedList = []
+        let arr = [];
+        res.data.forEach((item) => {
+          arr.push(item.menuId);
+        });
+        this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys(arr)
+          this.defaultCheckedList = arr;
+        });
+      });
+    },
+    jurisdictionBtn(row) {
+      const { roleId } = row;
+      this.roleId = roleId
+      this.jurisdictionVisible = true;
+      // console.log(row, "====");
+
+      this.sysRoleMenuList(roleId);
+    },
+    submitTree(){
+      console.log(this.$refs.tree)
+      console.log(this.$refs.tree.getCheckedKeys())
+      let arr = this.$refs.tree.getCheckedKeys()
+      let sysRoleMenu = []
+      arr.forEach(item=>{
+        sysRoleMenu.push({roleId:this.roleId,menuId:item})
+      })
+      console.log({sysRoleMenu},';;;;;;;')
+      this.$http.sysRole.sysRoleMenuSave([...sysRoleMenu]).then(res=>{
+        if(resOk){
+          this.jurisdictionVisible = false
+          this.roleId = ""
+          // this.$message.s
+        }
+      })
+    }
   },
   watch: {},
 };

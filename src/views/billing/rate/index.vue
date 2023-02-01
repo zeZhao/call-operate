@@ -144,6 +144,12 @@ export default {
           label: "单价（元）",
           key: "unitPrice",
           defaultValue: "",
+          rules:[
+            // {
+            //    message:'/^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$/'
+            //   `/^(([1]{1})([3]|[5]|[6]|[7]|[8]|[9]{1}))$/`
+            // }
+          ]
         },
         {
           type: "select",

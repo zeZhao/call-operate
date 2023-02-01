@@ -640,6 +640,11 @@ export default {
               this.$set(item, 'defaultValue', optionKey)
               item.defaultValue = optionKey
             })
+          }else{
+            this.$nextTick(() => {
+              this.$set(item, 'defaultValue', optionKey)
+              item.defaultValue = optionKey
+            })
           }
         }
       });
