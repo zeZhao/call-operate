@@ -141,15 +141,14 @@ export default {
         },
         {
           type: "select",
-          label: "对应角色", 
+          label: "对应角色",
           key: "roleId",
           defaultValue: "",
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
-          label: "状态", 
+          label: "状态",
           key: "state",
           defaultValue: "",
           optionData: [
@@ -161,18 +160,22 @@ export default {
       id: "",
     };
   },
-  created() {
-    
-  },
+  created() {},
   mounted() {
-    this.getRoleLlist()
+    this.getRoleLlist();
   },
   computed: {},
   methods: {
-    getRoleLlist(){
-      this.$http.sysUser.sysRoleLlist().then(res=>{
-        this._setDefaultValue(this.formConfig,res.data,'roleId','roleId','roleName')
-      })
+    getRoleLlist() {
+      this.$http.sysUser.sysRoleLlist({ current: 1, size: 999 }).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.records,
+          "roleId",
+          "roleId",
+          "roleName"
+        );
+      });
     },
     reset({ suId }) {
       this.$prompt("请输入新密码", "提示", {
@@ -200,7 +203,7 @@ export default {
     _mxCreate() {
       this.addChannel = true;
       this.formTit = "新增";
-      this.id = ''
+      this.id = "";
       setTimeout(() => {
         this.$refs.formItem.resetForm();
       }, 0);
@@ -248,34 +251,40 @@ export default {
       if (hasData && this.submitParamsIsData) {
         params = {
           data: {
-            ...form
-          }
+            ...form,
+          },
         };
       } else {
         params = {
-          ...form
+          ...form,
         };
       }
 
       if (this.formTit == "新增") {
-        this.$http[namespace][add](params).then(res => {
-          this._mxSuccess(res, hasData && this.submitParamsIsData ? params.data : params);
+        this.$http[namespace][add](params).then((res) => {
+          this._mxSuccess(
+            res,
+            hasData && this.submitParamsIsData ? params.data : params
+          );
         });
       } else {
         if (hasData && this.submitParamsIsData) {
           params.data = Object.assign(params.data, {
-            [editId]: this.id
+            [editId]: this.id,
           });
         } else {
           params = Object.assign(params, {
-            [editId]: this.id
+            [editId]: this.id,
           });
         }
 
         // params.data[editId] = this.id
         // this.$set(params.data, editId, this.id)
-        this.$http[namespace][edit](params).then(res => {
-          this._mxSuccess(res, hasData && this.submitParamsIsData ? params.data : params);
+        this.$http[namespace][edit](params).then((res) => {
+          this._mxSuccess(
+            res,
+            hasData && this.submitParamsIsData ? params.data : params
+          );
         });
       }
     },
@@ -285,14 +294,15 @@ export default {
      */
     _mxSuccess(res, params) {
       if (resOk(res)) {
-        this.$http.sysUser.addOrUpdateRole({roleId:params.roleId,userId:res.data}).then(res=>{
-          if(resOk(res)){
-            this.$message.success(res.msg || res.data);
-            this._mxGetList();
-            this.addChannel = false;
-            
-          }
-        })
+        this.$http.sysUser
+          .addOrUpdateRole({ roleId: params.roleId, userId: res.data })
+          .then((res) => {
+            if (resOk(res)) {
+              this.$message.success(res.msg || res.data);
+              this._mxGetList();
+              this.addChannel = false;
+            }
+          });
       } else {
         // console.log(111)
         this.$message.error(res.msg || res.data);
