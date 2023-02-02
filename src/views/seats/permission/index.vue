@@ -25,11 +25,7 @@
             size="small"
             >编辑</el-button
           >
-          <el-button
-            type="text"
-            size="small"
-            >权限</el-button
-          >
+          <el-button type="text" size="small">权限</el-button>
           <el-button
             @click="_mxDeleteItem('extId', scope.row.extId, false, false)"
             type="text"

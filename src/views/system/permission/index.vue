@@ -164,7 +164,7 @@ export default {
         children: "childMenu",
         label: "name",
       },
-      roleId:""
+      roleId: "",
     };
   },
   created() {},
@@ -181,44 +181,44 @@ export default {
       });
     },
     sysRoleMenuList(roleId) {
-      this.defaultCheckedList = []
+      this.defaultCheckedList = [];
       this.$http.sysRole.sysRoleMenuList({ roleId }).then((res) => {
-        this.defaultCheckedList = []
+        this.defaultCheckedList = [];
         let arr = [];
         res.data.forEach((item) => {
           arr.push(item.menuId);
         });
         this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys(arr)
+          this.$refs.tree.setCheckedKeys(arr);
           this.defaultCheckedList = arr;
         });
       });
     },
     jurisdictionBtn(row) {
       const { roleId } = row;
-      this.roleId = roleId
+      this.roleId = roleId;
       this.jurisdictionVisible = true;
       // console.log(row, "====");
 
       this.sysRoleMenuList(roleId);
     },
-    submitTree(){
-      console.log(this.$refs.tree)
-      console.log(this.$refs.tree.getCheckedKeys())
-      let arr = this.$refs.tree.getCheckedKeys()
-      let sysRoleMenu = []
-      arr.forEach(item=>{
-        sysRoleMenu.push({roleId:this.roleId,menuId:item})
-      })
-      console.log({sysRoleMenu},';;;;;;;')
-      this.$http.sysRole.sysRoleMenuSave([...sysRoleMenu]).then(res=>{
-        if(resOk){
-          this.jurisdictionVisible = false
-          this.roleId = ""
+    submitTree() {
+      console.log(this.$refs.tree);
+      console.log(this.$refs.tree.getCheckedKeys());
+      let arr = this.$refs.tree.getCheckedKeys();
+      let sysRoleMenu = [];
+      arr.forEach((item) => {
+        sysRoleMenu.push({ roleId: this.roleId, menuId: item });
+      });
+      console.log({ sysRoleMenu }, ";;;;;;;");
+      this.$http.sysRole.sysRoleMenuSave([...sysRoleMenu]).then((res) => {
+        if (resOk) {
+          this.jurisdictionVisible = false;
+          this.roleId = "";
           // this.$message.s
         }
-      })
-    }
+      });
+    },
   },
   watch: {},
 };

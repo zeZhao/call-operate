@@ -131,8 +131,8 @@ export default {
     };
     return {
       transferData: [],
-      leftDefaultCheckedList:[],
-      rightDefaultCheckedList:[],
+      leftDefaultCheckedList: [],
+      rightDefaultCheckedList: [],
       // 搜索框配置
       searchFormConfig: [
         { type: "input", label: "商户名称", key: "corpId" },
@@ -324,20 +324,19 @@ export default {
     },
     // 获取本技能组所有坐席
     getListAttendAllBySkillGroup(sgId) {
-      this.$http.skillGroup.listAttendAllBySkillGroup({sgId}).then((res) => {
-        if(resOk(res)){
-          res.data.forEach(item=>{
-            this.rightDefaultCheckedList.push(item.attendId)
-            
-          })
-          
+      this.$http.skillGroup.listAttendAllBySkillGroup({ sgId }).then((res) => {
+        if (resOk(res)) {
+          res.data.forEach((item) => {
+            this.rightDefaultCheckedList.push(item.attendId);
+          });
+
           this._setDefaultValue(
             this.formConfig,
             [],
             "attendIdList",
             this.rightDefaultCheckedList
           );
-          console.log(this.formConfig,'======formConfig')
+          console.log(this.formConfig, "======formConfig");
         }
         console.log(res);
       });
@@ -390,7 +389,7 @@ export default {
       setTimeout(() => {
         this.$refs.formItem.clearValidate();
       }, 0);
-      await this.getListAttendAllBySkillGroup(row.sgId)
+      await this.getListAttendAllBySkillGroup(row.sgId);
       this.addChannel = true;
     },
     // _mxHandleSubmit(form) {
