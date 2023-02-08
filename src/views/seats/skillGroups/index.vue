@@ -96,17 +96,11 @@
         @selectChange="selectChange"
         :isSubmitBtn="true"
       >
-        <template v-slot:custom="{ formData }">
+        <!-- <template v-slot:custom="{ formData }">
           <div style="margin-left: 50px; margin-bottom: 20px">
-            <el-transfer
-              v-model="formData.attendIdList"
-              :data="transferData"
-              :titles="['待关联座席', '已关联座席']"
-              :left-default-checked="leftDefaultCheckedList"
-              :right-default-checked="rightDefaultCheckedList"
-            ></el-transfer>
+            
           </div>
-        </template>
+        </template> -->
       </FormItem>
     </el-dialog>
   </div>
@@ -244,6 +238,16 @@ export default {
         {
           type: "divider",
         },
+        {
+          type: "transfer",
+          label: "",
+          key: "attendIdList",
+          data: [],
+          titles: ["待关联座席", "已关联座席"],
+          leftDefaultCheckedList: this.leftDefaultCheckedList,
+          rightDefaultCheckedList: this.rightDefaultCheckedList,
+          rules:[]
+        },
       ],
       id: "",
       //技能组列表
@@ -301,45 +305,56 @@ export default {
       });
     },
     // 获取技能组列表
-    getlistAll() {
-      this.$http.skillGroup.listAll().then((res) => {
-        console.log(res);
-      });
-    },
+    // getlistAll() {
+    //   this.$http.skillGroup.listAll().then((res) => {
+    //     console.log(res);
+    //   });
+    // },
     // 获取本企业所有坐席
-    getListAttendAll(corpId) {
-      this.$http.skillGroup.listAttendAll({ corpId }).then((res) => {
+    async getListAttendAll(corpId) {
+      await this.$http.skillGroup.listAttendAll({ corpId }).then((res) => {
         if (resOk(res)) {
-          this.transferData = [];
-          res.data.forEach((item) => {
-            this.transferData.push({
-              key: item.attendId,
-              label: item.attendName,
-              disabled: item.state == 1 ? true : false,
+          this.$nextTick(() => {
+            let arr = [];
+            res.data.forEach((item) => {
+              arr.push({
+                key: item.attendId,
+                label: item.attendName,
+                disabled: item.state == 1 ? true : false,
+              });
             });
+            this._setDefaultValue(
+              this.formConfig,
+              res.data,
+              "attendIdList",
+              "",
+              "",
+              "",
+              arr
+            );
+            console.log(arr, "=========获取本企业所有坐席");
           });
         }
         // console.log(res);
       });
     },
     // 获取本技能组所有坐席
-    getListAttendAllBySkillGroup(sgId) {
-      this.$http.skillGroup.listAttendAllBySkillGroup({ sgId }).then((res) => {
-        if (resOk(res)) {
-          res.data.forEach((item) => {
-            this.rightDefaultCheckedList.push(item.attendId);
-          });
-
-          this._setDefaultValue(
-            this.formConfig,
-            [],
-            "attendIdList",
-            this.rightDefaultCheckedList
-          );
-          console.log(this.formConfig, "======formConfig");
-        }
-        console.log(res);
-      });
+    async getListAttendAllBySkillGroup(sgId) {
+      await this.$http.skillGroup
+        .listAttendAllBySkillGroup({ sgId })
+        .then((res) => {
+          if (resOk(res)) {
+            this.$nextTick(() => {
+              let arr = [];
+              res.data.forEach((item) => {
+                arr.push(item.attendId);
+              });
+              this._setDefaultValue(this.formConfig, [], "attendIdList", arr);
+              console.log(arr, "======获取本技能组所有坐席");
+            });
+          }
+          // console.log(res);
+        });
     },
     selectChange({ val, item }) {
       if (item.key === "corpId") {
@@ -372,7 +387,7 @@ export default {
       this.id = row[ID];
       this.editId = ID;
       this.formTit = "修改";
-      this.formConfig.forEach((item) => {
+      await this.formConfig.forEach(async (item) => {
         for (let key in row) {
           if (item.key === key && row[key] !== "-") {
             this.$set(item, "defaultValue", row[key]);
@@ -382,14 +397,14 @@ export default {
           this.$set(item, "defaultValue", "");
         }
         if (item.key === "corpId") {
-          this.listScene(item.defaultValue);
-          this.getListAttendAll(item.defaultValue);
+          await this.listScene(item.defaultValue);
+          await this.getListAttendAll(item.defaultValue);
         }
       });
       setTimeout(() => {
         this.$refs.formItem.clearValidate();
       }, 0);
-      await this.getListAttendAllBySkillGroup(row.sgId);
+      this.getListAttendAllBySkillGroup(row.sgId);
       this.addChannel = true;
     },
     // _mxHandleSubmit(form) {

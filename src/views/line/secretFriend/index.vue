@@ -310,7 +310,7 @@ export default {
         {
           type: "select",
           label: "流程名称",
-          key: "sceneName",
+          key: "sceneId",
           colSpan: 12,
           optionData: [],
         },
@@ -334,31 +334,31 @@ export default {
           type: "dates",
           label: "日期",
           defaultValue: "",
-          key: 'dates',
+          key: "dates",
           colSpan: 24,
         },
         {
           type: "times",
           label: "时间段1",
           defaultValue: "",
-          key: 'time1',
+          key: "time1",
           colSpan: 24,
         },
         {
           type: "times",
           label: "时间段2",
           defaultValue: "",
-          key: 'time2',
+          key: "time2",
           colSpan: 24,
-          rules:[]
+          rules: [],
         },
         {
           type: "times",
           label: "时间段3",
           defaultValue: "",
-          key: 'time3',
+          key: "time3",
           colSpan: 24,
-          rules:[]
+          rules: [],
         },
       ],
       allocationVisible: false,
@@ -379,19 +379,19 @@ export default {
     listScene(corpId) {
       var data = {
         data: {
-          corpId
+          corpId,
         },
         version: "1.0",
       };
       this.$http.outbound.listScene(data).then((res) => {
         if (res.state === "200") {
           this._setDefaultValue(
-          this.allocationConfig,
-          res.data,
-          "sceneName",
-          "sceneId",
-          "sceneName"
-        );
+            this.allocationConfig,
+            res.data,
+            "sceneId",
+            "sceneId",
+            "sceneName"
+          );
         } else {
           this.$message.error(res.msg);
         }
@@ -487,7 +487,7 @@ export default {
           this.listAll(val);
           this.listScene(val);
           this._deleteDefaultValue(this.allocationConfig, "userId");
-          this._deleteDefaultValue(this.allocationConfig, "sceneName");
+          this._deleteDefaultValue(this.allocationConfig, "sceneId");
         } else {
           this._setDefaultValue(
             this.allocationConfig,
@@ -499,12 +499,12 @@ export default {
           this._setDefaultValue(
             this.allocationConfig,
             [],
-            "sceneName",
+            "sceneId",
             "sceneId",
             "sceneName"
           );
           this._deleteDefaultValue(this.allocationConfig, "userId");
-          this._deleteDefaultValue(this.allocationConfig, "sceneName");
+          this._deleteDefaultValue(this.allocationConfig, "sceneId");
         }
       }
     },
@@ -549,15 +549,16 @@ export default {
     },
     submitAllocation(form) {
       form.inId = this.multipleSelection[0].inId;
-      form.startDate = form.dates[0]
-      form.stopDate = form.dates[0]
-      form.callTime1Start = form.time1[0]
-      form.callTime1End = form.time1[1]
-      form.callTime2Start = form.time2[0]
-      form.callTime2End = form.time2[1]
-      form.callTime3Start = form.time3[0]
-      form.callTime3End = form.time3[1]
-      this.$http.inboundcfg.put(form).then((res) => {
+      form.startDate = form.dates[0];
+      form.stopDate = form.dates[0];
+      form.callTime1Start = form.time1[0];
+      form.callTime1End = form.time1[1];
+      form.callTime2Start = form.time2[0];
+      form.callTime2End = form.time2[1];
+      form.callTime3Start = form.time3[0];
+      form.callTime3End = form.time3[1];
+
+      this.$http.inboundcfg.put({ data: { ...form } }).then((res) => {
         if (res.state == 200) {
           this.$message.success(res.msg);
           this._mxGetList();
@@ -565,7 +566,6 @@ export default {
         } else {
           this.$message.error(res.msg);
         }
-        console.log(res);
       });
     },
     cancelAllocation() {
@@ -574,6 +574,12 @@ export default {
         this.$refs.allocationForm.resetForm();
       }, 0);
     },
+
+
+
+    //分配号码
+
+
     allocation() {
       if (
         this.multipleSelection.length === 0 ||
@@ -584,33 +590,67 @@ export default {
         this.allocationVisible = true;
         setTimeout(() => {
           this.$refs.allocationForm.resetForm();
-          let obj = this.multipleSelection[0];
+          let row = this.multipleSelection[0];
+          this.listScene(row.corpId)
+          this.listAll(row.corpId)
+
           this.allocationConfig.forEach((item) => {
-            if (item.key === "supplyId") {
-              item.defaultValue = obj.supplyId;
+            for (let key in row) {
+              if (item.key === key && row[key] !== "-") {
+                this.$set(item, "defaultValue", row[key]);
+              }
             }
-            if (item.key === "lineId") {
-              item.defaultValue = obj.lineId;
+            if (!Object.keys(row).includes(item.key)) {
+              this.$set(item, "defaultValue", "");
             }
-            if (item.key === "privince") {
-              item.defaultValue = obj.privince;
+            if (item.key === "weekDays" && row["weekDays"] !== "-") {
+              console.log(row["weekDays"], "======weekDays");
+              this.$set(item, "defaultValue", JSON.parse(row["weekDays"]));
             }
-            if (item.key === "operaId") {
-              item.defaultValue = obj.operaId;
+            if (
+              item.key === "dates" &&
+              row["startDate"] !== "-" &&
+              row["stopDate"] !== "-"
+            ) {
+              this.$set(item, "defaultValue", [
+                row["startDate"],
+                row["stopDate"],
+              ]);
             }
-            if (item.key === "operaNumber") {
-              item.defaultValue = obj.operaNumber;
+            if (
+              item.key === "time1" &&
+              row["callTime1Start"] !== "-" &&
+              row["callTime1End"] !== "-"
+            ) {
+              this.$set(item, "defaultValue", [
+                row["callTime1Start"],
+                row["callTime1End"],
+              ]);
+            }
+            if (
+              item.key === "time2" &&
+              row["callTime2Start"] !== "-" &&
+              row["callTime2End"] !== "-"
+            ) {
+              this.$set(item, "defaultValue", [
+                row["callTime2Start"],
+                row["callTime2End"],
+              ]);
+            }
+            if (
+              item.key === "time3" &&
+              row["callTime3Start"] !== "-" &&
+              row["callTime3End"] !== "-"
+            ) {
+              this.$set(item, "defaultValue", [
+                row["callTime3Start"],
+                row["callTime3End"],
+              ]);
             }
           });
-          // console.log()
-          // this._setDefaultValue(this.allocationConfig,[],'supplyId',obj.supplyId)
-          // this._setDefaultValue(this.allocationConfig,[],'lineId',obj.lineId)
-          // this._setDefaultValue(this.allocationConfig,[],'privince',obj.privince)
-          // this._setDefaultValue(this.allocationConfig,[],'operaId',obj.operaId)
-          // this._setDefaultValue(this.allocationConfig,[],'operaNumber',obj.operaNumber)
-          // this.allocationConfig.forEach(item=>{
-
-          // })
+          setTimeout(() => {
+            this.$refs.allocationForm.clearValidate();
+          }, 0);
         }, 0);
       }
     },

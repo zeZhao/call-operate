@@ -13,7 +13,6 @@
           v-for="(item, index) in formConfig"
           :key="index"
           :span="item.colSpan || colSpan"
-          
         >
           <div v-if="item.type === 'divider' && !item.isShow">
             <el-divider></el-divider>
@@ -56,7 +55,6 @@
               <span v-if="item.specialSymbols">{{ item.specialSymbols }}</span>
               <div v-if="item.tips" class="item-tips">{{ item.tips }}</div>
             </template>
-            <!-- <template v-if="item.type === "></template> -->
             <!--密码类型-输入框-->
             <template v-if="item.type === 'password'">
               <el-input
@@ -219,6 +217,7 @@
             </template>
 
             <!--多选框-->
+            <!-- 需要设置defaultValue 来确定是数组类型 -->
             <template v-if="item.type === 'checkbox'">
               <el-checkbox-group
                 v-model="formData[item.key]"
@@ -513,15 +512,29 @@
                 type="file"
                 name="fileUpload"
                 accept="*"
-                @change="(e) => { changeFileUpload(item,e) }"
+                @change="
+                  (e) => {
+                    changeFileUpload(item, e);
+                  }
+                "
                 :title="item.title || '未选择任何文件'"
               />
+            </template>
+            <!-- 穿梭框 -->
+            <template v-if="item.type === 'transfer'">
+              <el-transfer
+                v-model="formData[item.key]"
+                :data="item.data"
+                :titles="item.titles"
+                :left-default-checked="item.leftDefaultChecked"
+                :right-default-checked="item.rightDefaultChecked"
+              ></el-transfer>
             </template>
             <p v-if="item.tip" class="tip">{{ item.tip }}</p>
           </el-form-item>
         </el-col>
         <!-- 自定义表单项 -->
-        <div style="clear:both"></div>
+        <div style="clear: both"></div>
         <div>
           <slot name="custom" :formData="formData"></slot>
         </div>
@@ -651,7 +664,6 @@ export default {
   },
   computed: {},
   methods: {
-    
     upLoadUrl(item) {
       return item.uploadUrl || this.action;
     },
@@ -663,7 +675,7 @@ export default {
     //  select 事件
     onChange(val, item) {
       this._setDefaultVal(val, item);
-      console.log(33333)
+      console.log(33333);
       this.$emit("onChange", { val, item });
     },
     // 选择组件
@@ -793,8 +805,8 @@ export default {
       }
     },
     //input 上传
-    changeFileUpload(item,e){
-      this.$emit("changeFileUpload", { item,e });
+    changeFileUpload(item, e) {
+      this.$emit("changeFileUpload", { item, e });
     },
     //  文件上传成功时的钩子
     handleSuccess(item, response, file, fileList) {
@@ -813,8 +825,8 @@ export default {
         this.submitDisabled = true;
       });
     },
-    handleChange(item, file, fileList){
-      this.$emit("handleChange", { item, file, fileList });    
+    handleChange(item, file, fileList) {
+      this.$emit("handleChange", { item, file, fileList });
     },
     //  文件上传时的钩子
     handleProgress(item, event, file, fileList) {

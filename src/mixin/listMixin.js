@@ -621,7 +621,7 @@ export default {
      * @param optionVal 设置value的值
      * @private
      */
-    _setDefaultValue(list, data, key, optionKey, optionVal, disabled) {
+    _setDefaultValue(list, data, key, optionKey, optionVal, disabled, defaultData) {
       let arr = []
       list.forEach(item => {
         if (item.key === key) {
@@ -635,16 +635,26 @@ export default {
               };
               item.optionData.push(obj)
             });
-          } else if (item.type === 'input') {
-            this.$nextTick(() => {
-              this.$set(item, 'defaultValue', optionKey)
-              item.defaultValue = optionKey
-            })
-          }else{
-            this.$nextTick(() => {
-              this.$set(item, 'defaultValue', optionKey)
-              item.defaultValue = optionKey
-            })
+          } else if (item.type === 'input' || item.type === 'transfer') {
+            if (item.type === 'input'){
+              this.$nextTick(() => {
+                this.$set(item, 'defaultValue', optionKey)
+                item.defaultValue = optionKey
+              })
+            }else{
+              if (optionKey){
+                this.$nextTick(() => {
+                  this.$set(item, 'defaultValue', optionKey)
+                  item.defaultValue = optionKey
+                })
+              } else if (defaultData){
+                this.$nextTick(() => {
+                  this.$set(item, 'data', defaultData)
+                  item.data = defaultData
+                })
+              }
+            }
+            
           }
         }
       });
