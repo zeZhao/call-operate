@@ -48,7 +48,7 @@
       <el-table-column prop="merchantTenantAccountName" label="商家账户" />
       <el-table-column prop="routeType" label="路由类型">
         <template slot-scope="{ row }">
-          <span v-if="row.routeType === 0">技能组</span>
+          <span v-if="row.routeType === 2">技能组</span>
           <span v-if="row.routeType === 1">IVR</span>
         </template>
       </el-table-column>
@@ -303,7 +303,7 @@ export default {
           key: "routeType",
           colSpan: 12,
           optionData: [
-            { key: 0, value: "技能组" },
+            { key: 2, value: "技能组" },
             { key: 1, value: "IVR" },
           ],
         },
@@ -371,15 +371,16 @@ export default {
     this.getUser();
     this.linecfgList();
     this.provincecity();
-    this.listScene();
+    // this.listScene();
   },
   computed: {},
   methods: {
     // 流程
-    listScene(corpId) {
+    listScene(corpId, processType) {
       var data = {
         data: {
           corpId,
+          processType,
         },
         version: "1.0",
       };
@@ -485,9 +486,9 @@ export default {
       if (item.key === "corpId") {
         if (val) {
           this.listAll(val);
-          this.listScene(val);
+          // this.listScene(val);
           this._deleteDefaultValue(this.allocationConfig, "userId");
-          this._deleteDefaultValue(this.allocationConfig, "sceneId");
+          // this._deleteDefaultValue(this.allocationConfig, "sceneId");
         } else {
           this._setDefaultValue(
             this.allocationConfig,
@@ -496,6 +497,29 @@ export default {
             "supplyId",
             "userName"
           );
+
+          this._deleteDefaultValue(this.allocationConfig, "userId");
+          this._deleteDefaultValue(this.allocationConfig, "sceneId");
+        }
+      }
+      if (item.key === "routeType") {
+        let corpId = this._getFormKeyData(this.allocationConfig, "corpId");
+        if (corpId) {
+          if (val) {
+            this._deleteDefaultValue(this.allocationConfig, "sceneId");
+            this.listScene(corpId, val);
+          } else {
+            this._setDefaultValue(
+              this.allocationConfig,
+              [],
+              "sceneId",
+              "sceneId",
+              "sceneName"
+            );
+            this._deleteDefaultValue(this.allocationConfig, "sceneId");
+          }
+        } else {
+          this.$message.error("请先选择使用商家");
           this._setDefaultValue(
             this.allocationConfig,
             [],
@@ -503,8 +527,12 @@ export default {
             "sceneId",
             "sceneName"
           );
-          this._deleteDefaultValue(this.allocationConfig, "userId");
           this._deleteDefaultValue(this.allocationConfig, "sceneId");
+        }
+
+        if (val) {
+          // console.log(this._getFormKeyData(this.allocationConfig,'corpId'),'--------_getFormKeyData获取企业ID')
+        } else {
         }
       }
     },
@@ -574,11 +602,7 @@ export default {
         this.$refs.allocationForm.resetForm();
       }, 0);
     },
-
-
-
     //分配号码
-
 
     allocation() {
       if (
@@ -591,8 +615,12 @@ export default {
         setTimeout(() => {
           this.$refs.allocationForm.resetForm();
           let row = this.multipleSelection[0];
-          this.listScene(row.corpId)
-          this.listAll(row.corpId)
+          if (row.corpId && row.corpId !== '-') {
+            this.listAll(row.corpId);
+            if (row.routeType && row.routeType !== '-') {
+              this.listScene(row.corpId, row.routeType);
+            }
+          }
 
           this.allocationConfig.forEach((item) => {
             for (let key in row) {

@@ -191,9 +191,12 @@
             :show-overflow-tooltip="true"
           >
             <template slot-scope="{ row }">
-              <span v-if="row.status === 0">暂停</span>
-              <span v-if="row.status === 1">启用</span>
-              <span v-if="row.status === 2">已删除</span>
+              <span v-if="row.state === 3">未开始</span>
+              <span v-if="row.state === 4">呼叫中</span>
+              <span v-if="row.state === 5">自动暂停</span>
+              <span v-if="row.state === 6">任务完成</span>
+              <span v-if="row.state === 7">任务终止</span>
+              <span v-if="row.state === 8">手动暂停</span>
             </template>
           </el-table-column>
           <el-table-column

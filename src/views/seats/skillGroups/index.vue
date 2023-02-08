@@ -243,10 +243,11 @@ export default {
           label: "",
           key: "attendIdList",
           data: [],
+          defaultValue: [],
           titles: ["待关联座席", "已关联座席"],
           leftDefaultCheckedList: this.leftDefaultCheckedList,
           rightDefaultCheckedList: this.rightDefaultCheckedList,
-          rules:[]
+          rules: [],
         },
       ],
       id: "",
@@ -263,9 +264,6 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType();
-    // this.getlistAll();
-    // this.getListAttendAll();
-    // this.getListAttendAllBySkillGroup();
   },
   computed: {},
   methods: {
@@ -314,26 +312,37 @@ export default {
     async getListAttendAll(corpId) {
       await this.$http.skillGroup.listAttendAll({ corpId }).then((res) => {
         if (resOk(res)) {
-          this.$nextTick(() => {
-            let arr = [];
-            res.data.forEach((item) => {
+          let arr = [];
+          let checkList = [];
+          res.data.forEach((item) => {
+            if (item.state != 1) {
               arr.push({
                 key: item.attendId,
                 label: item.attendName,
                 disabled: item.state == 1 ? true : false,
               });
-            });
-            this._setDefaultValue(
-              this.formConfig,
-              res.data,
-              "attendIdList",
-              "",
-              "",
-              "",
-              arr
-            );
-            console.log(arr, "=========获取本企业所有坐席");
+            }
           });
+          this.attendSkillGroupList.forEach((item) => {
+            arr.push({
+              key: item.attendId,
+              label: item.attendName,
+              disabled: item.state == 1 ? true : false,
+            });
+            checkList.push(item.attendId);
+          });
+          console.log(arr, "=========获取本企业所有坐席");
+          console.log(checkList, "=========技能组所有坐席");
+          this._setDefaultValue(
+            this.formConfig,
+            res.data,
+            "attendIdList",
+            "",
+            "",
+            "",
+            arr
+          );
+          this._setDefaultValue(this.formConfig, [], "attendIdList", checkList);
         }
         // console.log(res);
       });
@@ -344,14 +353,7 @@ export default {
         .listAttendAllBySkillGroup({ sgId })
         .then((res) => {
           if (resOk(res)) {
-            this.$nextTick(() => {
-              let arr = [];
-              res.data.forEach((item) => {
-                arr.push(item.attendId);
-              });
-              this._setDefaultValue(this.formConfig, [], "attendIdList", arr);
-              console.log(arr, "======获取本技能组所有坐席");
-            });
+            this.attendSkillGroupList = res.data;
           }
           // console.log(res);
         });
@@ -387,6 +389,7 @@ export default {
       this.id = row[ID];
       this.editId = ID;
       this.formTit = "修改";
+      this.getListAttendAllBySkillGroup(row.sgId);
       await this.formConfig.forEach(async (item) => {
         for (let key in row) {
           if (item.key === key && row[key] !== "-") {
@@ -404,7 +407,7 @@ export default {
       setTimeout(() => {
         this.$refs.formItem.clearValidate();
       }, 0);
-      this.getListAttendAllBySkillGroup(row.sgId);
+
       this.addChannel = true;
     },
     // _mxHandleSubmit(form) {

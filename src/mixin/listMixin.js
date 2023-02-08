@@ -645,12 +645,10 @@ export default {
               if (optionKey){
                 this.$nextTick(() => {
                   this.$set(item, 'defaultValue', optionKey)
-                  item.defaultValue = optionKey
                 })
               } else if (defaultData){
                 this.$nextTick(() => {
                   this.$set(item, 'data', defaultData)
-                  item.data = defaultData
                 })
               }
             }
@@ -713,6 +711,22 @@ export default {
 
         }
       });
+    },
+    /**
+     * 通过key查询表单项数据
+     * @param list 选择项
+     * @param key 选择项key值
+     * @private
+     */
+    _getFormKeyData(list,key){
+      let val = null
+      list.forEach(item => {
+        if(item.key === key){
+          val = item.defaultValue
+        }
+      })
+      return val
+
     },
 
     /**
