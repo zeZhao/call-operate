@@ -308,11 +308,57 @@ export default {
           ],
         },
         {
-          type: "input",
+          type: "select",
           label: "流程名称",
           key: "sceneName",
           colSpan: 12,
           optionData: [],
+        },
+        {
+          type: "checkbox",
+          label: "周天",
+          key: "weekDays",
+          colSpan: 24,
+          defaultValue: [],
+          optionData: [
+            { key: "1", value: "星期一" },
+            { key: "2", value: "星期二" },
+            { key: "3", value: "星期三" },
+            { key: "4", value: "星期四" },
+            { key: "5", value: "星期五" },
+            { key: "6", value: "星期六" },
+            { key: "0", value: "星期日" },
+          ],
+        },
+        {
+          type: "dates",
+          label: "日期",
+          defaultValue: "",
+          key: 'dates',
+          colSpan: 24,
+        },
+        {
+          type: "times",
+          label: "时间段1",
+          defaultValue: "",
+          key: 'time1',
+          colSpan: 24,
+        },
+        {
+          type: "times",
+          label: "时间段2",
+          defaultValue: "",
+          key: 'time2',
+          colSpan: 24,
+          rules:[]
+        },
+        {
+          type: "times",
+          label: "时间段3",
+          defaultValue: "",
+          key: 'time3',
+          colSpan: 24,
+          rules:[]
         },
       ],
       allocationVisible: false,
@@ -325,9 +371,32 @@ export default {
     this.getUser();
     this.linecfgList();
     this.provincecity();
+    this.listScene();
   },
   computed: {},
   methods: {
+    // 流程
+    listScene(corpId) {
+      var data = {
+        data: {
+          corpId
+        },
+        version: "1.0",
+      };
+      this.$http.outbound.listScene(data).then((res) => {
+        if (res.state === "200") {
+          this._setDefaultValue(
+          this.allocationConfig,
+          res.data,
+          "sceneName",
+          "sceneId",
+          "sceneName"
+        );
+        } else {
+          this.$message.error(res.msg);
+        }
+      });
+    },
     //获取商家公司下拉
     getUser() {
       this.$http.select.queryCorpByCorpType({ corpType: 0 }).then((res) => {
@@ -416,7 +485,9 @@ export default {
       if (item.key === "corpId") {
         if (val) {
           this.listAll(val);
+          this.listScene(val);
           this._deleteDefaultValue(this.allocationConfig, "userId");
+          this._deleteDefaultValue(this.allocationConfig, "sceneName");
         } else {
           this._setDefaultValue(
             this.allocationConfig,
@@ -425,7 +496,15 @@ export default {
             "supplyId",
             "userName"
           );
+          this._setDefaultValue(
+            this.allocationConfig,
+            [],
+            "sceneName",
+            "sceneId",
+            "sceneName"
+          );
           this._deleteDefaultValue(this.allocationConfig, "userId");
+          this._deleteDefaultValue(this.allocationConfig, "sceneName");
         }
       }
     },
@@ -470,6 +549,14 @@ export default {
     },
     submitAllocation(form) {
       form.inId = this.multipleSelection[0].inId;
+      form.startDate = form.dates[0]
+      form.stopDate = form.dates[0]
+      form.callTime1Start = form.time1[0]
+      form.callTime1End = form.time1[1]
+      form.callTime2Start = form.time2[0]
+      form.callTime2End = form.time2[1]
+      form.callTime3Start = form.time3[0]
+      form.callTime3End = form.time3[1]
       this.$http.inboundcfg.put(form).then((res) => {
         if (res.state == 200) {
           this.$message.success(res.msg);
