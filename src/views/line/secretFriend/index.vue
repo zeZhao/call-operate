@@ -581,10 +581,10 @@ export default {
       form.stopDate = form.dates[0];
       form.callTime1Start = form.time1[0];
       form.callTime1End = form.time1[1];
-      form.callTime2Start = form.time2[0];
-      form.callTime2End = form.time2[1];
-      form.callTime3Start = form.time3[0];
-      form.callTime3End = form.time3[1];
+      form.callTime2Start = form.time2 ? form.time2[0] : "";
+      form.callTime2End = form.time2 ? form.time2[1] : "";
+      form.callTime3Start = form.time3 ? form.time3[0] : "";
+      form.callTime3End = form.time3 ? form.time3[1] : "";
 
       this.$http.inboundcfg.put({ data: { ...form } }).then((res) => {
         if (res.state == 200) {
@@ -615,9 +615,9 @@ export default {
         setTimeout(() => {
           this.$refs.allocationForm.resetForm();
           let row = this.multipleSelection[0];
-          if (row.corpId && row.corpId !== '-') {
+          if (row.corpId && row.corpId !== "-") {
             this.listAll(row.corpId);
-            if (row.routeType && row.routeType !== '-') {
+            if (row.routeType && row.routeType !== "-") {
               this.listScene(row.corpId, row.routeType);
             }
           }
