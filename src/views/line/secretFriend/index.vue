@@ -581,10 +581,10 @@ export default {
       form.stopDate = form.dates[0];
       form.callTime1Start = form.time1[0];
       form.callTime1End = form.time1[1];
-      form.callTime2Start = form.time2 ? form.time2[0] : "";
-      form.callTime2End = form.time2 ? form.time2[1] : "";
-      form.callTime3Start = form.time3 ? form.time3[0] : "";
-      form.callTime3End = form.time3 ? form.time3[1] : "";
+      form.callTime2Start = form.time2 ? form.time2[0] : null;
+      form.callTime2End = form.time2 ? form.time2[1] : null;
+      form.callTime3Start = form.time3 ? form.time3[0] : null;
+      form.callTime3End = form.time3 ? form.time3[1] : null;
 
       this.$http.inboundcfg.put({ data: { ...form } }).then((res) => {
         if (res.state == 200) {
