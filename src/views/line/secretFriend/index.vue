@@ -578,7 +578,7 @@ export default {
     submitAllocation(form) {
       form.inId = this.multipleSelection[0].inId;
       form.startDate = form.dates[0];
-      form.stopDate = form.dates[0];
+      form.stopDate = form.dates[1];
       form.callTime1Start = form.time1[0];
       form.callTime1End = form.time1[1];
       form.callTime2Start = form.time2 ? form.time2[0] : null;
