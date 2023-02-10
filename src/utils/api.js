@@ -711,7 +711,6 @@ export default {
       return request("/client/table/getTableColumnList", 'post', params);
     },
   },
-  //外呼
   // 外呼管理
   outbound: {
     //通话记列表
@@ -833,5 +832,47 @@ export default {
     listTaskByPage(params) {
       return request("/callTask/listTaskByPage", 'post', params);
     },
+  },
+  //通话详单
+  dataquery: {
+    //列表
+    voicetalkList(data) {
+      return request('/dataquery/voicetalk/list', 'post', data)
+    },
+    //通话详单-AI对话详情
+    voicetalkAiList(data) {
+      return request(`/dataquery/voicetalk/ai/${data}`, 'post')
+    },
+  },
+  //坐席角色
+  role: {
+    //列表
+    list(data) {
+      return request('/attend/role/list', 'post', data)
+    },
+    //新增
+    post(data) {
+      return request(`/attend/role/post`, 'post', data)
+    },
+    //修改
+    put(data) {
+      return request(`/attend/role/put`, 'put', data)
+    },
+    //删除
+    del(data) {
+      return request(`/attend/role/del`, 'post', data)
+    },
+    //角色权限
+    permissionsList(data) {
+      return request(`/attend/role/permissions/list`, 'post', data)
+    },
+    //设置权限
+    permissionsPost(data) {
+      return request(`/attend/role/permissions/post`, 'post', data)
+    },
+    // //获取所有菜单列表
+    // sysMenuList(data) {
+    //   return request('/attend/role/permissions/list', 'post', data)
+    // },
   },
 }

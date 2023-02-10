@@ -1,5 +1,6 @@
 <template>
-  <div class="company">
+  <!-- 角色及权限 -->
+  <div class="permission">
     <Search
       :searchFormConfig="searchFormConfig"
       @search="_mxDoSearch"
@@ -13,25 +14,36 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="corpId" label="角色名称" />
-      <el-table-column prop="corpId" label="描述" />
-      <el-table-column prop="corpId" label="状态" />
-      <el-table-column prop="corpId" label="创建时间" />
+      <el-table-column prop="corpName" label="商家名称" />
+      <el-table-column prop="roleName" label="角色名称" />
+      <el-table-column prop="remarks" label="描述" />
+      <el-table-column prop="status" label="状态">
+        <template slot-scope="{ row }">
+          <span v-if="row.status == 0">禁用</span>
+          <span v-if="row.status == 1">启用</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createTime" label="创建时间" />
       <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="_mxEdit(scope.row, 'templateId')"
+            @click="_mxEdit(scope.row, 'roleId')"
             type="text"
             size="small"
-            >编辑</el-button
+            >修改</el-button
           >
-          <el-button type="text" size="small">权限</el-button>
           <el-button
-            @click="_mxDeleteItem('extId', scope.row.extId, false, false)"
+            @click="jurisdictionBtn(scope.row)"
             type="text"
             size="small"
-            >删除</el-button
+            >权限</el-button
           >
+          <el-button
+            @click="_mxDeleteItem('roleId', scope.row.roleId, false, false)"
+            type="text"
+            size="small"
+            >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -55,6 +67,25 @@
         @choose="choose"
       ></FormItem>
     </el-dialog>
+    <el-dialog
+      title="权限分配"
+      :visible.sync="jurisdictionVisible"
+      :close-on-click-modal="false"
+      top="45px"
+    >
+      <el-tree
+        ref="tree"
+        :data="treeData"
+        :props="defaultProps"
+        node-key="menuId"
+        :default-checked-keys="defaultCheckedList"
+        show-checkbox
+      ></el-tree>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="jurisdictionVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitTree">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,91 +98,171 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "角色名称", key: "corpName" },
-        { type: "input", label: "描述", key: "corpNames" },
-        { type: "inputNum", label: "主叫号码", key: "userId" },
-        // {
-        //   type: "select",
-        //   label: "任务类型",
-        //   key: "sign",
-        //   optionData: [
-        //     { key: "1", value: "自动语音" },
-        //     { key: "2", value: "呼通后转人工" },
-        //   ],
-        // },
+        { type: "input", label: "角色名称", key: "roleName" },
         {
           type: "select",
-          label: "任务状态",
-          key: "sign",
+          label: "状态",
+          key: "status",
           optionData: [
-            { key: "1", value: "已停止" },
-            { key: "2", value: "运行中" },
+            { key: 0, value: "禁用" },
+            { key: 1, value: "启用" },
           ],
         },
-        // {
-        //   type: "select",
-        //   label: "类别",
-        //   key: "signs",
-        //   optionData: [
-        //     { key: "1", value: "商家" },
-        //     { key: "2", value: "代理商" },
-        //     { key: "3", value: "供应商" },
-        //   ],
-        // },
-        // {
-        //   type: "daterange",
-        //   label: "开户时间",
-        //   key: ["", "submitStartTime", "submitEndTime"],
-        // },
       ],
+      isParamsNotData: false,
+      submitParamsIsData: false,
       //搜索框数据
       searchParam: {},
       //接口地址
       searchAPI: {
-        namespace: "smslongnum",
+        namespace: "role",
         list: "list",
-        detele: "delete",
+        add: "post",
+        edit: "put",
+        detele: "del",
       },
       // 列表参数
-      namespace: "configs",
+      namespace: "",
       namespaceType: "Array",
       // 表单配置
       formConfig: [
         {
+          type: "select",
+          label: "商户名称",
+          key: "corpId",
+          defaultValue: "",
+          optionData: [],
+        },
+        {
           type: "input",
           label: "角色名称",
-          key: "userId",
+          key: "roleName",
           defaultValue: "",
-          rules: [
-            {
-              required: true,
-              message: "请输入必填项",
-              trigger: ["blur", "change"],
-            },
+        },
+        {
+          type: "select",
+          label: "状态",
+          key: "status",
+          defaultValue: "",
+          optionData: [
+            { key: 1, value: "启用" },
+            { key: 0, value: "禁用" },
           ],
         },
         {
           type: "textarea",
-          label: "描述",
-          key: "smsLongNum",
+          label: "备注",
+          key: "remarks",
+          rules: [],
           defaultValue: "",
-          maxlength: 4000,
-          // rules: [
-          //   {
-          //     required: true,
-          //     message: "请输入必填项",
-          //     trigger: ['blur', 'change']
-          //   }
-          // ]
         },
       ],
       id: "",
+      jurisdictionVisible: false,
+      treeData: [],
+      defaultCheckedList: [],
+      defaultProps: {
+        children: "childMenu",
+        label: "name",
+      },
+      roleId: "",
+      corpId: "",
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    // this.getSysMenuList();
+    this.queryCorpByCorpType()
+  },
   computed: {},
-  methods: {},
+  methods: {
+    //获取公司下拉
+    queryCorpByCorpType() {
+      this.$http.select.userListAll({}).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.records,
+          "corpId",
+          "userId",
+          "userName"
+        );
+      });
+    },
+    getSysMenuList() {
+      this.$http.role.sysMenuList().then((res) => {
+        let arr = []
+        res.data.forEach(item=>{
+          if(item.type === 1){
+            arr.push(item)
+          }
+        })
+        this.treeData = arr;
+        console.log(res);
+      });
+    },
+    sysRoleMenuList(roleId) {
+      this.defaultCheckedList = [];
+      this.$http.role.permissionsList({ roleId }).then((res) => {
+        let arr = []
+        let checkedList = []
+        res.data.forEach(item=>{
+          if(item.type === 1){
+            arr.push(item)
+          }
+        })
+        console.log(res,'===============')
+         this.treeData = arr;
+         arr.forEach(item=>{
+          if(item.childMenu && item.childMenu.length > 0){
+            item.childMenu.forEach(i=>{
+              if(i.ifChecked == 1){
+                checkedList.push(i.menuId)
+              }
+            })
+          }else{
+            if(item.ifChecked == 1){
+                checkedList.push(item.menuId)
+              }
+          }
+         })
+        // this.defaultCheckedList = [];
+        // let arr = [];
+        // res.data.forEach((item) => {
+        //   arr.push(item.menuId);
+        // });
+        this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys(checkedList);
+          this.defaultCheckedList = checkedList;
+        });
+      });
+    },
+    jurisdictionBtn(row) {
+      const { roleId,corpId } = row;
+      this.roleId = roleId;
+      this.corpId = corpId;
+      this.jurisdictionVisible = true;
+      // console.log(row, "====");
+
+      this.sysRoleMenuList(roleId);
+    },
+    submitTree() {
+      // console.log(this.$refs.tree);
+      // console.log(this.$refs.tree.getCheckedKeys());
+      let arr = this.$refs.tree.getCheckedKeys();
+      // let sysRoleMenu = [];
+      // arr.forEach((item) => {
+      //   sysRoleMenu.push({ roleId: this.roleId,corpId:this.corpId, menuId: item });
+      // });
+      // console.log({ sysRoleMenu }, ";;;;;;;");
+      this.$http.role.permissionsPost({roleId: this.roleId,corpId:this.corpId,menuIdList:arr}).then((res) => {
+        if (resOk) {
+          this.jurisdictionVisible = false;
+          this.roleId = "";
+          // this.$message.s
+        }
+      });
+    },
+  },
   watch: {},
 };
 </script>
