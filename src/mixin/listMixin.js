@@ -14,6 +14,7 @@ function throttle() {
   this.lastRequestTimeStamp = nowTimeStamp;
   const timeDifference = nowTimeStamp - lastRequestTimeStamp;
 
+
   //时间差小于限定值
   if (timeDifference < requestFrequency) {
     if (this.queryTask != null) {
@@ -230,9 +231,6 @@ export default {
     window.addEventListener("resize", this.handleTableResize);
     // 默认进入该页面不查询
     if (this.notSearch) return;
-
-    // 请求数据
-    this._mxGetBeforeListData();
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.handleTableResize);
@@ -252,30 +250,6 @@ export default {
         // 90为底部距离分页器
         this.tableHeight = `${(contentClientHeight - searchPanelClientHeight - 90).toString()}px`;
       });
-    },
-    /***
-     * 请求数据
-     * @private
-     */
-    _mxGetBeforeListData() {
-      // 请求查询列表接口之前是否请求其他接口
-      if (!this.searchAPI.beforeList) {
-        // 直接请求查询列表接口
-        this._mxGetList();
-      } else {
-        const { namespace, beforeList } = this.searchAPI;
-        if (!Array.isArray(beforeList)) return;
-        beforeList.forEach(async (item, index) => {
-          const res = await this.$http[namespace][beforeList[index]]({});
-          if (res.code === 200) {
-            this.beforeListData = res.data;
-          } else {
-            this.$message.error(res.msg || res.data);
-          }
-        });
-        // 请求列表数据
-        this._mxGetList();
-      }
     },
 
     /***
