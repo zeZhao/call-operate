@@ -195,9 +195,11 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType()
+    this.getRoleList()
   },
   activated(){
     this.queryCorpByCorpType()
+    this.getRoleList()
   },
   computed: {},
   methods: {
@@ -205,6 +207,12 @@ export default {
     queryCorpByCorpType(){
       this.$http.select.userListAll({corpType:0}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data.records,'userId','userId','userName')
+      })
+    },
+    //获取公司下拉
+    getRoleList(){
+      this.$http.role.list({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'attendroleId','roleId','roleName')
       })
     },
   },

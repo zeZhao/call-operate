@@ -293,6 +293,16 @@ export default {
           rules:[],
           colSpan:12
         },
+        {
+          type: "select",
+          label: "坐席权限",
+          key: "attendRoleId",
+          defaultValue: "",
+          optionData:[],
+          rules:[],
+          isShow:true,
+          colSpan:12,
+        }
       ],
     };
   },
@@ -301,11 +311,13 @@ export default {
     this.queryCorpByCorpType()
     this.linecfgList()
     this.listAllAttend()
+    this.getRoleList()
   },
   activated(){
     this.queryCorpByCorpType()
     this.linecfgList()
     this.listAllAttend()
+    this.getRoleList()
   },
   computed: {},
   methods: {
@@ -329,6 +341,12 @@ export default {
         this._setDefaultValue(this.searchFormConfig,res.data,'attendId','attendId','attendName')
       })
     },
+    //获取公司下拉
+    getRoleList(){
+      this.$http.role.list({enablePage:false}).then(res=>{
+        this._setDefaultValue(this.formConfig,res.data.list,'attendRoleId','roleId','roleName')
+      })
+    },
     _mxCreate(){
       this.addChannel = true;
       this.formTit = "新增";
@@ -337,6 +355,7 @@ export default {
         this._setDisplayShow(this.formConfig,'pwd',true)
         this._setDisplayShow(this.formConfig,'extName',true)
         this._setDisplayShow(this.formConfig,'jobNumberStart',true)
+        this._setDisplayShow(this.formConfig,'attendRoleId',true)
         this._setDisplayShow(this.formConfig,'status',true)
         this._setDisplayShow(this.formConfig,'ext',true)
         this._setDisplayShow(this.formConfig,'attendId',true)
@@ -366,6 +385,7 @@ export default {
       this._setDisplayShow(this.formConfig,'pwdType',true)
       this._setDisplayShow(this.formConfig,'autogeneration',true)
       this._setDisplayShow(this.formConfig,'jobNumberStart',true)
+      this._setDisplayShow(this.formConfig,'attendRoleId',true)
       this._setDisplayShow(this.formConfig,'isBatchcaller',true)
       this._setDisplayShow(this.formConfig,'pwd',false)
       this._setDisplayShow(this.formConfig,'status',false)
@@ -397,8 +417,10 @@ export default {
       if( key === 'autogeneration'){
         if(val == 1){
           this._setDisplayShow(this.formConfig,'jobNumberStart',false)
+          this._setDisplayShow(this.formConfig,'attendRoleId',false)
         }else{
           this._setDisplayShow(this.formConfig,'jobNumberStart',true)
+          this._setDisplayShow(this.formConfig,'attendRoleId',true)
         }
       }
     },
