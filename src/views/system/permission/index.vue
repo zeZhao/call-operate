@@ -203,19 +203,16 @@ export default {
       this.sysRoleMenuList(roleId);
     },
     submitTree() {
-      console.log(this.$refs.tree);
-      console.log(this.$refs.tree.getCheckedKeys());
       let arr = this.$refs.tree.getCheckedKeys();
       let sysRoleMenu = [];
       arr.forEach((item) => {
         sysRoleMenu.push({ roleId: this.roleId, menuId: item });
       });
-      console.log({ sysRoleMenu }, ";;;;;;;");
       this.$http.sysRole.sysRoleMenuSave([...sysRoleMenu]).then((res) => {
         if (resOk) {
           this.jurisdictionVisible = false;
           this.roleId = "";
-          // this.$message.s
+          this.$message.success('操作成功！')
         }
       });
     },

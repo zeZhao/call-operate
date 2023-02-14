@@ -131,6 +131,17 @@ export default {
       return request('/extensions/extensionsList', 'get', data)
     },
   },
+  //外呼数据管理-列表
+  outboundata: {
+    //列表
+    list(data) {
+      return request('/outboundata/list', 'post', data)
+    },
+    //外呼数据管理-导出
+    export(data) {
+      return request(`/outboundata/export`, 'post', data, true)
+    },
+  },
   //合作方管理、公司
   corp: {
     //列表

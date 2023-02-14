@@ -232,6 +232,14 @@ const constRouterList = [
           title: '任务管理',
         },
       },
+      {
+        path: '/B-Call/callMataManagement',
+        name: 'callMataManagement',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/B-Call/callMataManagement/index.vue'),
+        meta: {
+          title: '外呼数据管理',
+        },
+      },
     ]
   },
   {
