@@ -25,7 +25,11 @@
       </el-table-column>
       <el-table-column prop="amount" label="缴费金额（元）" />
       <el-table-column prop="balance" label="账户余额（元）" />
-      <el-table-column prop="createTime" label="操作时间" />
+      <el-table-column prop="createTime" label="操作时间" >
+        <template slot-scope="{row}">
+          <span>{{row.createTime | dateTime}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="updateByName" label="操作人" />
       <el-table-column prop="accountCategory" label="操作人身份" />
       <el-table-column prop="remarks" label="备注" />
@@ -52,7 +56,11 @@
       <el-table-column prop="amount" label="缴费金额（元）" />
       <el-table-column prop="balance" label="充值数量（条）" />
       <el-table-column prop="corpId" label="短信余额（条）" />
-      <el-table-column prop="createTime" label="操作时间" />
+      <el-table-column prop="createTime" label="操作时间" >
+        <template slot-scope="{row}">
+          <span>{{row.createTime | dateTime}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="updateByName" label="操作人" />
       <el-table-column prop="accountCategory" label="操作人身份" />
       <el-table-column prop="remarks" label="备注" />

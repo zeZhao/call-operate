@@ -45,7 +45,11 @@
         prop="createTime"
         label="创建时间"
         show-overflow-tooltip
-      />
+      >
+      <template slot-scope="{row}">
+          <span>{{row.createTime | dateTime}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="createrType" label="创建人类别">
         <template slot-scope="{ row }">
           <span v-if="row.createrType == 0">运营</span>

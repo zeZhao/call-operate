@@ -114,7 +114,11 @@
             label="创建时间"
             min-width="170"
             :show-overflow-tooltip="true"
-          ></el-table-column>
+          >
+            <template slot-scope="{ row }">
+              <span>{{ row.createTime | dateTime }}</span>
+            </template>
+          </el-table-column>
           <!--<el-table-column-->
           <!--align="center"-->
           <!--prop="createUserName"-->
@@ -164,14 +168,10 @@
                 @click="NewlyEdit($index, row, '编辑')"
                 type="text"
                 size="small"
-                v-if="
-                  !userType
-                "
+                v-if="!userType"
                 >编辑</el-button
               >
-              <el-divider
-                direction="vertical"
-              ></el-divider>
+              <el-divider direction="vertical"></el-divider>
               <el-button
                 @click="delRow($index, row)"
                 type="text"
@@ -181,16 +181,12 @@
               >
               <el-divider direction="vertical"></el-divider>
               <el-button
-                @click="
-                  updateSceneStatus(row);
-                "
+                @click="updateSceneStatus(row)"
                 type="text"
                 size="small"
-                >{{row.status === 1 ? '停用' : '启用'}}</el-button
+                >{{ row.status === 1 ? "停用" : "启用" }}</el-button
               >
-              <el-divider
-                direction="vertical"
-              ></el-divider>
+              <el-divider direction="vertical"></el-divider>
               <el-button
                 @click="NewlyEdit($index, row, '复制')"
                 type="text"
@@ -198,9 +194,7 @@
                 >复制</el-button
               >
 
-              <el-divider
-                direction="vertical"
-              ></el-divider>
+              <el-divider direction="vertical"></el-divider>
               <!-- <el-button
                 @click="Release($index, row)"
                 type="text"
@@ -216,9 +210,7 @@
                 size="small"
                 >重新发布</el-button
               >
-              <el-divider
-                direction="vertical"
-              ></el-divider>
+              <el-divider direction="vertical"></el-divider>
               <!-- <el-button
                 @click="check(row, 2)"
                 type="text"
@@ -237,8 +229,6 @@
                 size="small"
                 >详情</el-button
               >
-              
-              
             </template>
           </el-table-column>
         </el-table>
@@ -316,9 +306,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="流程类型：">
-              <el-radio v-model="RuleForm.processType" :label="1"
-                >IVR</el-radio
-              >
+              <el-radio v-model="RuleForm.processType" :label="1">IVR</el-radio>
               <el-radio v-model="RuleForm.processType" :label="2"
                 >技能组</el-radio
               >
@@ -363,7 +351,7 @@
                 show-word-limit
               ></el-input>
             </el-form-item>
-            
+
             <!-- <el-form-item label="启用识别：">
               <el-select
                 v-model="RuleForm.asrEnable"
@@ -586,7 +574,7 @@ export default {
           {
             required: true,
             message: "请填写必填项",
-            trigger: ['blur','change'],
+            trigger: ["blur", "change"],
           },
         ],
       },
@@ -625,21 +613,21 @@ export default {
   },
 
   methods: {
-    updateSceneStatus({sceneId,status}){
+    updateSceneStatus({ sceneId, status }) {
       var data = {
         data: {
           sceneId,
-          status:status == 1 ? 2 : 1
+          status: status == 1 ? 2 : 1,
         },
         version: "1.0",
       };
-      this.$http.scene.updateSceneStatus(data).then(res=>{
+      this.$http.scene.updateSceneStatus(data).then((res) => {
         if (res.state == "200") {
           this.List();
         } else {
           self.$message.error(res.msg);
         }
-      })
+      });
     },
     // 发布按钮显示
     issue(row) {
@@ -1116,7 +1104,7 @@ export default {
         },
         version: "1.0",
       };
-      this.$http.scene.listSceneByPage(data).then((res) => { 
+      this.$http.scene.listSceneByPage(data).then((res) => {
         self.loading = false;
         if (res.state == "200") {
           var arr = [];

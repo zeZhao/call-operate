@@ -23,7 +23,11 @@
           <span v-if="row.status == 1">启用</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" />
+      <el-table-column prop="createTime" label="创建时间"
+        ><template slot-scope="{ row }">
+          <span>{{ row.createTime | dateTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-button
@@ -172,7 +176,7 @@ export default {
   created() {},
   mounted() {
     // this.getSysMenuList();
-    this.queryCorpByCorpType()
+    this.queryCorpByCorpType();
   },
   computed: {},
   methods: {
@@ -190,12 +194,12 @@ export default {
     },
     getSysMenuList() {
       this.$http.role.sysMenuList().then((res) => {
-        let arr = []
-        res.data.forEach(item=>{
-          if(item.type === 1){
-            arr.push(item)
+        let arr = [];
+        res.data.forEach((item) => {
+          if (item.type === 1) {
+            arr.push(item);
           }
-        })
+        });
         this.treeData = arr;
         console.log(res);
       });
@@ -203,28 +207,28 @@ export default {
     sysRoleMenuList(roleId) {
       this.defaultCheckedList = [];
       this.$http.role.permissionsList({ roleId }).then((res) => {
-        let arr = []
-        let checkedList = []
-        res.data.forEach(item=>{
-          if(item.type === 1){
-            arr.push(item)
+        let arr = [];
+        let checkedList = [];
+        res.data.forEach((item) => {
+          if (item.type === 1) {
+            arr.push(item);
           }
-        })
-        console.log(res,'===============')
-         this.treeData = arr;
-         arr.forEach(item=>{
-          if(item.childMenu && item.childMenu.length > 0){
-            item.childMenu.forEach(i=>{
-              if(i.ifChecked == 1){
-                checkedList.push(i.menuId)
+        });
+        console.log(res, "===============");
+        this.treeData = arr;
+        arr.forEach((item) => {
+          if (item.childMenu && item.childMenu.length > 0) {
+            item.childMenu.forEach((i) => {
+              if (i.ifChecked == 1) {
+                checkedList.push(i.menuId);
               }
-            })
-          }else{
-            if(item.ifChecked == 1){
-                checkedList.push(item.menuId)
-              }
+            });
+          } else {
+            if (item.ifChecked == 1) {
+              checkedList.push(item.menuId);
+            }
           }
-         })
+        });
         // this.defaultCheckedList = [];
         // let arr = [];
         // res.data.forEach((item) => {
@@ -237,7 +241,7 @@ export default {
       });
     },
     jurisdictionBtn(row) {
-      const { roleId,corpId } = row;
+      const { roleId, corpId } = row;
       this.roleId = roleId;
       this.corpId = corpId;
       this.jurisdictionVisible = true;
@@ -254,13 +258,19 @@ export default {
       //   sysRoleMenu.push({ roleId: this.roleId,corpId:this.corpId, menuId: item });
       // });
       // console.log({ sysRoleMenu }, ";;;;;;;");
-      this.$http.role.permissionsPost({roleId: this.roleId,corpId:this.corpId,menuIdList:arr}).then((res) => {
-        if (resOk) {
-          this.jurisdictionVisible = false;
-          this.roleId = "";
-          // this.$message.s
-        }
-      });
+      this.$http.role
+        .permissionsPost({
+          roleId: this.roleId,
+          corpId: this.corpId,
+          menuIdList: arr,
+        })
+        .then((res) => {
+          if (resOk) {
+            this.jurisdictionVisible = false;
+            this.roleId = "";
+            // this.$message.s
+          }
+        });
     },
   },
   watch: {},

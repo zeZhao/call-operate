@@ -205,7 +205,11 @@
             label="更新时间"
             min-width="80"
             :show-overflow-tooltip="true"
-          ></el-table-column>
+          >
+            <template slot-scope="{ row }">
+              <span>{{ row.updateTime | dateTime }}</span>
+            </template>
+          </el-table-column>
           <!-- <el-table-column
             align="center"
             prop="statusText"
@@ -354,7 +358,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="并发数："  prop="concurrency">
+            <el-form-item label="并发数：" prop="concurrency">
               <el-input
                 v-model="RuleForm.concurrency"
                 placeholder="请输入并发数"
@@ -378,7 +382,8 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 format="yyyy-MM-dd"
-                placeholder="选择开始日期">
+                placeholder="选择开始日期"
+              >
               </el-date-picker>
               <span style="padding: 0 10px">至</span>
               <el-date-picker
@@ -386,7 +391,8 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 format="yyyy-MM-dd"
-                placeholder="选择结束日期">
+                placeholder="选择结束日期"
+              >
               </el-date-picker>
               <!-- <el-date-picker
                 v-model="RuleForm.startDate"
@@ -783,7 +789,7 @@ export default {
       userType: "",
       hasAudio: false,
       audioUrl: "",
-      header:{token:getStorage('token')}
+      header: { token: getStorage("token") },
     };
   },
   created() {
@@ -804,8 +810,8 @@ export default {
     changeClient() {
       this.getExtList();
       this.listScene();
-      this.RuleForm.sceneId = ''
-      this.RuleForm.extId = ''
+      this.RuleForm.sceneId = "";
+      this.RuleForm.extId = "";
     },
     // 获取分机接口
     getExtList() {
@@ -863,7 +869,8 @@ export default {
      */
     beforeAvatarUpload(file) {
       var testmsg = file.name.substring(file.name.lastIndexOf(".") + 1);
-      const extension = testmsg === "csv" || testmsg === "xlsx" || testmsg === "xls";
+      const extension =
+        testmsg === "csv" || testmsg === "xlsx" || testmsg === "xls";
 
       // const isLt2M = file.size / 1024 / 1024 < 10
       if (!extension) {
@@ -917,30 +924,27 @@ export default {
      */
     PPTDownload() {
       axios({
-          method: "get",
-          url: "/api/callTask/downloadTemplate",
-          params: {
-            taskId: this.rowData.taskId,
-          },
-          headers:{token:getStorage("token")},
-          responseType: "blob",
-        }).then((res) => {
-          let blob = new Blob([res.data], {
-            type: "application/vnd.ms-excel;charset=utf-8",
-          });
-          let url = window.URL.createObjectURL(blob);
-          let aLink = document.createElement("a");
-          aLink.style.display = "none";
-          aLink.href = url;
-          aLink.setAttribute(
-            "download",
-            `svc模板.csv`
-          );
-          document.body.appendChild(aLink);
-          aLink.click();
-          document.body.removeChild(aLink);
-          window.URL.revokeObjectURL(url);
+        method: "get",
+        url: "/api/callTask/downloadTemplate",
+        params: {
+          taskId: this.rowData.taskId,
+        },
+        headers: { token: getStorage("token") },
+        responseType: "blob",
+      }).then((res) => {
+        let blob = new Blob([res.data], {
+          type: "application/vnd.ms-excel;charset=utf-8",
         });
+        let url = window.URL.createObjectURL(blob);
+        let aLink = document.createElement("a");
+        aLink.style.display = "none";
+        aLink.href = url;
+        aLink.setAttribute("download", `svc模板.csv`);
+        document.body.appendChild(aLink);
+        aLink.click();
+        document.body.removeChild(aLink);
+        window.URL.revokeObjectURL(url);
+      });
     },
     /*
 
@@ -948,30 +952,27 @@ export default {
      */
     ExDownload() {
       axios({
-          method: "get",
-          url: "/api/callTask/downloadExcelTemplate",
-          params: {
-            taskId: this.rowData.taskId,
-          },
-          headers:{token:getStorage("token")},
-          responseType: "blob",
-        }).then((res) => {
-          let blob = new Blob([res.data], {
-            type: "application/vnd.ms-excel;charset=utf-8",
-          });
-          let url = window.URL.createObjectURL(blob);
-          let aLink = document.createElement("a");
-          aLink.style.display = "none";
-          aLink.href = url;
-          aLink.setAttribute(
-            "download",
-            `excel模板.xlsx`
-          );
-          document.body.appendChild(aLink);
-          aLink.click();
-          document.body.removeChild(aLink);
-          window.URL.revokeObjectURL(url);
+        method: "get",
+        url: "/api/callTask/downloadExcelTemplate",
+        params: {
+          taskId: this.rowData.taskId,
+        },
+        headers: { token: getStorage("token") },
+        responseType: "blob",
+      }).then((res) => {
+        let blob = new Blob([res.data], {
+          type: "application/vnd.ms-excel;charset=utf-8",
         });
+        let url = window.URL.createObjectURL(blob);
+        let aLink = document.createElement("a");
+        aLink.style.display = "none";
+        aLink.href = url;
+        aLink.setAttribute("download", `excel模板.xlsx`);
+        document.body.appendChild(aLink);
+        aLink.click();
+        document.body.removeChild(aLink);
+        window.URL.revokeObjectURL(url);
+      });
     },
     /*
 
@@ -1203,8 +1204,8 @@ export default {
           sceneId: row.sceneId, //场景ID
           concurrency: row.concurrency, //并发数
           startDate: row.startDate,
-            // ? [new Date(row.startDate), new Date(row.stopDate)]
-            // : "", //开始日期
+          // ? [new Date(row.startDate), new Date(row.stopDate)]
+          // : "", //开始日期
           // startDate: row.startDate
           //   ? [new Date(row.startDate), new Date(row.stopDate)]
           //   : "", //开始日期
