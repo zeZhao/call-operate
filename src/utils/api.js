@@ -38,6 +38,10 @@ export default {
     IVRlistAll(data) {
       return request('/skillGroup/listAll', 'get', data)
     },
+    // 获取线路下拉
+    linecfgList(data) {
+      return request('/linecfg/getList', 'get', data)
+    },
   },
   //账户
   sysUser: {

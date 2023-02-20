@@ -89,6 +89,7 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
+        @selectChange="addSelectChange"
         @changeFileUpload="changeFileUpload"
       ></FormItem>
     </el-dialog>
@@ -197,13 +198,26 @@ export default {
           type: "select",
           label: "线路名称",
           key: "lineId",
+          colSpan: 12,
           optionData: [],
+        },
+        {
+          type: "select",
+          label: "线路类型",
+          key: "lineType",
+          colSpan: 12,
+          disabled: true,
+          optionData: [
+            { key: 0, value: "直连" },
+            { key: 1, value: "第三方" },
+          ],
         },
         {
           type: "select",
           label: "号码归属地区",
           key: "privince",
           colSpan: 12,
+          disabled: false,
           optionData: [],
         },
         {
@@ -211,6 +225,7 @@ export default {
           label: "号码归属运营商",
           key: "operaId",
           colSpan: 12,
+          disabled: false,
           optionData: [
             // { key: 0, value: "非法" },
             { key: 1, value: "移动" },
@@ -363,13 +378,14 @@ export default {
       ],
       allocationVisible: false,
       multipleSelection: [],
+      lineList: [],
     };
   },
   created() {},
   mounted() {
     this.queryCorpByCorpType();
     this.getUser();
-    this.linecfgList();
+    // this.linecfgList();
     this.provincecity();
     // this.listScene();
   },
@@ -440,24 +456,60 @@ export default {
         );
       });
     },
-    //获取线路下拉
-    linecfgList() {
-      this.$http.linecfg.get({ enablePage: false }).then((res) => {
+    // 获取线路下拉数据
+    linecfgList(corpId) {
+      this.$http.select.linecfgList({ corpId }).then((res) => {
+        this.lineList = res.data;
         this._setDefaultValue(
           this.formConfig,
-          res.data.list,
+          res.data,
           "lineId",
           "lineId",
           "lineName"
         );
         this._setDefaultValue(
           this.allocationConfig,
-          res.data.list,
+          res.data,
           "lineId",
           "lineId",
           "lineName"
         );
       });
+    },
+    // //获取线路下拉
+    // linecfgList() {
+    //   this.$http.linecfg.get({ enablePage: false }).then((res) => {
+    //     this._setDefaultValue(
+    //       this.formConfig,
+    //       res.data.list,
+    //       "lineId",
+    //       "lineId",
+    //       "lineName"
+    //     );
+    //     this._setDefaultValue(
+    //       this.allocationConfig,
+    //       res.data.list,
+    //       "lineId",
+    //       "lineId",
+    //       "lineName"
+    //     );
+    //   });
+    // },
+    /**
+     * 创建表单
+     * @param row  当前行数据
+     * @param id  当前行ID
+     * @private
+     */
+
+    _mxCreate() {
+      this.addChannel = true;
+      this.formTit = "新增";
+      this._setDisabledShow(this.formConfig, "privince", false);
+      this._setDisabledShow(this.formConfig, "operaId", false);
+      setTimeout(() => {
+        this.$refs.formItem.resetForm();
+      }, 0);
     },
     provincecity(province) {
       this.$http.select.provincecity({ province }).then((res) => {
@@ -477,11 +529,64 @@ export default {
         );
       });
     },
-    // listAll(corpId){
-    //   this.$http.select.listAll({corpId}).then(res=>{
-    //     this._setDefaultValue(this.formConfig,res.data.records,'userId','supplyId','userName')
-    //   })
-    // },
+    //新增下拉操作处理
+    addSelectChange({ val, item }) {
+      if (item.key === "supplyId") {
+        if (val) {
+          this.linecfgList(val);
+          this._deleteDefaultValue(this.formConfig, "lineId");
+          this._deleteDefaultValue(this.formConfig, "lineType");
+          this._deleteDefaultValue(this.formConfig, "privince");
+          this._deleteDefaultValue(this.formConfig, "operaId");
+        } else {
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "lineId",
+            "lineId",
+            "lineName"
+          );
+          this._deleteDefaultValue(this.formConfig, "lineId");
+          this._deleteDefaultValue(this.formConfig, "lineType");
+          this._deleteDefaultValue(this.formConfig, "privince");
+          this._deleteDefaultValue(this.formConfig, "operaId");
+        }
+      }
+      if (item.key === "lineId") {
+        if (val) {
+          let lines = this.lineList.filter((item) => item.lineId === val);
+          if (lines.length > 0) {
+            let line = lines[0];
+            console.log(line, "========线路数据");
+            const { lineType, operaId, province } = line;
+            // 线路为第三方可以修改地区和运营商
+            if (lineType === 0) {
+              this._setDisabledShow(this.formConfig, "privince", true);
+              this._setDisabledShow(this.formConfig, "operaId", true);
+            } else {
+              this._setDisabledShow(this.formConfig, "privince", false);
+              this._setDisabledShow(this.formConfig, "operaId", false);
+            }
+            this.formConfig.forEach((item) => {
+              if (item.key === "lineType") {
+                item.defaultValue = lineType;
+              }
+              if (item.key === "privince") {
+                item.defaultValue = province;
+              }
+              if (item.key === "operaId") {
+                item.defaultValue = operaId;
+              }
+            });
+          }
+        } else {
+          this._deleteDefaultValue(this.formConfig, "lineType");
+          this._deleteDefaultValue(this.formConfig, "privince");
+          this._deleteDefaultValue(this.formConfig, "operaId");
+        }
+      }
+    },
+    // 分配号码下拉操作处理
     selectChange({ val, item }) {
       if (item.key === "corpId") {
         if (val) {
