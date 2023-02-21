@@ -191,13 +191,13 @@ export default {
         {
           type: "select",
           label: "供应商公司",
-          key: "supplyId",
+          key: "corpId",
           optionData: [],
         },
         {
           type: "select",
           label: "供应商账户",
-          key: "corpId",
+          key: "supplyId",
           optionData: [],
         },
         {
@@ -391,9 +391,7 @@ export default {
   mounted() {
     this.queryCorpByCorpType();
     this.getUser();
-    // this.linecfgList();
     this.provincecity();
-    // this.listScene();
   },
   computed: {},
   methods: {
@@ -438,7 +436,7 @@ export default {
         this._setDefaultValue(
           this.formConfig,
           res.data.records,
-          "corpId",
+          "supplyId",
           "supplyId",
           "userName"
         );
@@ -461,7 +459,7 @@ export default {
         this._setDefaultValue(
           this.formConfig,
           res.data.records,
-          "supplyId",
+          "corpId",
           "corpId",
           "corpName"
         );
@@ -549,25 +547,25 @@ export default {
     },
     //新增下拉操作处理
     addSelectChange({ val, item }) {
-      if (item.key === "supplyId") {
+      if (item.key === "corpId") {
         if (val) {
           this.corpListAll(val);
-          this._deleteDefaultValue(this.formConfig, "corpId");
+          this._deleteDefaultValue(this.formConfig, "supplyId");
           this._deleteDefaultValue(this.formConfig, "lineId");
           this._deleteDefaultValue(this.formConfig, "lineType");
           this._deleteDefaultValue(this.formConfig, "privince");
           this._deleteDefaultValue(this.formConfig, "operaId");
         } else {
-          this._setDefaultValue(this.formConfig, [], "corpId");
+          this._setDefaultValue(this.formConfig, [], "supplyId");
           this._setDefaultValue(this.formConfig, [], "lineId");
-          this._deleteDefaultValue(this.formConfig, "corpId");
+          this._deleteDefaultValue(this.formConfig, "supplyId");
           this._deleteDefaultValue(this.formConfig, "lineId");
           this._deleteDefaultValue(this.formConfig, "lineType");
           this._deleteDefaultValue(this.formConfig, "privince");
           this._deleteDefaultValue(this.formConfig, "operaId");
         }
       }
-      if (item.key === "corpId") {
+      if (item.key === "supplyId") {
         if (val) {
           this.linecfgList(val);
           this._deleteDefaultValue(this.formConfig, "lineId");
