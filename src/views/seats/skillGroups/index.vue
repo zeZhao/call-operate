@@ -388,7 +388,7 @@ export default {
       this.formTit = "新增";
       this._setDefaultValue(
         this.formConfig,
-        res.data,
+        [],
         "attendIdList",
         "",
         "",

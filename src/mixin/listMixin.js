@@ -620,7 +620,7 @@ export default {
                 this.$nextTick(() => {
                   this.$set(item, 'defaultValue', optionKey)
                 })
-              } else if (defaultData){
+              } else{
                 this.$nextTick(() => {
                   this.$set(item, 'data', defaultData)
                 })
