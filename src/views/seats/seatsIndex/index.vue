@@ -190,6 +190,7 @@ export default {
         },
       ],
       id: "",
+      userList:[]
     };
   },
   created() {},
@@ -206,6 +207,7 @@ export default {
     //获取公司下拉
     queryCorpByCorpType(){
       this.$http.select.userListAll({corpType:0}).then(res=>{
+        this.userList = res.data.records;
         this._setDefaultValue(this.formConfig,res.data.records,'userId','userId','userName')
       })
     },
@@ -214,6 +216,18 @@ export default {
       this.$http.role.list({enablePage:false}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data.list,'attendroleId','roleId','roleName')
       })
+    },
+    _mxArrangeSubmitData(formData) {
+      let form = Object.assign({}, formData);
+      let userId = form.userId;
+      if (userId) {
+        this.userList.forEach((item) => {
+          if (item.userId === userId) {
+            form.corpId = item.corpId;
+          }
+        });
+      }
+      return form;
     },
   },
   watch: {},
