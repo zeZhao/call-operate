@@ -160,6 +160,10 @@ export default {
     delete(data) {
       return request('/corp/delete', 'get', data)
     },
+    //删除
+    updateSecretKey(data) {
+      return request('/corp/updateSecretKey', 'get', data)
+    },
   },
   //商家
   corpUser: {

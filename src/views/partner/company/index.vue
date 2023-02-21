@@ -22,10 +22,11 @@
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="cardno" label="银行账户" />
       <el-table-column prop="address" label="地址" />
+      <el-table-column prop="secretKey" label="密钥" />
       <!-- <el-table-column prop="corpId" label="状态" /> -->
       <el-table-column prop="createTime" label="开户时间" width="150" />
       <el-table-column prop="remarks" label="备注" />
-      <el-table-column label="操作" width="100" fixed="right">
+      <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'corpId')"
@@ -41,6 +42,7 @@
             size="small"
             >删除
           </el-button> -->
+          <el-button type="text" size="small" @click="updateSecretKey(scope.row)">更新密钥</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -201,7 +203,26 @@ export default {
   created() {},
   mounted() {},
   computed: {},
-  methods: {},
+  methods: {
+    updateSecretKey(row){
+      console.log(row)
+       this.$confirm(`${row.secretKey?row.secretKey:'暂无密钥'}`, '密钥', {
+          distinguishCancelAndClose: true,
+          confirmButtonText: '更新密钥',
+          cancelButtonText: '取消'
+        })
+          .then(() => {
+            this.$http.corp.updateSecretKey({corpId:row.corpId}).then(res=>{
+              if(resOk(res)){
+                this.$message.success('更新成功')
+                this._mxGetList();
+              }else{
+                this.$message.error('更新失败')
+              }
+            })
+          })
+    }
+  },
   watch: {},
 };
 </script>
