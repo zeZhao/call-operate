@@ -318,6 +318,7 @@
                 clearable
                 placeholder="请选择任务类型"
                 style="width: 200px"
+                 @change="changeTask"
               >
                 <el-option label="自动语音" :value="1"></el-option>
                 <el-option label="呼通后转人工" :value="2"></el-option>
@@ -813,6 +814,10 @@ export default {
       this.RuleForm.sceneId = "";
       this.RuleForm.extId = "";
     },
+    changeTask(){
+      this.listScene();
+      this.RuleForm.sceneId = "";
+    },
     // 获取分机接口
     getExtList() {
       let data = {
@@ -828,12 +833,12 @@ export default {
         }
       });
     },
-    // 获取场景 、 线路
+    // 获取服务流程/班组
     listScene() {
       var data = {
         data: {
           corpId: this.RuleForm.corpId,
-          processType: this.RuleForm.processType,
+          processType: this.RuleForm.taskType,
         },
         version: "1.0",
       };

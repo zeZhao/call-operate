@@ -191,7 +191,7 @@ export default {
       formConfig: [
         {
           type: "select",
-          label: "商户名称",
+          label: "商户公司",
           key: "corpId",
           defaultValue: "",
           optionData: [],
@@ -267,7 +267,7 @@ export default {
   },
   computed: {},
   methods: {
-    // 获取场景 、 线路
+    // // 获取服务流程/班组
     listScene(corpId) {
       var data = {
         data: {
@@ -289,16 +289,17 @@ export default {
           this.$message.error(res.msg);
         }
       });
+      
     },
     //获取公司下拉
     queryCorpByCorpType() {
-      this.$http.select.userListAll({}).then((res) => {
+      this.$http.select.queryCorpByCorpType({corpType:0}).then((res) => {
         this._setDefaultValue(
           this.formConfig,
           res.data.records,
           "corpId",
-          "userId",
-          "userName"
+          "corpId",
+          "corpName"
         );
       });
     },
