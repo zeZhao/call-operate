@@ -190,8 +190,14 @@ export default {
       formConfig: [
         {
           type: "select",
-          label: "供应商名称",
+          label: "供应商公司",
           key: "supplyId",
+          optionData: [],
+        },
+        {
+          type: "select",
+          label: "供应商账户",
+          key: "corpId",
           optionData: [],
         },
         {
@@ -258,7 +264,7 @@ export default {
       allocationConfig: [
         {
           type: "select",
-          label: "供应商名称",
+          label: "供应商公司",
           key: "supplyId",
           disabled: true,
           optionData: [],
@@ -426,6 +432,18 @@ export default {
         );
       });
     },
+    // 获取供应商账户
+    corpListAll(corpId) {
+      this.$http.select.corpListAll({ corpId }).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.records,
+          "corpId",
+          "supplyId",
+          "userName"
+        );
+      });
+    },
     listAll(corpId) {
       this.$http.corpUser.list({ enablePage: false, corpId }).then((res) => {
         this._setDefaultValue(
@@ -457,8 +475,8 @@ export default {
       });
     },
     // 获取线路下拉数据
-    linecfgList(corpId) {
-      this.$http.select.linecfgList({ corpId }).then((res) => {
+    linecfgList(supplyId) {
+      this.$http.select.linecfgList({ supplyId }).then((res) => {
         this.lineList = res.data;
         this._setDefaultValue(
           this.formConfig,
@@ -533,19 +551,31 @@ export default {
     addSelectChange({ val, item }) {
       if (item.key === "supplyId") {
         if (val) {
+          this.corpListAll(val);
+          this._deleteDefaultValue(this.formConfig, "corpId");
+          this._deleteDefaultValue(this.formConfig, "lineId");
+          this._deleteDefaultValue(this.formConfig, "lineType");
+          this._deleteDefaultValue(this.formConfig, "privince");
+          this._deleteDefaultValue(this.formConfig, "operaId");
+        } else {
+          this._setDefaultValue(this.formConfig, [], "corpId");
+          this._setDefaultValue(this.formConfig, [], "lineId");
+          this._deleteDefaultValue(this.formConfig, "corpId");
+          this._deleteDefaultValue(this.formConfig, "lineId");
+          this._deleteDefaultValue(this.formConfig, "lineType");
+          this._deleteDefaultValue(this.formConfig, "privince");
+          this._deleteDefaultValue(this.formConfig, "operaId");
+        }
+      }
+      if (item.key === "corpId") {
+        if (val) {
           this.linecfgList(val);
           this._deleteDefaultValue(this.formConfig, "lineId");
           this._deleteDefaultValue(this.formConfig, "lineType");
           this._deleteDefaultValue(this.formConfig, "privince");
           this._deleteDefaultValue(this.formConfig, "operaId");
         } else {
-          this._setDefaultValue(
-            this.formConfig,
-            [],
-            "lineId",
-            "lineId",
-            "lineName"
-          );
+          this._setDefaultValue(this.formConfig, [], "lineId");
           this._deleteDefaultValue(this.formConfig, "lineId");
           this._deleteDefaultValue(this.formConfig, "lineType");
           this._deleteDefaultValue(this.formConfig, "privince");
@@ -557,8 +587,22 @@ export default {
           let lines = this.lineList.filter((item) => item.lineId === val);
           if (lines.length > 0) {
             let line = lines[0];
-            console.log(line, "========线路数据");
             const { lineType, operaId, province } = line;
+            console.log(lineType, operaId, province,'==========lineType, operaId, province')
+            this.formConfig.forEach((item) => {
+              if (item.key === "lineType") {
+                this.$set(item,'defaultValue',lineType)
+                item.defaultValue = lineType;
+              }
+              if (item.key === "privince") {
+                this.$set(item,'defaultValue',province)
+                item.defaultValue = province;
+              }
+              if (item.key === "operaId") {
+                this.$set(item,'defaultValue',operaId)
+                item.defaultValue = operaId;
+              }
+            });
             // 线路为第三方可以修改地区和运营商
             if (lineType === 0) {
               this._setDisabledShow(this.formConfig, "privince", true);
@@ -567,17 +611,6 @@ export default {
               this._setDisabledShow(this.formConfig, "privince", false);
               this._setDisabledShow(this.formConfig, "operaId", false);
             }
-            this.formConfig.forEach((item) => {
-              if (item.key === "lineType") {
-                item.defaultValue = lineType;
-              }
-              if (item.key === "privince") {
-                item.defaultValue = province;
-              }
-              if (item.key === "operaId") {
-                item.defaultValue = operaId;
-              }
-            });
           }
         } else {
           this._deleteDefaultValue(this.formConfig, "lineType");

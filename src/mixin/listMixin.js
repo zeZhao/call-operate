@@ -600,28 +600,15 @@ export default {
       list.forEach(item => {
         if (item.key === key) {
           if (item.type === 'select' || item.type === 'checkbox') {
-            // 判断给list赋值还是给默认选择赋值
-            if ((data && data.length > 0) || (optionKey && optionVal)){
-              console.log(optionKey,'======optionKey')
-              console.log(optionVal,'======optionVal')
-              item.optionData = []
-              data.forEach(t => {
-                let obj = {
-                  key: t[optionKey],
-                  value: t[optionVal],
-                  disabled: t[disabled] === 1 ? true : false || false
-                };
-                item.optionData.push(obj)
-              });
-            }else{
-              
-              this.$nextTick(() => {
-                this.$set(item, 'defaultValue', optionKey)
-                item.defaultValue = optionKey
-                console.log(optionKey, '===========defaultValue optionKey')
-              })
-            }
-            
+            item.optionData = []
+            data.forEach(t => {
+              let obj = {
+                key: t[optionKey],
+                value: t[optionVal],
+                disabled: t[disabled] === 1 ? true : false || false
+              };
+              item.optionData.push(obj)
+            });
           } else if (item.type === 'input' || item.type === 'transfer') {
             if (item.type === 'input'){
               this.$nextTick(() => {

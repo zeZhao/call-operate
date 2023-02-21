@@ -717,6 +717,10 @@ export default {
       const form = {};
       this.formConfig.forEach((item) => {
         const { key, type } = item;
+        if(key === 'lineType'){
+          // debugger
+          console.log(item.defaultValue,'=======jichubiaodan')
+        }
         form[key] = item.defaultValue;
 
         if (type === "selects") {
