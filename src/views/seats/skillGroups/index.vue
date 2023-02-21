@@ -289,11 +289,10 @@ export default {
           this.$message.error(res.msg);
         }
       });
-      
     },
     //获取公司下拉
     queryCorpByCorpType() {
-      this.$http.select.queryCorpByCorpType({corpType:0}).then((res) => {
+      this.$http.select.queryCorpByCorpType({ corpType: 0 }).then((res) => {
         this._setDefaultValue(
           this.formConfig,
           res.data.records,
@@ -376,6 +375,30 @@ export default {
           this._deleteDefaultValue(this.formConfig, "satisfactionIvrId");
         }
       }
+    },
+    /**
+     * 创建表单
+     * @param row  当前行数据
+     * @param id  当前行ID
+     * @private
+     */
+
+    _mxCreate() {
+      this.addChannel = true;
+      this.formTit = "新增";
+      this._setDefaultValue(
+        this.formConfig,
+        res.data,
+        "attendIdList",
+        "",
+        "",
+        "",
+        []
+      );
+      this._setDefaultValue(this.formConfig, [], "attendIdList", []);
+      setTimeout(() => {
+        this.$refs.formItem.resetForm();
+      }, 0);
     },
 
     /**
