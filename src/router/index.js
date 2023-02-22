@@ -124,7 +124,15 @@ const constRouterList = [
         name: 'callList',
         component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/callList/index.vue'),
         meta: {
-          title: '通话详单',
+          title: '外呼通话详单',
+        },
+      },
+      {
+        path: '/dataQuery/callList2',
+        name: 'callList2',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataQuery/callList2/index.vue'),
+        meta: {
+          title: '坐席通话详单',
         },
       },
       {

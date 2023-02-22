@@ -772,6 +772,7 @@ export default {
             item.defaultValue = null;
             item.defaultFileList = [];
           } else if (type === "fileUpload") {
+            item.defaultValue = ""
             this.$refs.fileUpload[0].value = ''
           } else {
             item.defaultValue = null;

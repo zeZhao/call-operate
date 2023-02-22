@@ -164,6 +164,9 @@ export default {
   mounted() {
     this.getRoleLlist();
   },
+  activated(){
+    this.getRoleLlist();
+  },
   computed: {},
   methods: {
     getRoleLlist() {

@@ -854,9 +854,13 @@ export default {
   },
   //通话详单
   dataquery: {
-    //列表
+    //外呼列表
     voicetalkList(data) {
       return request('/dataquery/voicetalk/list', 'post', data)
+    },
+    //坐席列表
+    attendLogList(data) {
+      return request('/attendLog/list', 'post', data)
     },
     //通话详单-AI对话详情
     voicetalkAiList(data) {

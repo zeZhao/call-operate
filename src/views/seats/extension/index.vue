@@ -25,9 +25,14 @@
       </el-table-column>
       <el-table-column prop="attendName" label="绑定座席" />
       <el-table-column prop="caller" label="外呼主叫" />
-      <el-table-column prop="lineId" label="外呼线路" />
+      <el-table-column prop="lineName" label="外呼线路" />
       <el-table-column prop="extName" label="分机昵称" />
-      <el-table-column prop="isBatchcaller" label="作为批量外呼主叫" />
+      <el-table-column prop="isBatchcaller" label="作为批量外呼主叫" >
+        <template slot-scope="{ row }">
+          <span v-if="row.isBatchcaller == 0">否</span>
+          <span v-if="row.isBatchcaller == 1">是</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="isRecording" label="是否录音">
         <template slot-scope="{ row }">
           <span v-if="row.status == 0">否</span>

@@ -32,7 +32,7 @@
       <el-table-column prop="cost" label="费用（元）" />
       <el-table-column prop="callType" label="呼叫类型" />
       <el-table-column prop="hangupCause" label="挂断原因" />
-      <el-table-column label="操作" width="100" fixed="right">
+      <!-- <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
             @click="dialogue(scope.index, scope.row)"
@@ -41,7 +41,7 @@
             >通话详情</el-button
           >
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <Page
       :pageObj="pageObj"
@@ -131,7 +131,7 @@ export default {
       //接口地址
       searchAPI: {
         namespace: "dataquery",
-        list: "voicetalkList",
+        list: "attendLogList",
       },
       isParamsNotData: false,
       submitParamsIsData: false,
