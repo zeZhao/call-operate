@@ -98,7 +98,15 @@ const constRouterList = [
         name: 'rechargeRecord',
         component: () => import(/* webpackChunkName: "about" */ '@/views/billing/rechargeRecord/index.vue'),
         meta: {
-          title: '充值记录',
+          title: '语音充值记录',
+        },
+      },
+      {
+        path: '/billing/smsRechargeRecord',
+        name: 'smsRechargeRecord',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/billing/smsRechargeRecord/index.vue'),
+        meta: {
+          title: '短信充值记录',
         },
       },
     ]

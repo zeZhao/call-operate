@@ -10,6 +10,7 @@
       border
       highlight-current-row
       style="width: 100%"
+      :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center"/>
       <el-table-column prop="corpName" label="公司名称" />
@@ -23,7 +24,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="amount" label="缴费金额（元）" />
-      <el-table-column prop="balance" label="账户余额（元）" />
+      <el-table-column prop="balance" label="充值数量（条）" />
+      <el-table-column prop="corpId" label="短信余额（条）" />
       <el-table-column prop="createTime" label="操作时间" >
         <template slot-scope="{row}">
           <span>{{row.createTime | dateTime}}</span>
@@ -71,7 +73,7 @@ export default {
       //接口地址
       searchAPI: {
         namespace: "rechargeWater",
-        list: "speechRechargeLog",
+        list: "smsRechargeLog",
         add: "post",
         edit: "put",
         detele: "delete",
