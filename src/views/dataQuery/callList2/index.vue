@@ -28,9 +28,9 @@
       </el-table-column>
       <el-table-column prop="calledId" label="被叫号码" />
       <el-table-column prop="talkDuration" label="通话时长（秒）" />
-      <el-table-column prop="billingTime" label="计费时长（秒）" />
+      <el-table-column prop="costDuration" label="计费时长（秒）" />
       <el-table-column prop="cost" label="费用（元）" />
-      <el-table-column prop="callType" label="呼叫类型" />
+      <!-- <el-table-column prop="callType" label="呼叫类型" /> -->
       <el-table-column prop="hangupCause" label="挂断原因" />
       <!-- <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
