@@ -20,7 +20,7 @@
       <el-table-column prop="jobNumber" label="工号" />
       <el-table-column prop="pwd" label="座席密码" />
       <el-table-column prop="roleName" label="角色" />
-      <el-table-column prop="skillgroupId" label="归属技能组" />
+      <el-table-column prop="skillGroupName" label="归属技能组" />
       <el-table-column prop="loginMode" label="坐席登录方式" >
         <template slot-scope="{row}">
           <span v-if="row.loginMode == 0">人工</span>
@@ -168,6 +168,16 @@ export default {
             {key:1,value:'企业管理员'},
           ],
         },
+        // {
+        //   type: "select",
+        //   label: "技能组",
+        //   key: "skillGroupName",
+        //   defaultValue: "",
+        //   optionData:[
+        //     {key:0,value:'人工'},
+        //     {key:1,value:'自动'},
+        //   ],
+        // },
         {
           type: "select",
           label: "坐席登录方式",

@@ -593,6 +593,7 @@ export default {
      * @param key 选择项key值
      * @param optionKey 设置key的值
      * @param optionVal 设置value的值
+     * @param defaultData 穿梭框特殊设置的数据
      * @private
      */
     _setDefaultValue(list, data, key, optionKey, optionVal, disabled, defaultData) {

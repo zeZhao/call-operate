@@ -773,7 +773,6 @@ export default {
             item.defaultFileList = [];
           } else if (type === "fileUpload") {
             this.$refs.fileUpload[0].value = ''
-            console.log(this.$refs.fileUpload,'======this.$refs.fileUpload')
           } else {
             item.defaultValue = null;
             this.formData[key] = null;
