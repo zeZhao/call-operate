@@ -213,6 +213,7 @@ export default {
           key: "lineType",
           colSpan: 12,
           disabled: true,
+          defaultValue:"",
           optionData: [
             { key: 0, value: "直连" },
             { key: 1, value: "第三方" },
@@ -224,6 +225,7 @@ export default {
           key: "privince",
           colSpan: 12,
           disabled: false,
+          defaultValue:"",
           optionData: [],
         },
         {
@@ -232,6 +234,7 @@ export default {
           key: "operaId",
           colSpan: 12,
           disabled: false,
+          defaultValue:"",
           optionData: [
             // { key: 0, value: "非法" },
             { key: 1, value: "移动" },
