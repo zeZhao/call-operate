@@ -1,5 +1,5 @@
 <template>
-<!-- 坐席 -->
+  <!-- 坐席 -->
   <div class="seatsIndex">
     <Search
       :searchFormConfig="searchFormConfig"
@@ -21,14 +21,14 @@
       <el-table-column prop="pwd" label="座席密码" />
       <el-table-column prop="roleName" label="角色" />
       <el-table-column prop="skillGroupName" label="归属技能组" />
-      <el-table-column prop="loginMode" label="坐席登录方式" >
-        <template slot-scope="{row}">
+      <el-table-column prop="loginMode" label="坐席登录方式">
+        <template slot-scope="{ row }">
           <span v-if="row.loginMode == 0">人工</span>
           <span v-if="row.loginMode == 1">自动</span>
         </template>
       </el-table-column>
       <el-table-column prop="status" label="状态">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <span v-if="row.status == 0">禁用</span>
           <span v-if="row.status == 1">启用</span>
         </template>
@@ -42,9 +42,7 @@
             >修改</el-button
           >
           <el-button
-            @click="
-              _mxDeleteItem('attendId', scope.row.attendId, false, false)
-            "
+            @click="_mxDeleteItem('attendId', scope.row.attendId, false, false)"
             type="text"
             size="small"
             >删除
@@ -81,6 +79,18 @@ export default {
   mixins: [listMixin],
   components: {},
   data() {
+    // 标签名称验证
+    var tagNameValidator = (rule, value, callback) => {
+      if (value) {
+        if (/[\u4E00-\u9FA5]/g.test(value)) {
+          callback(new Error("工号不能输入汉字!"));
+        } else {
+          callback();
+        }
+      } else {
+        callback(new Error("工号不能为空!"));
+      }
+    };
     return {
       // 搜索框配置
       searchFormConfig: [
@@ -138,7 +148,7 @@ export default {
           label: "商家名称",
           key: "userId",
           defaultValue: "",
-          optionData:[]
+          optionData: [],
         },
         {
           type: "input",
@@ -151,6 +161,13 @@ export default {
           label: "工号",
           key: "jobNumber",
           defaultValue: "",
+          rules: [
+            {
+              required: true,
+              validator: tagNameValidator,
+              trigger: "blur",
+            },
+          ],
         },
         {
           type: "password",
@@ -163,9 +180,9 @@ export default {
           label: "座席角色",
           key: "attendroleId",
           defaultValue: "",
-          optionData:[
-            {key:2,value:'普通坐席'},
-            {key:1,value:'企业管理员'},
+          optionData: [
+            { key: 2, value: "普通坐席" },
+            { key: 1, value: "企业管理员" },
           ],
         },
         // {
@@ -183,9 +200,9 @@ export default {
           label: "坐席登录方式",
           key: "loginMode",
           defaultValue: "",
-          optionData:[
-            {key:0,value:'人工'},
-            {key:1,value:'自动'},
+          optionData: [
+            { key: 0, value: "人工" },
+            { key: 1, value: "自动" },
           ],
         },
         {
@@ -193,39 +210,51 @@ export default {
           label: "状态",
           key: "status",
           defaultValue: "",
-          optionData:[
+          optionData: [
             { key: 1, value: "启用" },
             { key: 0, value: "禁用" },
           ],
         },
       ],
       id: "",
-      userList:[]
+      userList: [],
     };
   },
   created() {},
   mounted() {
-    this.queryCorpByCorpType()
-    this.getRoleList()
+    this.queryCorpByCorpType();
+    this.getRoleList();
   },
-  activated(){
-    this.queryCorpByCorpType()
-    this.getRoleList()
+  activated() {
+    this.queryCorpByCorpType();
+    this.getRoleList();
   },
   computed: {},
   methods: {
     //获取公司下拉
-    queryCorpByCorpType(){
-      this.$http.select.userListAll({corpType:0}).then(res=>{
+    queryCorpByCorpType() {
+      this.$http.select.userListAll({ corpType: 0 }).then((res) => {
         this.userList = res.data.records;
-        this._setDefaultValue(this.formConfig,res.data.records,'userId','userId','userName')
-      })
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.records,
+          "userId",
+          "userId",
+          "userName"
+        );
+      });
     },
     //获取公司下拉
-    getRoleList(){
-      this.$http.role.list({enablePage:false}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data.list,'attendroleId','roleId','roleName')
-      })
+    getRoleList() {
+      this.$http.role.list({ enablePage: false }).then((res) => {
+        this._setDefaultValue(
+          this.formConfig,
+          res.data.list,
+          "attendroleId",
+          "roleId",
+          "roleName"
+        );
+      });
     },
     _mxArrangeSubmitData(formData) {
       let form = Object.assign({}, formData);
