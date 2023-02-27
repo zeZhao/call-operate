@@ -35,7 +35,7 @@
           <el-button type="primary" @click="List()">查询</el-button>
         </el-form-item>
         <el-button
-          size="small "
+          size="small"
           type="primary"
           @click="NewlyEdit"
           style="float: right;margin-right:30px"
