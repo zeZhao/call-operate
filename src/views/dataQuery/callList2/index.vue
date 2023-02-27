@@ -34,7 +34,7 @@
       <el-table-column prop="hangupCause" label="挂断原因" />
       <el-table-column prop="recordFile" label="录音" >
         <template slot-scope="{row}">
-          <a :href="origin + row.recordFile" target="_blank" rel="noopener noreferrer"></a>
+          <a :href="origin + row.recordFile" target="_blank" rel="noopener noreferrer">录音地址</a>
         </template>
       </el-table-column>
       <!-- <el-table-column label="操作" width="100" fixed="right">
