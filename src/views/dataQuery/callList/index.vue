@@ -169,9 +169,9 @@ export default {
       searchFormConfig: [
         { type: "input", label: "主叫", key: "callerId" },
         { type: "input", label: "被叫", key: "calledId" },
-        { type: "input", label: "商家账户", key: "userName" },
-        { type: "input", label: "供应商账户", key: "supplyName" },
-        { type: "input", label: "代理商账户", key: "agentName" },
+        { type: "select", label: "商家账户", key: "userId", optionData:[] },
+        { type: "select", label: "供应商账户", key: "supplyId", optionData:[] },
+        { type: "select", label: "代理商账户", key: "agentId", optionData:[] },
         { type: "input", label: "挂机原因", key: "hangupCause" },
         { type: "input", label: "通话时长>", key: "talkDuration" },
         { type: "date", label: "导入开始时间", key: "startTime" },
@@ -196,9 +196,45 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType(0)
+    this.queryCorpByCorpType(1)
+    this.queryCorpByCorpType(2)
+  },
   computed: {},
   methods: {
+    //获取公司下拉
+    // corpType（0:商家,1:代理商,2:供应商）
+    queryCorpByCorpType(corpType) {
+      this.$http.select.queryCorpByCorpType({ corpType }).then((res) => {
+        if(corpType === 0){
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "userId",
+            "corpId",
+            "corpName"
+          );
+        }else if(corpType === 1){
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "supplyId",
+            "corpId",
+            "corpName"
+          );
+        }else{
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "agentId",
+            "corpId",
+            "corpName"
+          );
+        }
+        
+      });
+    },
     /*
       试听
      */

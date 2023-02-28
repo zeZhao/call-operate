@@ -14,11 +14,12 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
-      <el-table-column prop="uploadTime" label="导入时间" >
+      <el-table-column prop="attendName" label="坐席名称" />
+      <!-- <el-table-column prop="uploadTime" label="导入时间" >
         <template slot-scope="{row}">
           <span>{{row.uploadTime | dateTime}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="startTime" label="开始时间" >
         <template slot-scope="{row}">
           <span>{{row.startTime | dateTime}}</span>
@@ -172,9 +173,17 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "公司名称", key: "corpName" },
-        { type: "input", label: "联系人", key: "corpNames" },
-        { type: "inputNum", label: "联系电话", key: "userId" },
+        { type: "input", label: "主叫", key: "callerId" },
+        { type: "input", label: "被叫", key: "calledId" },
+        { type: "input", label: "座席姓名", key: "attendName" },
+        { type: "input", label: "工号", key: "jobNumber" },
+        { type: "select", label: "商家账户", key: "userId", optionData:[] },
+        { type: "select", label: "供应商账户", key: "supplyId", optionData:[] },
+        { type: "select", label: "代理商账户", key: "agentId", optionData:[] },
+        { type: "input", label: "挂机原因", key: "hangupCause" },
+        { type: "input", label: "通话时长>", key: "talkDuration" },
+        { type: "date", label: "开始时间", key: "startTime" },
+        { type: "date", label: "终止时间", key: "endTime" },
       ],
       //搜索框数据
       searchParam: {},
@@ -196,9 +205,45 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.queryCorpByCorpType(0)
+    this.queryCorpByCorpType(1)
+    this.queryCorpByCorpType(2)
+  },
   computed: {},
   methods: {
+    //获取公司下拉
+    // corpType（0:商家,1:代理商,2:供应商）
+    queryCorpByCorpType(corpType) {
+      this.$http.select.queryCorpByCorpType({ corpType }).then((res) => {
+        if(corpType === 0){
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "userId",
+            "corpId",
+            "corpName"
+          );
+        }else if(corpType === 1){
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "supplyId",
+            "corpId",
+            "corpName"
+          );
+        }else{
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "agentId",
+            "corpId",
+            "corpName"
+          );
+        }
+        
+      });
+    },
     /*
       试听
      */
