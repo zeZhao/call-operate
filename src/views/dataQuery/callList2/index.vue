@@ -50,6 +50,7 @@
       <el-table-column prop="linePort" label="线路端口" />
       <el-table-column prop="hangupCause" label="挂机原因" />
       <el-table-column prop="talkDuration" label="通话时长" />
+      <el-table-column prop="userName" label="用户名称" />
       <el-table-column prop="costType" label="用户收费类型" >
         <template slot-scope="{row}">
           <span v-if="row.costType == 1">费率</span>
@@ -59,6 +60,7 @@
       </el-table-column>
       <el-table-column prop="costDuration" label="用户收费时长" />
       <el-table-column prop="cost" label="用户费用" />
+      <el-table-column prop="agentName" label="代理商名称" />
       <el-table-column prop="agentCostType" label="代理商收费类型" >
         <template slot-scope="{row}">
           <span v-if="row.agentCostType == 1">费率</span>
@@ -68,6 +70,7 @@
       </el-table-column>
       <el-table-column prop="agentCostDuration" label="代理商收费时长" />
       <el-table-column prop="agentCost" label="代理商费用" />
+      <el-table-column prop="supplyName" label="供应商名称" />
       <el-table-column prop="supplyCostType" label="供应商收费类型" >
         <template slot-scope="{row}">
           <span v-if="row.supplyCostType == 1">费率</span>
