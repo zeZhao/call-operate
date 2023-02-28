@@ -187,7 +187,7 @@ export default {
           defaultValue: "",
         },
         {
-          type: "input",
+          type: "password",
           label: "密码",
           key: "pwd",
           isShow: true,
