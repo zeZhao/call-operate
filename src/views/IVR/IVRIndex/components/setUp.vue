@@ -1484,7 +1484,7 @@ export default {
           overtimeNext: row.overtimeNext == null ? "" : row.overtimeNext, //超时下一题
           unrecogNext: row.unrecogNext == null ? "" : row.unrecogNext, //未识别下一题目
           unrecogType: row.unrecogType == null ? "" : row.unrecogType + "", //未识别下一题选项 '1. 知识库,2. 此场景中的分支(为空时为重复播当前题目) 设置
-          defaultNext: row.defaultNext == null ? "" : row.defaultNext, //默认下一题目
+          defaultNext: row.defaultNext == null ? null : row.defaultNext, //默认下一题目
           branchState: "1" /*1.时段   2.非时段*/,
           interruptFlag:
             row.interruptFlag == null ? "" : row.interruptFlag + "", //是否打断 0.不可打断，1.可打断
