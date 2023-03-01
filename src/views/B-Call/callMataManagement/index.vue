@@ -74,7 +74,7 @@ export default {
       searchParam: {},
       //接口地址
       searchAPI: {
-        namespace: "outboundata",
+        namespace: "",
         list: "list",
       },
       // 列表参数

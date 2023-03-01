@@ -8,8 +8,8 @@
       :add="false"
     >
       <template slot="other">
-        <el-button type="primary" @click="allocation">分配号码</el-button>
         <el-button type="primary" @click="_mxCreate">新增号码</el-button>
+        <el-button type="primary" @click="allocation">分配号码</el-button>
         <el-button type="primary" @click="_mxDeleteItem">删除</el-button>
         <el-button type="primary" @click="exportNum">导出Excel</el-button>
       </template>

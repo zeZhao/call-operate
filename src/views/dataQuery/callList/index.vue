@@ -59,6 +59,8 @@
       </el-table-column>
       <el-table-column prop="costDuration" label="用户收费时长" />
       <el-table-column prop="cost" label="用户费用" />
+      <el-table-column prop="period" label="用户计费周期" />
+      <el-table-column prop="costSetMeal" label="用户套餐扣除时长" />
       <el-table-column prop="agentName" label="代理商名称" />
       <el-table-column prop="agentCostType" label="代理商收费类型" >
         <template slot-scope="{row}">
@@ -69,6 +71,8 @@
       </el-table-column>
       <el-table-column prop="agentCostDuration" label="代理商收费时长" />
       <el-table-column prop="agentCost" label="代理商费用" />
+      <el-table-column prop="agentPeriod" label="代理商计费周期" />
+      <el-table-column prop="agentSetMeal" label="代理商套餐扣除时长" />
       <el-table-column prop="supplyName" label="供应商名称" />
       <el-table-column prop="supplyCostType" label="供应商收费类型" >
         <template slot-scope="{row}">
@@ -79,6 +83,8 @@
       </el-table-column>
       <el-table-column prop="supplyCostDuration" label="供应商收费时长" />
       <el-table-column prop="supplyCost" label="供应商费用" />
+      <el-table-column prop="supplyPeriod" label="供应商计费周期" />
+      <el-table-column prop="supplySetMeal" label="供应商套餐扣除时长" />
       <el-table-column prop="dataTag" label="标签" />
       <el-table-column label="操作" width="100" fixed="right">
         <template slot-scope="scope">
