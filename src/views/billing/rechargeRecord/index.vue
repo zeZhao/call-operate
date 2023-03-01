@@ -50,7 +50,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        // { type: "input", label: "公司名称", key: "corpName" },
+        { type: "input", label: "公司名称", key: "corpName" },
         // { type: "input", label: "账户名称", key: "corpNames" },
         // // { type: "inputNum", label: "联系电话", key: "userId" },
         // { type: "select", label: "签名", key: "sign",optionData:[{key:'1',value:"有效"},{key:'2',value:"无效"},] },
