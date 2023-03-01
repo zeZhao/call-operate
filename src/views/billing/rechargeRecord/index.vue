@@ -50,21 +50,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "公司名称", key: "corpName" },
-        // { type: "input", label: "账户名称", key: "corpNames" },
-        // // { type: "inputNum", label: "联系电话", key: "userId" },
-        // { type: "select", label: "签名", key: "sign",optionData:[{key:'1',value:"有效"},{key:'2',value:"无效"},] },
-        // { type: "select", label: "类别", key: "signs",optionData:[{key:'1',value:"商家"},{key:'2',value:"代理商"},{key:'3',value:"供应商"},] },
-        // {
-        //   type: "daterange",
-        //   label: "有效时间",
-        //   key: ["", "submitStartTime", "submitEndTime"]
-        // },
-        // {
-        //   type: "daterange",
-        //   label: "开户时间",
-        //   key: ["", "submitStartTime1", "submitEndTime1"]
-        // },
+        { type: "select", label: "公司名称", key: "userId", optionData:[] },
       ],
        //搜索框数据
       searchParam: {},
@@ -85,9 +71,42 @@ export default {
   },
   created() {},
   mounted() {
+    this.queryCorpByCorpType(0)
   },
   computed: {},
   methods: {
+    //获取公司下拉
+    // corpType（0:商家,1:代理商,2:供应商）
+    queryCorpByCorpType(corpType) {
+      this.$http.select.queryCorpByCorpType({ corpType }).then((res) => {
+        if(corpType === 0){
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "userId",
+            "corpId",
+            "corpName"
+          );
+        }else if(corpType === 1){
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "supplyId",
+            "corpId",
+            "corpName"
+          );
+        }else{
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "agentId",
+            "corpId",
+            "corpName"
+          );
+        }
+        
+      });
+    },
   },
   watch: {},
 };
