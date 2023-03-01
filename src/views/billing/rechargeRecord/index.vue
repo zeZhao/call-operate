@@ -71,39 +71,21 @@ export default {
   },
   created() {},
   mounted() {
-    this.queryCorpByCorpType(0)
+    this.queryCorpByCorpType()
   },
   computed: {},
   methods: {
     //获取公司下拉
     // corpType（0:商家,1:代理商,2:供应商）
     queryCorpByCorpType(corpType) {
-      this.$http.select.queryCorpByCorpType({ corpType }).then((res) => {
-        if(corpType === 0){
-          this._setDefaultValue(
+      this.$http.select.queryCorpByCorpType({ corpType:"" }).then((res) => {
+        this._setDefaultValue(
             this.searchFormConfig,
             res.data.records,
             "userId",
             "corpId",
             "corpName"
           );
-        }else if(corpType === 1){
-          this._setDefaultValue(
-            this.searchFormConfig,
-            res.data.records,
-            "supplyId",
-            "corpId",
-            "corpName"
-          );
-        }else{
-          this._setDefaultValue(
-            this.searchFormConfig,
-            res.data.records,
-            "agentId",
-            "corpId",
-            "corpName"
-          );
-        }
         
       });
     },

@@ -52,7 +52,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "公司名称", key: "corpName" },
+        { type: "select", label: "公司名称", key: "userId", optionData:[] },
         // { type: "input", label: "账户名称", key: "corpNames" },
         // // { type: "inputNum", label: "联系电话", key: "userId" },
         // { type: "select", label: "签名", key: "sign",optionData:[{key:'1',value:"有效"},{key:'2',value:"无效"},] },
@@ -87,9 +87,24 @@ export default {
   },
   created() {},
   mounted() {
+    this.queryCorpByCorpType()
   },
   computed: {},
   methods: {
+    //获取公司下拉
+    // corpType（0:商家,1:代理商,2:供应商）
+    queryCorpByCorpType(corpType) {
+      this.$http.select.queryCorpByCorpType({ corpType:"" }).then((res) => {
+        this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "userId",
+            "corpId",
+            "corpName"
+          );
+        
+      });
+    },
   },
   watch: {},
 };
