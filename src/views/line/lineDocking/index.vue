@@ -58,7 +58,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="remarks" label="备注" show-overflow-tooltip />
-      <el-table-column label="操作" width="100" fixed="right">
+      <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'lineId')"

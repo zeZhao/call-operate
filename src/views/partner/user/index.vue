@@ -36,7 +36,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="开户时间"  width="150"/>
-      <el-table-column label="操作" width="130" fixed="right">
+      <el-table-column label="操作" width="130">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'userId')"

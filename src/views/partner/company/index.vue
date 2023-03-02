@@ -26,7 +26,7 @@
       <!-- <el-table-column prop="corpId" label="状态" /> -->
       <el-table-column prop="createTime" label="开户时间" width="150" />
       <el-table-column prop="remarks" label="备注" />
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'corpId')"
