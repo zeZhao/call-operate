@@ -230,7 +230,10 @@ export default {
           key: "isJobnumber",
           colSpan: 12,
           defaultValue: 1,
-          optionData: [{key:1,value:"是"},{key:0,value:"否"}],
+          optionData: [
+            { key: 1, value: "是" },
+            { key: 0, value: "否" },
+          ],
         },
         {
           type: "select",
@@ -238,7 +241,10 @@ export default {
           key: "status",
           colSpan: 12,
           defaultValue: 1,
-          optionData: [{key:1,value:"启用"},{key:0,value:"禁用"}],
+          optionData: [
+            { key: 1, value: "启用" },
+            { key: 0, value: "禁用" },
+          ],
         },
         {
           type: "divider",
@@ -307,6 +313,15 @@ export default {
         );
       });
     },
+    //设置穿梭框数据
+    setAttendIdList(data) {
+      this.formConfig.forEach((item) => {
+        if (item.key === "attendIdList")
+          this.$nextTick(() => {
+            this.$set(item, "data", data);
+          });
+      });
+    },
     // 获取技能组列表
     // getlistAll() {
     //   this.$http.skillGroup.listAll().then((res) => {
@@ -324,7 +339,6 @@ export default {
               arr.push({
                 key: item.attendId,
                 label: item.attendName,
-                disabled: item.state == 1 ? true : false,
               });
             }
           });
@@ -332,22 +346,18 @@ export default {
             arr.push({
               key: item.attendId,
               label: item.attendName,
-              disabled: item.state == 1 ? true : false,
             });
             checkList.push(item.attendId);
           });
           console.log(arr, "=========获取本企业所有坐席");
           console.log(checkList, "=========技能组所有坐席");
-          this._setDefaultValue(
-            this.formConfig,
-            res.data,
-            "attendIdList",
-            "",
-            "",
-            "",
-            arr
-          );
-          this._setDefaultValue(this.formConfig, [], "attendIdList", checkList);
+          this.setAttendIdList(arr)
+            this._setDefaultValue(
+              this.formConfig,
+              [],
+              "attendIdList",
+              checkList
+            );
         }
         // console.log(res);
       });
@@ -391,15 +401,8 @@ export default {
     _mxCreate() {
       this.addChannel = true;
       this.formTit = "新增";
-      this._setDefaultValue(
-        this.formConfig,
-        [],
-        "attendIdList",
-        "",
-        "",
-        "",
-        []
-      );
+      this.setAttendIdList([])
+      this.attendSkillGroupList = []
       this._setDefaultValue(this.formConfig, [], "attendIdList", []);
       setTimeout(() => {
         this.$refs.formItem.resetForm();

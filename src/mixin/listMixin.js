@@ -596,7 +596,7 @@ export default {
      * @param defaultData 穿梭框特殊设置的数据
      * @private
      */
-    _setDefaultValue(list, data, key, optionKey, optionVal, disabled, defaultData) {
+    _setDefaultValue(list, data, key, optionKey, optionVal, disabled) {
       let arr = []
       list.forEach(item => {
         if (item.key === key) {
@@ -611,22 +611,12 @@ export default {
               item.optionData.push(obj)
             });
           } else if (item.type === 'input' || item.type === 'transfer') {
-            if (item.type === 'input'){
-              this.$nextTick(() => {
-                this.$set(item, 'defaultValue', optionKey)
-                item.defaultValue = optionKey
-              })
-            }else{
-              if (optionKey){
-                this.$nextTick(() => {
-                  this.$set(item, 'defaultValue', optionKey)
-                })
-              } else{
-                this.$nextTick(() => {
-                  this.$set(item, 'data', defaultData)
-                })
-              }
+            if (item.type === 'transfer'){
+              console.log(optionKey,'=====穿梭框值')
             }
+            this.$nextTick(() => {
+              this.$set(item, 'defaultValue', optionKey)
+            })
             
           }
         }
