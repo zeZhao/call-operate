@@ -335,12 +335,20 @@ export default {
           let arr = [];
           let checkList = [];
           res.data.forEach((item) => {
-            if (item.state != 1) {
-              arr.push({
-                key: item.attendId,
-                label: item.attendName,
-              });
-            }
+            this.attendSkillGroupList.forEach(t=>{
+              if(item.attendId === t.attendId || item.state != 1){
+                  arr.push({
+                  key: item.attendId,
+                  label: item.attendName,
+                });
+              }
+            })
+            // if (item.state != 1) {
+            //     arr.push({
+            //       key: item.attendId,
+            //       label: item.attendName,
+            //     });
+            // }
           });
           this.attendSkillGroupList.forEach((item) => {
             arr.push({
