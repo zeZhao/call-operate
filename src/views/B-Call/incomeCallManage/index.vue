@@ -801,6 +801,10 @@ export default {
   },
   mounted() {},
   watch: {},
+  activated(){
+    this.List();
+    this.listClient();
+  },
 
   components: {},
 
