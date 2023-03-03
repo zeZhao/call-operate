@@ -1277,6 +1277,17 @@ export default {
     this.listClientTable();
     this.getIVRlistAll() // 获取技能组数据
   },
+  activated(){
+    this.List(); //列表
+    this.TagList(); //标签选项列表
+    this.variableList(); //变量列表
+    // this.templateist(); //模板列表
+    this.getKnowledgeBase(1);
+    this.getKnowledgeBase(2);
+    this.VallLis();
+    this.listClientTable();
+    this.getIVRlistAll() // 获取技能组数据
+  },
 
   components: { Voice },
 

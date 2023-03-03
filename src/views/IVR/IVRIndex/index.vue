@@ -603,6 +603,10 @@ export default {
     this.listClient();
     // this.templateist(); //模板列表
   },
+  activated(){
+    this.List();
+    this.listClient();
+  },
 
   components: {},
 
