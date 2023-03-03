@@ -469,6 +469,22 @@ export default {
       }, 0);
       this._setDisplayShow(this.formConfig, "comboId", true);
       this._setDisplayShow(this.formConfig, "recComboId", true);
+      this.formConfig.forEach(item=>{
+        if(item.key === 'account'){
+          item.rules = [ {
+          required: true,
+          message: "请输入必填项",
+          trigger: ["blur", "change"],
+        },]
+        }
+        if(item.key === 'pwd'){
+          item.rules = [ {
+          required: true,
+          message: "请输入必填项",
+          trigger: ["blur", "change"],
+        },]
+        }
+      })
     },
 
     /**
@@ -498,6 +514,12 @@ export default {
         }
         if (!Object.keys(row).includes(item.key)) {
           this.$set(item, "defaultValue", "");
+        }
+        if(item.key === 'account'){
+          item.rules = []
+        }
+        if(item.key === 'pwd'){
+          item.rules = []
         }
       });
       setTimeout(() => {
