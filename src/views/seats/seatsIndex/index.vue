@@ -76,6 +76,7 @@
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
         @choose="choose"
+        @selectChange="selectChange"
       ></FormItem>
     </el-dialog>
   </div>
@@ -189,8 +190,8 @@ export default {
           key: "attendroleId",
           defaultValue: "",
           optionData: [
-            { key: 2, value: "普通坐席" },
-            { key: 1, value: "企业管理员" },
+            // { key: 2, value: "普通坐席" },
+            // { key: 1, value: "企业管理员" },
           ],
         },
         // {
@@ -231,14 +232,41 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType();
-    this.getRoleList();
+    // this.getRoleList();
   },
   activated() {
     this.queryCorpByCorpType();
-    this.getRoleList();
+    // this.getRoleList();
   },
   computed: {},
   methods: {
+    selectChange({ val, item }) {
+      const {key} = item
+      if (key === "userId") {
+        if (val) {
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "attendRoleId",
+            "roleId",
+            "roleName"
+          );
+          this.userList.forEach((item) => {
+            if (item.userId === val) {
+              this.getRoleList(item.corpId);
+            }
+          });
+        } else {
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "attendRoleId",
+            "roleId",
+            "roleName"
+          );
+        }
+      }
+    },
     //获取公司下拉
     queryCorpByCorpType() {
       this.$http.select.userListAll({ corpType: 0 }).then((res) => {
@@ -253,8 +281,8 @@ export default {
       });
     },
     //获取公司下拉
-    getRoleList() {
-      this.$http.role.list({ enablePage: false }).then((res) => {
+    getRoleList(corpId) {
+      this.$http.role.list({ enablePage: false, corpId}).then((res) => {
         this._setDefaultValue(
           this.formConfig,
           res.data.list,

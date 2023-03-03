@@ -27,7 +27,7 @@
       <el-table-column prop="caller" label="外呼主叫" />
       <el-table-column prop="lineName" label="外呼线路" />
       <el-table-column prop="extName" label="分机昵称" />
-      <el-table-column prop="isBatchcaller" label="作为批量外呼主叫" >
+      <el-table-column prop="isBatchcaller" label="作为批量外呼主叫">
         <template slot-scope="{ row }">
           <span v-if="row.isBatchcaller == 0">否</span>
           <span v-if="row.isBatchcaller == 1">是</span>
@@ -81,6 +81,7 @@
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
         @onChange="onChange"
+        @selectChange="selectChange"
       ></FormItem>
     </el-dialog>
   </div>
@@ -307,13 +308,11 @@ export default {
     this.queryCorpByCorpType();
     this.linecfgList();
     this.listAllAttend();
-    this.getRoleList();
   },
   activated() {
     this.queryCorpByCorpType();
     this.linecfgList();
     this.listAllAttend();
-    this.getRoleList();
   },
   computed: {},
   methods: {
@@ -370,8 +369,8 @@ export default {
       });
     },
     //获取角色权限下拉
-    getRoleList() {
-      this.$http.role.list({ enablePage: false }).then((res) => {
+    getRoleList(corpId) {
+      this.$http.role.list({ enablePage: false, corpId }).then((res) => {
         this._setDefaultValue(
           this.formConfig,
           res.data.list,
@@ -432,8 +431,36 @@ export default {
       }, 0);
       this.addChannel = true;
     },
+    selectChange({ val, item }) {
+      const {key} = item
+      if (key === "userId") {
+        if (val) {
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "attendRoleId",
+            "roleId",
+            "roleName"
+          );
+          this.userList.forEach((item) => {
+            if (item.userId === val) {
+              this.getRoleList(item.corpId);
+            }
+          });
+        } else {
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "attendRoleId",
+            "roleId",
+            "roleName"
+          );
+        }
+      }
+    },
     onChange({ val, item }) {
       const { key } = item;
+
       if (key === "pwdType") {
         if (val == 2) {
           this._setDisplayShow(this.formConfig, "pwd", false);
