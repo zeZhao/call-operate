@@ -110,7 +110,7 @@
             type="primary"
             :disabled="auditStatus"
             @click="statusSubmit(item, 1)"
-            v-if="item.status == 2 && item.knowledgeVoiceFileUrl"
+            v-if="item.status == 2 && item.kbItemVoice"
             >启用</el-link
           >
 
@@ -118,7 +118,7 @@
             direction="vertical"
             v-if="
               (item.status == 2 ) &&
-                item.knowledgeVoiceFileUrl
+                item.kbItemVoice
             "
           ></el-divider>
 
@@ -139,14 +139,14 @@
 
           <el-link
             type="primary"
-            v-if="item.knowledgeVoiceFileUrl"
+            v-if="item.kbItemVoice"
             @click="Audition(item)"
             >试听</el-link
           >
           <el-divider
             direction="vertical"
             v-if="
-              item.knowledgeVoiceFileUrl &&
+              item.kbItemVoice &&
                 (item.status == '2' || item.status == 2)
             "
           ></el-divider>
@@ -373,7 +373,7 @@ export default {
     Audition(val) {
       const self = this;
       this.audition = {
-        url: val.knowledgeVoiceFileUrl,
+        url: val.kbItemVoice,
         createBy: "",
         Title: "",
       };
