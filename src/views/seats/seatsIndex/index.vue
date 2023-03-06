@@ -247,23 +247,27 @@ export default {
           this._setDefaultValue(
             this.formConfig,
             [],
-            "attendRoleId",
+            "attendroleId",
             "roleId",
             "roleName"
           );
-          this.userList.forEach((item) => {
-            if (item.userId === val) {
-              this.getRoleList(item.corpId);
-            }
-          });
+          this._deleteDefaultValue(this.formConfig, "attendroleId");
+          this.getRoleList(val);
+          // this.userList.forEach((item) => {
+          //   if (item.userId === val) {
+          //     console.log(item.corpId,'======shanghugongsi ')
+          //     this.getRoleList(item.corpId);
+          //   }
+          // });
         } else {
           this._setDefaultValue(
             this.formConfig,
             [],
-            "attendRoleId",
+            "attendroleId",
             "roleId",
             "roleName"
           );
+          this._deleteDefaultValue(this.formConfig, "attendroleId");
         }
       }
     },
@@ -280,7 +284,7 @@ export default {
         );
       });
     },
-    //获取公司下拉
+    //获取坐席角色
     getRoleList(corpId) {
       this.$http.role.list({ enablePage: false, corpId}).then((res) => {
         this._setDefaultValue(
@@ -303,6 +307,36 @@ export default {
         });
       }
       return form;
+    },
+    /**
+     * 编辑表单
+     * @param row  当前行数据
+     * @param ID  当前行ID
+     * @private
+     */
+
+    _mxEdit(row, ID) {
+      row = this._mxArrangeEditData(row);
+      this.id = row[ID];
+      this.editId = ID;
+      this.formTit = "修改";
+      this.formConfig.forEach(item => {
+        for (let key in row) {
+          if (item.key === key && row[key] !== "-") {
+            this.$set(item, "defaultValue", row[key]);
+          }
+        }
+        if (!Object.keys(row).includes(item.key)) {
+          this.$set(item, "defaultValue", "");
+        }
+        if(item.key === 'userId'){
+          this.getRoleList(item.defaultValue);
+        }
+      });
+      setTimeout(() => {
+        this.$refs.formItem.clearValidate();
+      }, 0);
+      this.addChannel = true;
     },
   },
   watch: {},

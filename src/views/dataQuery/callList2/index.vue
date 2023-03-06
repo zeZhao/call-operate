@@ -38,14 +38,14 @@
       <el-table-column prop="callerId" label="主叫" />
       <el-table-column prop="calledId" label="被叫" />
       <el-table-column prop="callId" label="呼叫ID" />
-      <el-table-column prop="callType" label="通话类型" >
+      <!-- <el-table-column prop="callType" label="通话类型" >
         <template slot-scope="{row}">
           <span v-if="row.callType == 1">AI外呼</span>
           <span v-if="row.callType == 2">外呼人工</span>
           <span v-if="row.callType == 3">呼入</span>
           <span v-if="row.callType == 4">呼入人工</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="lineIp" label="线路ip" />
       <el-table-column prop="linePort" label="线路端口" />
       <el-table-column prop="hangupCause" label="挂机原因" />

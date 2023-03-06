@@ -442,11 +442,12 @@ export default {
             "roleId",
             "roleName"
           );
-          this.userList.forEach((item) => {
-            if (item.userId === val) {
-              this.getRoleList(item.corpId);
-            }
-          });
+          this.getRoleList(val);
+          // this.userList.forEach((item) => {
+          //   if (item.userId === val) {
+          //     this.getRoleList(item.corpId);
+          //   }
+          // });
         } else {
           this._setDefaultValue(
             this.formConfig,
