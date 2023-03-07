@@ -973,13 +973,14 @@
                         >
                           <el-option :value="1" label="客户的回答"></el-option>
                           <el-option :value="2" label="自定义的值"></el-option>
+                          <el-option :value="3" label="排队号"></el-option>
                         </el-select>
                         <el-input
                           style="width:220px"
                           v-model="item.setValue"
                           :placeholder="
                             `请输入${
-                              item.setType == 1 ? '客户的回答' : '自定义的值'
+                              item.setType == 1 ? '客户的回答' : item.setType == 2 ? '自定义的值':'排队号'
                             }`
                           "
                         ></el-input>
