@@ -22,7 +22,7 @@
 
             <el-upload
               style="width:28px;float:left"
-              action="/rob/voicelib/sentence/uploadWav"
+              action="/api/voicelib/sentence/uploadWav"
               :show-file-list="false"
               :limit="1"
               ref="my_upload"
@@ -66,7 +66,7 @@
             ></el-divider>
             <el-upload
               style="width:28px;float:left"
-              action="/rob/voicelib/sentence/uploadWav"
+              action="/api/voicelib/sentence/uploadWav"
               :show-file-list="false"
               :limit="1"
               ref="my_upload"

@@ -376,7 +376,7 @@ export default {
       } else {
         axios({
           method: "get",
-          url: "/rob/client/table/exportTableData",
+          url: "/api/client/table/exportTableData",
           params: {
             tableId: this.query.clientTableId,
           },
