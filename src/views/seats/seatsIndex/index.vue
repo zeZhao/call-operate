@@ -91,8 +91,9 @@ export default {
     // 标签名称验证
     var tagNameValidator = (rule, value, callback) => {
       if (value) {
-        if (/[\u4E00-\u9FA5]/g.test(value)) {
-          callback(new Error("工号不能输入汉字!"));
+        let test = /^[\da-z]+$/i.test(value)
+        if (!test) {
+          callback(new Error("工号只能输入字母、数字!"));
         } else {
           callback();
         }
