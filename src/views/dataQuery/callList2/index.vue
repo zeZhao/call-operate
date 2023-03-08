@@ -237,7 +237,7 @@ export default {
           this._setDefaultValue(
             this.searchFormConfig,
             res.data.records,
-            "supplyId",
+            "agentId",
             "corpId",
             "corpName"
           );
@@ -245,7 +245,7 @@ export default {
           this._setDefaultValue(
             this.searchFormConfig,
             res.data.records,
-            "agentId",
+            "supplyId",
             "corpId",
             "corpName"
           );
