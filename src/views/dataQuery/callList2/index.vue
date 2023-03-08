@@ -191,8 +191,9 @@ export default {
         { type: "select", label: "代理商账户", key: "agentId", optionData:[] },
         { type: "input", label: "挂机原因", key: "hangupCause" },
         { type: "input", label: "通话时长>", key: "talkDuration" },
-        { type: "date", label: "开始时间", key: "startTime" },
-        { type: "date", label: "终止时间", key: "endTime" },
+        // { type: "datetime", label: "开始时间", key: "startTime" },
+        // { type: "datetime", label: "终止时间", key: "endTime" },
+        { type: "datetime", label: "导入时间", key: ["","startTime","endTime"] },
       ],
       //搜索框数据
       searchParam: {},
@@ -215,43 +216,34 @@ export default {
   },
   created() {},
   mounted() {
-    this.queryCorpByCorpType(0)
-    this.queryCorpByCorpType(1)
-    this.queryCorpByCorpType(2)
+    this.getCorpListAll()
+    this.getUserListAll()
+    this.getAgentListAll()
+  },
+  activated(){
+    this.getCorpListAll()
+    this.getUserListAll()
+    this.getAgentListAll()
   },
   computed: {},
   methods: {
-    //获取公司下拉
-    // corpType（0:商家,1:代理商,2:供应商）
-    queryCorpByCorpType(corpType) {
-      this.$http.select.queryCorpByCorpType({ corpType }).then((res) => {
-        if(corpType === 0){
-          this._setDefaultValue(
-            this.searchFormConfig,
-            res.data.records,
-            "userId",
-            "corpId",
-            "corpName"
-          );
-        }else if(corpType === 1){
-          this._setDefaultValue(
-            this.searchFormConfig,
-            res.data.records,
-            "agentId",
-            "corpId",
-            "corpName"
-          );
-        }else{
-          this._setDefaultValue(
-            this.searchFormConfig,
-            res.data.records,
-            "supplyId",
-            "corpId",
-            "corpName"
-          );
-        }
-        
-      });
+    //获取供应商账户
+    getCorpListAll(){
+      this.$http.select.corpListAll({}).then(res=>{
+        this._setDefaultValue(this.searchFormConfig,res.data.records,'supplyId','supplyId','userName')
+      })
+    },
+    // 获取商户账户
+    getUserListAll(){
+      this.$http.select.userListAll({}).then(res=>{
+        this._setDefaultValue(this.searchFormConfig,res.data.records,'userId','userId','userName')
+      })
+    },
+    // 获取代理商账户
+    getAgentListAll(){
+      this.$http.select.agentListAll({}).then(res=>{
+        this._setDefaultValue(this.searchFormConfig,res.data.records,'agentId','agentId','userName')
+      })
     },
     /*
       试听
