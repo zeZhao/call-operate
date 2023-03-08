@@ -185,6 +185,7 @@ export default {
           label: "分机号",
           key: "ext",
           isShow: true,
+          disabled:true,
           defaultValue: "",
         },
         {
