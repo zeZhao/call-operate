@@ -118,9 +118,19 @@ export default {
       rightDefaultCheckedList: [],
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商户名称", key: "corpId" },
-        { type: "input", label: "技能组流程", key: "taskName" },
-        { type: "input", label: "满意度流程", key: "extId" },
+        { type: "select", label: "商户名称", key: "corpId", optionData: [] },
+        // {
+        //   type: "select",
+        //   label: "技能组流程",
+        //   key: "taskName",
+        //   optionData: [],
+        // },
+        {
+          type: "select",
+          label: "满意度流程",
+          key: "satisfactionIvrId",
+          optionData: [],
+        },
         { type: "input", label: "技能组名称", key: "extId" },
         {
           type: "select",
@@ -275,10 +285,11 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType();
+    this.listScene();
   },
   computed: {},
   methods: {
-    // // 获取服务流程/班组
+    // // 获取满意度流程
     listScene(corpId) {
       var data = {
         data: {
@@ -289,13 +300,23 @@ export default {
       this.$http.outbound.listScene(data).then((res) => {
         if (res.state === "200") {
           this.sceneList = res.data;
-          this._setDefaultValue(
-            this.formConfig,
-            res.data,
-            "satisfactionIvrId",
-            "sceneId",
-            "sceneName"
-          );
+          if (corpId) {
+            this._setDefaultValue(
+              this.formConfig,
+              res.data,
+              "satisfactionIvrId",
+              "sceneId",
+              "sceneName"
+            );
+          } else {
+            this._setDefaultValue(
+              this.searchFormConfig,
+              res.data,
+              "satisfactionIvrId",
+              "sceneId",
+              "sceneName"
+            );
+          }
         } else {
           this.$message.error(res.msg);
         }
@@ -306,6 +327,13 @@ export default {
       this.$http.select.queryCorpByCorpType({ corpType: 0 }).then((res) => {
         this._setDefaultValue(
           this.formConfig,
+          res.data.records,
+          "corpId",
+          "corpId",
+          "corpName"
+        );
+        this._setDefaultValue(
+          this.searchFormConfig,
           res.data.records,
           "corpId",
           "corpId",
@@ -349,13 +377,8 @@ export default {
             });
             checkList.push(item.attendId);
           });
-          this.setAttendIdList(arr)
-            this._setDefaultValue(
-              this.formConfig,
-              [],
-              "attendIdList",
-              checkList
-            );
+          this.setAttendIdList(arr);
+          this._setDefaultValue(this.formConfig, [], "attendIdList", checkList);
         }
         // console.log(res);
       });
@@ -399,8 +422,8 @@ export default {
     _mxCreate() {
       this.addChannel = true;
       this.formTit = "新增";
-      this.setAttendIdList([])
-      this.attendSkillGroupList = []
+      this.setAttendIdList([]);
+      this.attendSkillGroupList = [];
       this._setDefaultValue(this.formConfig, [], "attendIdList", []);
       setTimeout(() => {
         this.$refs.formItem.resetForm();

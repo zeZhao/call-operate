@@ -123,12 +123,10 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         {
-          type: "input",
+          type: "select",
           label: "供应商名称",
           key: "supplyId",
           optionData: [
-            { key: "1", value: "有效" },
-            { key: "2", value: "无效" },
           ],
         },
         {
@@ -143,7 +141,7 @@ export default {
             { key: 4, value: "国际" },
           ],
         },
-        { type: "input", label: "商家名称", key: "userName" },
+        { type: "select", label: "商家名称", key: "corpId",optionData:[] },
         {
           type: "select",
           label: "号码状态",
@@ -155,18 +153,15 @@ export default {
           ],
         },
         {
-          type: "input",
+          type: "select",
           label: "线路名称",
-          key: "lineName",
+          key: "lineId",
           optionData: [
-            { key: "1", value: "商家" },
-            { key: "2", value: "代理商" },
-            { key: "3", value: "供应商" },
           ],
         },
         { type: "input", label: "号码", key: "operaNumber" },
-        { type: "inputNum", label: "商户账号", key: "userId" },
-        { type: "input", label: "号码归属地区", key: "privince" },
+        { type: "select", label: "商户账号", key: "userId",optionData:[] },
+        { type: "select", label: "号码归属地区", key: "privince",optionData:[] },
         // {
         //   type: "daterange",
         //   label: "开户时间",
@@ -395,6 +390,15 @@ export default {
     this.queryCorpByCorpType();
     this.getUser();
     this.provincecity();
+    this.linecfgList();
+    this.listAll();
+  },
+  activated(){
+    this.queryCorpByCorpType();
+    this.getUser();
+    this.provincecity();
+    this.linecfgList();
+    this.listAll();
   },
   computed: {},
   methods: {
@@ -437,18 +441,36 @@ export default {
           "corpId",
           "corpName"
         );
+        this._setDefaultValue(
+          this.searchFormConfig,
+          res.data.records,
+          "corpId",
+          "corpId",
+          "corpName"
+        );
       });
     },
     // 获取分配号码商家账号下拉数据
     listAll(corpId) {
       this.$http.corpUser.list({ enablePage: false, corpId }).then((res) => {
-        this._setDefaultValue(
+        if(corpId){
+          this._setDefaultValue(
           this.allocationConfig,
           res.data.records,
           "userId",
           "userId",
           "userName"
         );
+        }else{
+          this._setDefaultValue(
+          this.searchFormConfig,
+          res.data.records,
+          "userId",
+          "userId",
+          "userName"
+        );
+        }
+        
       });
     },
     // 分配号码下拉操作处理
@@ -636,6 +658,13 @@ export default {
           "corpId",
           "corpName"
         );
+        this._setDefaultValue(
+          this.searchFormConfig,
+          res.data.records,
+          "supplyId",
+          "corpId",
+          "corpName"
+        );
       });
     },
     // 新增号码获取供应商账户
@@ -654,7 +683,8 @@ export default {
     linecfgList(supplyId) {
       this.$http.select.linecfgList({ supplyId }).then((res) => {
         this.lineList = res.data;
-        this._setDefaultValue(
+        if(supplyId){
+          this._setDefaultValue(
           this.formConfig,
           res.data,
           "lineId",
@@ -668,6 +698,16 @@ export default {
           "lineId",
           "lineName"
         );
+        }else{
+          this._setDefaultValue(
+          this.searchFormConfig,
+          res.data,
+          "lineId",
+          "lineId",
+          "lineName"
+        );
+        }
+        
       });
     },
     /**
@@ -845,6 +885,13 @@ export default {
         );
         this._setDefaultValue(
           this.allocationConfig,
+          res.data,
+          "privince",
+          "province",
+          "province"
+        );
+        this._setDefaultValue(
+          this.searchFormConfig,
           res.data,
           "privince",
           "province",

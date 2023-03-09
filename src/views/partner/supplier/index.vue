@@ -114,7 +114,7 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         { type: "select", label: "公司名称", key: "corpId", optionData: [] },
-        { type: "input", label: "费率", key: "rateName", optionData: [] },
+        { type: "select", label: "费率", key: "rateName", optionData: [] },
         // { type: "input", label: "代理商", key: "corpName" },
         // { type: "input", label: "定购套餐", key: "corpName" },
         {
@@ -369,6 +369,7 @@ export default {
           "rateId",
           "rateName"
         );
+        this._setDefaultValue(this.searchFormConfig,res.data.list,'rateName','rateName','rateName')
         // this._setDefaultValue(this.searchFormConfig,res.data.list,'rateId','rateId','rateName')
       });
     },

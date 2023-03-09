@@ -42,6 +42,10 @@ export default {
     linecfgList(data) {
       return request('/linecfg/getList', 'get', data)
     },
+    // 获取技能组下拉
+    skillGroupListAll(data) {
+      return request('/skillGroup/listAll', 'get', data)
+    },
   },
   //账户
   sysUser: {

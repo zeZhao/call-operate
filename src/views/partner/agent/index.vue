@@ -113,7 +113,7 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         { type: "input", label: "公司名称", key: "corpName" },
-        { type: "input", label: "费率", key: "rateName" },
+        { type: "select", label: "费率", key: "rateName",optionData:[] },
         // { type: "input", label: "代理商", key: "corpName" },
 
         // { type: "input", label: "定购套餐", key: "corpName" },
@@ -376,6 +376,7 @@ export default {
           "rateId",
           "rateName"
         );
+        this._setDefaultValue(this.searchFormConfig,res.data.list,'rateName','rateName','rateName')
       });
     },
     //获取通话套餐

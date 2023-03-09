@@ -104,7 +104,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商家账号", key: "userName" },
+        { type: "select", label: "商家账号", key: "userName",optionData:[] },
         { type: "input", label: "座席名称", key: "attendName" },
         { type: "inputNum", label: "工号", key: "jobNumber" },
         {
@@ -112,8 +112,6 @@ export default {
           label: "角色",
           key: "attendroleId",
           optionData: [
-            { key: 2, value: "普通坐席" },
-            { key: 1, value: "企业管理员" },
           ],
         },
         {
@@ -121,9 +119,6 @@ export default {
           label: "归属技能组",
           key: "skillgroupId",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "技能组A" },
-            { key: "3", value: "技能组B" },
           ],
         },
         {
@@ -233,11 +228,13 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType();
-    // this.getRoleList();
+    this.getRoleList();
+    this.skillGroupListAll();
   },
   activated() {
     this.queryCorpByCorpType();
-    // this.getRoleList();
+    this.getRoleList();
+    this.skillGroupListAll();
   },
   computed: {},
   methods: {
@@ -272,7 +269,18 @@ export default {
         }
       }
     },
-    //获取公司下拉
+    skillGroupListAll(){
+      this.$http.select.skillGroupListAll().then(res=>{
+        this._setDefaultValue(
+          this.searchFormConfig,
+          res.data,
+          "skillgroupId",
+          "sgId",
+          "skillGroupName"
+        );
+      })
+    },
+    //获取商家账户下拉
     queryCorpByCorpType() {
       this.$http.select.userListAll({ corpType: 0 }).then((res) => {
         this.userList = res.data.records;
@@ -283,18 +291,37 @@ export default {
           "userId",
           "userName"
         );
+        this._setDefaultValue(
+          this.searchFormConfig,
+          res.data.records,
+          "userName",
+          "userName",
+          "userName"
+        );
       });
     },
     //获取坐席角色
     getRoleList(corpId) {
       this.$http.role.list({ enablePage: false, corpId}).then((res) => {
-        this._setDefaultValue(
+        if(corpId){
+          this._setDefaultValue(
           this.formConfig,
           res.data.list,
           "attendroleId",
           "roleId",
           "roleName"
         );
+        }else{
+          this._setDefaultValue(
+          this.searchFormConfig,
+          res.data.list,
+          "attendroleId",
+          "roleId",
+          "roleName"
+        );
+        }
+        
+        
       });
     },
     _mxArrangeSubmitData(formData) {

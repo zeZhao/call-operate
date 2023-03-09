@@ -166,9 +166,9 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "供应商名称", key: "corpName" },
+        { type: "select", label: "供应商名称", key: "corpId",optionData:[] },
         { type: "input", label: "线路名称", key: "corpNames" },
-        { type: "inputNum", label: "供应商账户", key: "supplyId" },
+        { type: "select", label: "供应商账户", key: "supplyId",optionData:[] },
         {
           type: "select",
           label: "对接方式",
@@ -202,11 +202,8 @@ export default {
         {
           type: "select",
           label: "落地省份",
-          key: "city",
+          key: "province",
           optionData: [
-            { key: "1", value: "全部" },
-            { key: "2", value: "停用" },
-            { key: "3", value: "有效" },
           ],
         },
         {
@@ -373,6 +370,8 @@ export default {
     this.queryCorpByCorpType()
     this.provincecity()
     this.callruleGet()
+    this.corpListAll()
+    
   },
   computed: {},
   methods: {
@@ -410,16 +409,22 @@ export default {
     queryCorpByCorpType(){
       this.$http.select.queryCorpByCorpType({corpType:2}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data.records,'corpId','corpId','corpName')
+        this._setDefaultValue(this.searchFormConfig,res.data.records,'corpId','corpId','corpName')
       })
     },
     corpListAll(corpId){
       this.$http.select.corpListAll({corpId}).then(res=>{
-        this._setDefaultValue(this.formConfig,res.data.records,'supplyId','supplyId','userName')
+        if(corpId){
+          this._setDefaultValue(this.formConfig,res.data.records,'supplyId','supplyId','userName')
+        }else{
+          this._setDefaultValue(this.searchFormConfig,res.data.records,'supplyId','supplyId','userName')
+        }
       })
     },
     provincecity(province){
       this.$http.select.provincecity({province}).then(res=>{
         this._setDefaultValue(this.formConfig,res.data,'province','province','province')
+        this._setDefaultValue(this.searchFormConfig,res.data,'province','province','province')
       })
     },
     /**

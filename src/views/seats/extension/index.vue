@@ -96,7 +96,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "input", label: "商家账号", key: "userName" },
+        { type: "select", label: "商家账号", key: "userName",optionData:[] },
         { type: "input", label: "分机号", key: "ext" },
         {
           type: "select",
@@ -307,7 +307,7 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType();
-    this.linecfgList();
+    this.linecfgList();select.userListAll
     this.listAllAttend();
   },
   activated() {
@@ -317,7 +317,7 @@ export default {
   },
   computed: {},
   methods: {
-    //获取公司下拉
+    //获取商家账户下拉
     queryCorpByCorpType() {
       this.$http.select.userListAll({}).then((res) => {
         this.userList = res.data.records;
@@ -326,6 +326,13 @@ export default {
           res.data.records,
           "userId",
           "userId",
+          "userName"
+        );
+        this._setDefaultValue(
+          this.searchFormConfig,
+          res.data.records,
+          "userName",
+          "userName",
           "userName"
         );
       });
