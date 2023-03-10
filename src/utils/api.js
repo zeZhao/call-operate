@@ -46,6 +46,10 @@ export default {
     skillGroupListAll(data) {
       return request('/skillGroup/listAll', 'get', data)
     },
+    // 获取外呼任务下拉
+    listTask(data) {
+      return request('/callTask/listTask', 'get', data)
+    },
   },
   //账户
   sysUser: {

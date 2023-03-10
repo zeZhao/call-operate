@@ -17,14 +17,44 @@
               placeholder="请选择场商户名称"
             >
               <el-option
-                v-for="(item, index) in clientList"
+                 v-for="(item, index) in clientList"
                 :label="item.corpName"
                 :value="item.corpId"
                 :key="index"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="场景名称：" v-if="!userType">
+          <el-form-item label="任务类型：">
+            <el-select v-model="quertForm.taskType" clearable placeholder="请选择任务类型">
+              <el-option label="自动语音" value="1"></el-option>
+              <el-option label="呼通后转人工" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="任务状态：">
+            <el-select v-model="quertForm.state" clearable placeholder="请选择任务状态">
+              <el-option label="已停止" value="1"></el-option>
+              <el-option label="运行中" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="任务名称：">
+            <el-input v-model="quertForm.taskName" placeholder="请输入任务名称"></el-input>
+          </el-form-item>
+          <el-form-item label="主叫/线路：" prop="extId">
+              <el-select
+                v-model="quertForm.extId"
+                clearable
+                placeholder="请选择主叫/线路"
+                style="width: 200px"
+              >
+                <el-option
+                  v-for="(item, index) in extList"
+                  :label="item.extName"
+                  :value="item.extId"
+                  :key="index"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          <!-- <el-form-item label="场景名称：" v-if="!userType">
             <el-select
               v-model="quertForm.sceneId"
               clearable
@@ -37,8 +67,8 @@
                 :key="index"
               ></el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="被叫号码：">
+          </el-form-item> -->
+          <!-- <el-form-item label="被叫号码：">
             <el-input
               v-model="quertForm.phone"
               clearable
@@ -56,7 +86,7 @@
               end-placeholder="结束日期"
               :default-time="['00:00:00', '23:59:59']"
             ></el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <!-- <el-form-item label="商户ID：" v-if="!userType">
             <el-input v-model="quertForm.corpId" clearable placeholder="请输入商户ID"></el-input>
 
@@ -611,21 +641,11 @@ export default {
       subInbound: "1",
       // 搜索条件
       quertForm: {
-        sceneId: "",
+        taskType: "",
         corpId: "",
-        campaignName: "",
-        phone: "",
-        status: "",
-        startEndTime: [
-          new Date(
-            new Date(new Date().toLocaleDateString()).getTime() -
-              24 * 60 * 60 * 1000 * 6
-          ),
-          new Date(
-            new Date(new Date().toLocaleDateString()).getTime() +
-              (24 * 60 * 60 * 1000 - 1)
-          ),
-        ],
+        state: "",
+        taskName: "",
+        extId: "",
       },
       tableData: [],
       querySceneData: [],
@@ -797,6 +817,7 @@ export default {
     this.List();
 
     this.listClient();
+    this.getExtList();
     this.userType = false;
   },
   mounted() {},
@@ -804,6 +825,7 @@ export default {
   activated(){
     this.List();
     this.listClient();
+    this.getExtList();
   },
 
   components: {},
@@ -1289,27 +1311,8 @@ export default {
           pageNumber: self.page - 1,
           pageSize: self.size,
           inboundConfig: {
-            corpId: self.quertForm.corpId,
-            mobile: self.quertForm.phone,
-            sceneId: self.quertForm.sceneId,
-            startTime:
-              self.quertForm.startEndTime.length > 0
-                ? new Date(self.quertForm.startEndTime[0]).Format(
-                    "yyyy-MM-dd hh:mm:ss"
-                  )
-                : new Date(
-                    new Date(new Date().toLocaleDateString()).getTime() -
-                      24 * 60 * 60 * 1000 * 6
-                  ),
-            endTime:
-              self.quertForm.startEndTime.length > 0
-                ? new Date(self.quertForm.startEndTime[1]).Format(
-                    "yyyy-MM-dd hh:mm:ss"
-                  )
-                : new Date(
-                    new Date(new Date().toLocaleDateString()).getTime() +
-                      (24 * 60 * 60 * 1000 - 1)
-                  ),
+            ...self.quertForm
+            
           },
         },
         version: "1.0",

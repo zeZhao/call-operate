@@ -36,10 +36,10 @@
               clearable
               placeholder="请选择状态"
             >
-              <el-option label="待提审" value="1"></el-option>
-              <el-option label="待审核" value="2"></el-option>
-              <el-option label="已通过" value="3"></el-option>
-              <el-option label="已拒绝" value="4"></el-option>
+              <el-option label="有效" value="1"></el-option>
+              <el-option label="停用" value="2"></el-option>
+              <!-- <el-option label="已通过" value="3"></el-option>
+              <el-option label="已拒绝" value="4"></el-option> -->
             </el-select>
           </el-form-item>
           <!-- <el-form-item label="审核时间：">

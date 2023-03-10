@@ -59,7 +59,7 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         { type: "select", label: "公司名称", key: "corpId", optionData: [] },
-        { type: "input", label: "任务名称", key: "taskName" },
+        { type: "select", label: "任务名称", key: "taskId",optionData:[] },
         { type: "input", label: "外呼号码", key: "mobile" },
         {
           type: "select",
@@ -72,8 +72,9 @@ export default {
           ],
         },
         { type: "input", label: "通话时长>", key: "talkDuration" },
-        { type: "date", label: "导入开始时间", key: "startTime" },
-        { type: "date", label: "导入终止时间", key: "endTime" },
+        { type: "datetime", label: "导入时间", key: ["","startTime","endTime"] },
+        // { type: "date", label: "导入开始时间", key: "startTime" },
+        // { type: "date", label: "导入终止时间", key: "endTime" },
         // {
         //   type: "select",
         //   label: "签名",
@@ -101,19 +102,31 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType();
+    this.listTask();
   },
   computed: {},
   methods: {
     //获取公司下拉
     // corpType（0:商家,1:代理商,2:供应商）
     queryCorpByCorpType(corpType) {
-      this.$http.select.queryCorpByCorpType({ corpType: "" }).then((res) => {
+      this.$http.select.queryCorpByCorpType({ corpType: "0" }).then((res) => {
         this._setDefaultValue(
           this.searchFormConfig,
           res.data.records,
           "corpId",
           "corpId",
           "corpName"
+        );
+      });
+    },
+    listTask() {
+      this.$http.select.listTask().then((res) => {
+        this._setDefaultValue(
+          this.searchFormConfig,
+          res.data.records,
+          "taskId",
+          "taskId",
+          "taskName"
         );
       });
     },

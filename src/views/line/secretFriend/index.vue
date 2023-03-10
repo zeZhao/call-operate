@@ -125,7 +125,7 @@ export default {
         {
           type: "select",
           label: "供应商名称",
-          key: "supplyId",
+          key: "corpId",
           optionData: [
           ],
         },
@@ -141,7 +141,7 @@ export default {
             { key: 4, value: "国际" },
           ],
         },
-        { type: "select", label: "商家名称", key: "corpId",optionData:[] },
+        { type: "select", label: "商家名称", key: "corpUserId",optionData:[] },
         {
           type: "select",
           label: "号码状态",
@@ -444,7 +444,7 @@ export default {
         this._setDefaultValue(
           this.searchFormConfig,
           res.data.records,
-          "corpId",
+          "corpUserId",
           "corpId",
           "corpName"
         );
@@ -661,7 +661,7 @@ export default {
         this._setDefaultValue(
           this.searchFormConfig,
           res.data.records,
-          "supplyId",
+          "corpId",
           "corpId",
           "corpName"
         );

@@ -25,7 +25,7 @@
           </el-form-item>
           <el-form-item label="数据表名称：">
             <el-input
-              v-model="query.clientTableName"
+              v-model="query.clientTableCnName"
               placeholder="输入数据表名称"
             ></el-input>
           </el-form-item>
@@ -255,7 +255,7 @@ export default {
       isNew: false,
       query: {
         clientName: "",
-        clientTableName: "",
+        clientTableCnName: "",
       },
       // 新增 验证
       newRules: {
@@ -545,7 +545,7 @@ export default {
     },
     reset(){
       this.query.clientName = ''
-      this.query.clientTableName = ''
+      this.query.clientTableCnName = ''
     }
   },
 };

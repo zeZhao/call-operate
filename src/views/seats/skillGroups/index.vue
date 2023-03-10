@@ -131,7 +131,7 @@ export default {
           key: "satisfactionIvrId",
           optionData: [],
         },
-        { type: "input", label: "技能组名称", key: "extId" },
+        { type: "input", label: "技能组名称", key: "skillGroupName" },
         {
           type: "select",
           label: "座席分配策略",
