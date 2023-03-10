@@ -389,11 +389,11 @@ export default {
           let clientName = this.clientList.filter(
             (item) => item.corpId == clientId
           )[0].corpName;
-          console.log(clientName,'========clientName')
           let clientTableCnName = this.clientTableList.filter(
             (item) => item.id == clientTableId
           )[0].clientTableCnName;
-          let blob = new Blob([res], {
+          console.log(res,'======')
+          let blob = new Blob([res.data], {
             type: "application/zip",
           });
           let url = window.URL.createObjectURL(blob);
