@@ -343,7 +343,7 @@ export default {
           headers:{token:this.token},
           responseType: "blob",
         }).then((res) => {
-          let corpName = this.clientList.filter(
+          let clientName = this.clientList.filter(
             (item) => item.corpId == clientId
           )[0].corpName;
           let clientTableCnName = this.clientTableList.filter(
@@ -358,7 +358,7 @@ export default {
           aLink.href = url;
           aLink.setAttribute(
             "download",
-            `${corpName}（商户）-${clientTableCnName}-表数据模板.xlsx`
+            `${clientName}（商户）-${clientTableCnName}-表数据模板.xlsx`
           );
           document.body.appendChild(aLink);
           aLink.click();
@@ -376,7 +376,7 @@ export default {
       } else {
         axios({
           method: "get",
-          url: "/api/api/client/table/exportTableData",
+          url: "/api/client/table/exportTableData",
           params: {
             tableId: this.query.clientTableId,
           },
@@ -385,11 +385,11 @@ export default {
           },
           responseType: "blob",
         }).then((res) => {
-          // if(res.cod)
           const { clientId, clientTableId } = this.query;
           let clientName = this.clientList.filter(
             (item) => item.corpId == clientId
-          )[0].clientName;
+          )[0].corpName;
+          console.log(clientName,'========clientName')
           let clientTableCnName = this.clientTableList.filter(
             (item) => item.id == clientTableId
           )[0].clientTableCnName;
@@ -402,7 +402,7 @@ export default {
           aLink.href = url;
           aLink.setAttribute(
             "download",
-            `${corpName}（商户）-${clientTableCnName}-表数据.zip`
+            `${clientName}（商户）-${clientTableCnName}-表数据.zip`
           );
           document.body.appendChild(aLink);
           aLink.click();
