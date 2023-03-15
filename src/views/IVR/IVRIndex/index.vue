@@ -1079,7 +1079,7 @@ export default {
       }
       var data = {
         data: {
-          pageNumber: self.page - 1,
+          pageNumber: self.page,
           pageSize: self.size,
 
           scene: {

@@ -1308,8 +1308,8 @@ export default {
       }
       var data = {
         data: {
-          pageNumber: self.page - 1,
-          pageSize: self.size,
+          current  : self.page,
+          size  : self.size,
           inboundConfig: {
             ...self.quertForm
             
