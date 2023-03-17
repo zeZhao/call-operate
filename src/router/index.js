@@ -370,6 +370,22 @@ const constRouterList = [
           title: '角色及权限',
         },
       },
+      {
+        path: '/system/callDataImportLog',
+        name: 'callDataImportLog',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/system/callDataImportLog/index.vue'),
+        meta: {
+          title: '导入记录',
+        },
+      },
+      {
+        path: '/system/operationLog',
+        name: 'operationLog',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/system/operationLog/index.vue'),
+        meta: {
+          title: '操作记录',
+        },
+      },
       
     ]
   },

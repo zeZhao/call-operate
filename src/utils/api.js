@@ -906,4 +906,14 @@ export default {
     //   return request('/attend/role/permissions/list', 'post', data)
     // },
   },
+  logs:{
+    //导入记录
+    callDataImportLog(data){
+      return request(`/callDataImportLog/list`, 'post', data)
+    },
+    //操作日志记录
+    operationLog(data){
+      return request(`/operationLog/list`, 'post', data)
+    },
+  },
 }
