@@ -10,6 +10,7 @@
       border
       highlight-current-row
       style="width: 100%"
+      :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center"/>
       

@@ -5,7 +5,7 @@
       @search="_mxDoSearch"
       :add="false"
     ></Search>
-    <el-table :data="listData" border highlight-current-row style="width: 100%">
+    <el-table :data="listData" border highlight-current-row style="width: 100%" :height="tableHeight">
       <el-table-column label="序号" type="index" align="center" />
       <el-table-column prop="serverType" label="项目类型">
         <template slot-scope="{ row }">
@@ -34,10 +34,10 @@
       </el-table-column>
       <el-table-column prop="module" label="操作模块" />
       <el-table-column prop="remark" label="操作描述" />
-      <el-table-column prop="requParam" label="请求参数" show-overflow-tooltip />
+      <el-table-column prop="requParam" label="请求参数" show-overflow-tooltip/>
       <el-table-column prop="respParam" label="返回参数" show-overflow-tooltip/>
-      <el-table-column prop="excName" label="异常名称" />
-      <el-table-column prop="excMessage" label="异常信息" />
+      <el-table-column prop="excName" label="异常名称" show-overflow-tooltip/>
+      <el-table-column prop="excMessage" label="异常信息" show-overflow-tooltip/>
       <el-table-column prop="operatorId" label="操作人ID" />
       <el-table-column prop="operatorName" label="操作人名称" />
       <el-table-column prop="method" label="操作方法" show-overflow-tooltip />

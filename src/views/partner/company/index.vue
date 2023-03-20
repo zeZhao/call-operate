@@ -16,6 +16,7 @@
       <el-table-column prop="corpName" label="公司名称" width="120" />
       <el-table-column prop="shortName" label="公司简称" />
       <el-table-column prop="corpTypename" label="类别" />
+      <el-table-column prop="concurrency" label="并发数" />
       <el-table-column prop="sells" label="销售" />
       <el-table-column prop="linkman" label="联系人" />
       <el-table-column prop="tel" label="联系电话"  width="150"/>
@@ -63,7 +64,7 @@
         :btnTxt="formTit"
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
-        @choose="choose"
+        @selectChange="selectChange"
       ></FormItem>
     </el-dialog>
   </div>
@@ -149,6 +150,14 @@ export default {
         },
         {
           type: "input",
+          label: "并发数",
+          key: "concurrency",
+          defaultValue: "",
+          isShow: true,
+          colSpan:12
+        },
+        {
+          type: "input",
           label: "销售",
           key: "sells",
           defaultValue: "",
@@ -221,7 +230,66 @@ export default {
               }
             })
           })
-    }
+    },
+    selectChange({ val, item }){
+      if(item.key === 'corpType'){
+        if(val === 0){
+          this._setDisplayShow(this.formConfig,'concurrency',false)
+        }else{
+          this._setDisplayShow(this.formConfig,'concurrency',true)
+        }
+        
+      }
+    },
+    /**
+     * 创建表单
+     * @param row  当前行数据
+     * @param id  当前行ID
+     * @private
+     */
+
+    _mxCreate() {
+      this.addChannel = true;
+      this.formTit = "新增";
+      setTimeout(() => {
+        this.$refs.formItem.resetForm();
+      }, 0);
+      this._setDisplayShow(this.formConfig,'concurrency',true)
+    },
+    /**
+     * 编辑表单
+     * @param row  当前行数据
+     * @param ID  当前行ID
+     * @private
+     */
+
+    _mxEdit(row, ID) {
+      row = this._mxArrangeEditData(row);
+      this.id = row[ID];
+      this.editId = ID;
+      this.formTit = "修改";
+      this.formConfig.forEach(item => {
+        for (let key in row) {
+          if (item.key === key && row[key] !== "-") {
+            this.$set(item, "defaultValue", row[key]);
+          }
+        }
+        if (!Object.keys(row).includes(item.key)) {
+          this.$set(item, "defaultValue", "");
+        }
+        if(item.key === 'corpType'){
+          if(item.defaultValue === 0){
+          this._setDisplayShow(this.formConfig,'concurrency',false)
+          }else{
+            this._setDisplayShow(this.formConfig,'concurrency',true)
+          }
+        }
+      });
+      setTimeout(() => {
+        this.$refs.formItem.clearValidate();
+      }, 0);
+      this.addChannel = true;
+    },
   },
   watch: {},
 };
