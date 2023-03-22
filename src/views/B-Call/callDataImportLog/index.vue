@@ -17,6 +17,7 @@
       <el-table-column prop="taskName" label="任务名称" />
       <el-table-column prop="sceneName" label="IVR名称" />
       <el-table-column prop="folder" label="批次ID" show-overflow-tooltip />
+      <el-table-column prop="failDesc" label="失败原因" show-overflow-tooltip />
       <el-table-column prop="orgFileName" label="原始导入文件" show-overflow-tooltip/>
       <el-table-column prop="orgRecordCount" label="原始记录数" />
       <el-table-column prop="importState" label="导入状态" >

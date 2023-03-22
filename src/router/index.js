@@ -256,6 +256,15 @@ const constRouterList = [
           title: '外呼数据管理',
         },
       },
+
+      {
+        path: '/B-Call/callDataImportLog',
+        name: 'callDataImportLog',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/B-Call/callDataImportLog/index.vue'),
+        meta: {
+          title: '导入记录',
+        },
+      },
     ]
   },
   {
@@ -368,14 +377,6 @@ const constRouterList = [
         component: () => import(/* webpackChunkName: "about" */ '@/views/system/permission/index.vue'),
         meta: {
           title: '角色及权限',
-        },
-      },
-      {
-        path: '/system/callDataImportLog',
-        name: 'callDataImportLog',
-        component: () => import(/* webpackChunkName: "about" */ '@/views/system/callDataImportLog/index.vue'),
-        meta: {
-          title: '导入记录',
         },
       },
       {
