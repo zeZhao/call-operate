@@ -95,6 +95,11 @@ export default {
     this.listTask()
     this.listScene()
   },
+  activated(){
+    this.queryCorpByCorpType()
+    this.listTask()
+    this.listScene()
+  },
   computed: {},
   methods: {
     //获取公司下拉
