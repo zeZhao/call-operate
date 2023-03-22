@@ -34,7 +34,7 @@ export default {
     attendlistAll(data) {
       return request('/attend/listAll', 'post', data)
     },
-    // 获取IVR流程下拉
+    // 获取技能组下拉
     IVRlistAll(data) {
       return request('/skillGroup/listAll', 'get', data)
     },
@@ -42,13 +42,13 @@ export default {
     linecfgList(data) {
       return request('/linecfg/getList', 'get', data)
     },
-    // 获取技能组下拉
-    skillGroupListAll(data) {
-      return request('/skillGroup/listAll', 'get', data)
-    },
     // 获取外呼任务下拉
     listTask(data) {
       return request('/callTask/listTask', 'get', data)
+    },
+     //  IVR下拉数据
+    listScene(params) {
+      return request("/scene/listScene", 'post', params);
     },
   },
   //账户
@@ -851,7 +851,7 @@ export default {
     getSceneVariable(params) {
       return request("/call/data/getSceneVariable", 'post' , params);
     },
-    //  服务流程/班组
+    //  IVR下拉数据
     listScene(params) {
       return request("/scene/listScene", 'post', params);
     },

@@ -13,10 +13,9 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center"/>
-      
-      <el-table-column prop="corpId" label="商户ID" />
-      <el-table-column prop="taskId" label="任务ID" />
-      <el-table-column prop="sceneId" label="IVR的ID" />
+      <el-table-column prop="corpName" label="商户名称" />
+      <el-table-column prop="taskName" label="任务名称" />
+      <el-table-column prop="sceneName" label="IVR名称" />
       <el-table-column prop="folder" label="批次ID" show-overflow-tooltip />
       <el-table-column prop="orgFileName" label="原始导入文件" show-overflow-tooltip/>
       <el-table-column prop="orgRecordCount" label="原始记录数" />
@@ -66,10 +65,10 @@ export default {
       // 搜索框配置
       
       searchFormConfig: [
-        { type: "input", label: "企业id", key: "corpId", optionData:[] },
+        { type: "select", label: "商户名称", key: "corpId", optionData:[] },
         { type: "input", label: "批次ID", key: "folder", optionData:[] },
-        { type: "input", label: "任务ID", key: "taskId", optionData:[] },
-        { type: "input", label: "IVR的ID", key: "sceneId", optionData:[] },
+        { type: "select", label: "任务名称", key: "taskId", optionData:[] },
+        { type: "select", label: "IVR名称", key: "sceneId", optionData:[] },
         { type: "datetime", label: "上传时间", key: ["","startTime","endTime"] },
       ],
        //搜索框数据
@@ -92,6 +91,8 @@ export default {
   created() {},
   mounted() {
     this.queryCorpByCorpType()
+    this.listTask()
+    this.listScene()
   },
   computed: {},
   methods: {
@@ -102,11 +103,40 @@ export default {
         this._setDefaultValue(
             this.searchFormConfig,
             res.data.records,
-            "userId",
+            "corpId",
             "corpId",
             "corpName"
           );
         
+      });
+    },
+    listTask() {
+      this.$http.select.listTask().then((res) => {
+        this._setDefaultValue(
+            this.searchFormConfig,
+            res.data,
+            "taskId",
+            "taskId",
+            "taskName"
+          );
+      });
+    },
+    listScene() {
+      let params = {
+        data: {
+          corpId:"",
+        },
+        version: "1.0",
+      }
+        
+      this.$http.select.listScene(params).then((res) => {
+        this._setDefaultValue(
+            this.searchFormConfig,
+            res.data,
+            "sceneId",
+            "sceneId",
+            "sceneName"
+          );
       });
     },
   },

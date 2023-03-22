@@ -627,9 +627,14 @@ export default {
       };
       this.$http.scene.updateSceneStatus(data).then((res) => {
         if (res.state == "200") {
+          this.$message({
+            type: "success",
+            message: "操作成功!",
+          });
           this.List();
+          
         } else {
-          self.$message.error(res.msg);
+          this.$message.error(res.msg);
         }
       });
     },

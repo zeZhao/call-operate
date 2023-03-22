@@ -270,7 +270,7 @@ export default {
       }
     },
     skillGroupListAll(){
-      this.$http.select.skillGroupListAll().then(res=>{
+      this.$http.select.IVRlistAll().then(res=>{
         this._setDefaultValue(
           this.searchFormConfig,
           res.data,
