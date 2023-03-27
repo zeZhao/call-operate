@@ -193,6 +193,21 @@ export default {
         },
         {
           type: "input",
+          label: "回调路径",
+          key: "callbackUrl",
+          defaultValue: "",
+          colSpan:12
+        },
+        {
+          type: "radio",
+          label: "是否回调",
+          key: "callbackType",
+          defaultValue: "",
+          optionData:[{key:'1',value:'是'},{key:'0',value:'否'}],
+          colSpan:12
+        },
+        {
+          type: "input",
           label: "地址",
           key: "address",
           defaultValue: "",
