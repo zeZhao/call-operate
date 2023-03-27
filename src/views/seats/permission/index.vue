@@ -178,6 +178,9 @@ export default {
     // this.getSysMenuList();
     this.queryCorpByCorpType();
   },
+  activated(){
+    this.queryCorpByCorpType();
+  },
   computed: {},
   methods: {
     //获取公司下拉
