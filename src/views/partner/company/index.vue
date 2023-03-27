@@ -196,6 +196,7 @@ export default {
           label: "回调路径",
           key: "callbackUrl",
           defaultValue: "",
+          isShow: true,
           colSpan:12
         },
         {
@@ -203,7 +204,8 @@ export default {
           label: "是否回调",
           key: "callbackType",
           defaultValue: "",
-          optionData:[{key:'1',value:'是'},{key:'0',value:'否'}],
+          optionData:[{key:1,value:'是'},{key:0,value:'否'}],
+          isShow: true,
           colSpan:12
         },
         {
@@ -250,8 +252,12 @@ export default {
       if(item.key === 'corpType'){
         if(val === 0){
           this._setDisplayShow(this.formConfig,'concurrency',false)
+          this._setDisplayShow(this.formConfig,'callbackUrl',false)
+          this._setDisplayShow(this.formConfig,'callbackType',false)
         }else{
           this._setDisplayShow(this.formConfig,'concurrency',true)
+          this._setDisplayShow(this.formConfig,'callbackUrl',true)
+          this._setDisplayShow(this.formConfig,'callbackType',true)
         }
         
       }
@@ -295,8 +301,12 @@ export default {
         if(item.key === 'corpType'){
           if(item.defaultValue === 0){
           this._setDisplayShow(this.formConfig,'concurrency',false)
+          this._setDisplayShow(this.formConfig,'callbackUrl',false)
+          this._setDisplayShow(this.formConfig,'callbackType',false)
           }else{
             this._setDisplayShow(this.formConfig,'concurrency',true)
+            this._setDisplayShow(this.formConfig,'callbackUrl',true)
+          this._setDisplayShow(this.formConfig,'callbackType',true)
           }
         }
       });
