@@ -32,8 +32,12 @@
           </el-form-item>
           <el-form-item label="任务状态：">
             <el-select v-model="quertForm.state" clearable placeholder="请选择任务状态">
-              <el-option label="已停止" value="1"></el-option>
-              <el-option label="运行中" value="2"></el-option>
+              <el-option label="未开始" value="3"></el-option>
+              <el-option label="呼叫中" value="4"></el-option>
+              <el-option label="自动暂停" value="5"></el-option>
+              <el-option label="任务完成" value="6"></el-option>
+              <el-option label="任务终止" value="7"></el-option>
+              <el-option label="手动暂停" value="8"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="任务名称：">
