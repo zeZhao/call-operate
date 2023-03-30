@@ -21,6 +21,11 @@
       <el-table-column label="序号" type="index" align="center" />
       <el-table-column prop="corpName" label="公司名称" />
       <el-table-column prop="taskName" label="任务标题" />
+      <el-table-column prop="uploadTime" label="导入时间">
+        <template slot-scope="{ row }">
+          <span>{{ row.uploadTime | dateTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="startTime" label="开始时间">
         <template slot-scope="{ row }">
           <span>{{ row.startTime | dateTime }}</span>
@@ -66,8 +71,8 @@ export default {
           label: "呼叫状态",
           key: "isConnected",
           optionData: [
-            { key: "0", value: "未接通" },
-            { key: "1", value: "接通" },
+            { key: 0, value: "未接通" },
+            { key: 1, value: "接通" },
             { key: "", value: "未开始" },
           ],
         },
@@ -104,6 +109,10 @@ export default {
     this.queryCorpByCorpType();
     this.listTask();
   },
+  activated(){
+    this.queryCorpByCorpType();
+    this.listTask();
+  },
   computed: {},
   methods: {
     //获取公司下拉
@@ -123,7 +132,7 @@ export default {
       this.$http.select.listTask().then((res) => {
         this._setDefaultValue(
           this.searchFormConfig,
-          res.data.records,
+          res.data,
           "taskId",
           "taskId",
           "taskName"

@@ -1322,10 +1322,7 @@ export default {
         data: {
           current  : self.page,
           size  : self.size,
-          inboundConfig: {
-            ...self.quertForm
-            
-          },
+          ...self.quertForm
         },
         version: "1.0",
       };
