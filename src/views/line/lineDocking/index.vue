@@ -167,7 +167,7 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         { type: "select", label: "供应商名称", key: "corpId",optionData:[] },
-        { type: "input", label: "线路名称", key: "corpNames" },
+        { type: "input", label: "线路名称", key: "lineName" },
         { type: "select", label: "供应商账户", key: "supplyId",optionData:[] },
         {
           type: "select",
