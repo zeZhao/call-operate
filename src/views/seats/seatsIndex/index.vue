@@ -21,7 +21,14 @@
       <el-table-column prop="pwd" label="座席密码" />
       <el-table-column prop="roleName" label="角色" />
       <el-table-column prop="skillGroupName" label="归属技能组" />
-      <el-table-column prop="loginMode" label="坐席登录方式">
+      <el-table-column prop="roleType" label="坐席类型">
+        <template slot-scope="{ row }">
+          <span v-if="row.roleType == 0">企业管理员</span>
+          <span v-if="row.roleType == 1">普通坐席</span>
+          <span v-if="row.roleType == 2">班长坐席</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="loginMode" label="坐席登录方式" width="120">
         <template slot-scope="{ row }">
           <span v-if="row.loginMode == 0">人工</span>
           <span v-if="row.loginMode == 1">自动</span>
