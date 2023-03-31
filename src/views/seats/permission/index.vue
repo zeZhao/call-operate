@@ -133,7 +133,7 @@ export default {
         {
           type: "select",
           label: "商户名称",
-          key: "corpId",
+          key: "userId",
           defaultValue: "",
           optionData: [],
         },
@@ -181,7 +181,8 @@ export default {
         label: "name",
       },
       roleId: "",
-      corpId: "",
+      userId: "",
+      userList:[]
     };
   },
   created() {},
@@ -197,10 +198,11 @@ export default {
     //获取公司下拉
     queryCorpByCorpType() {
       this.$http.select.userListAll({}).then((res) => {
+        this.userList = res.data.records
         this._setDefaultValue(
           this.formConfig,
           res.data.records,
-          "corpId",
+          "userId",
           "userId",
           "userName"
         );
@@ -243,11 +245,6 @@ export default {
             }
           }
         });
-        // this.defaultCheckedList = [];
-        // let arr = [];
-        // res.data.forEach((item) => {
-        //   arr.push(item.menuId);
-        // });
         this.$nextTick(() => {
           this.$refs.tree.setCheckedKeys(checkedList);
           this.defaultCheckedList = checkedList;
@@ -255,27 +252,20 @@ export default {
       });
     },
     jurisdictionBtn(row) {
-      const { roleId, corpId } = row;
+      const { roleId, userId } = row;
       this.roleId = roleId;
-      this.corpId = corpId;
+      this.userId = userId;
       this.jurisdictionVisible = true;
       // console.log(row, "====");
 
       this.sysRoleMenuList(roleId);
     },
     submitTree() {
-      // console.log(this.$refs.tree);
-      // console.log(this.$refs.tree.getCheckedKeys());
       let arr = this.$refs.tree.getCheckedKeys();
-      // let sysRoleMenu = [];
-      // arr.forEach((item) => {
-      //   sysRoleMenu.push({ roleId: this.roleId,corpId:this.corpId, menuId: item });
-      // });
-      // console.log({ sysRoleMenu }, ";;;;;;;");
       this.$http.role
         .permissionsPost({
           roleId: this.roleId,
-          corpId: this.corpId,
+          userId: this.userId,
           menuIdList: arr,
         })
         .then((res) => {
@@ -285,6 +275,21 @@ export default {
             // this.$message.s
           }
         });
+    },
+    /**
+     * 提交表单前调整表单内数据
+     * @param formData
+     * @private
+     */
+    _mxArrangeSubmitData(formData) {
+      const {userId} = formData
+      this.userList.forEach(item=>{
+        if(item.userId == userId){
+          formData.corpId = item.corpId
+        }
+      })
+      console.log(formData,'=================')
+      return formData;
     },
   },
   watch: {},

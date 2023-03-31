@@ -377,8 +377,8 @@ export default {
       });
     },
     //获取角色权限下拉
-    getRoleList(corpId) {
-      this.$http.role.list({ enablePage: false, corpId }).then((res) => {
+    getRoleList(userId) {
+      this.$http.role.list({ enablePage: false, userId }).then((res) => {
         this._setDefaultValue(
           this.formConfig,
           res.data.list,

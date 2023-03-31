@@ -308,9 +308,9 @@ export default {
       });
     },
     //获取坐席角色
-    getRoleList(corpId) {
-      this.$http.role.list({ enablePage: false, corpId}).then((res) => {
-        if(corpId){
+    getRoleList(userId) {
+      this.$http.role.list({ enablePage: false, userId}).then((res) => {
+        if(userId){
           this._setDefaultValue(
           this.formConfig,
           res.data.list,
