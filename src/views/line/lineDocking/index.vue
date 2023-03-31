@@ -371,7 +371,12 @@ export default {
     this.provincecity()
     this.callruleGet()
     this.corpListAll()
-    
+  },
+  activated(){
+    this.queryCorpByCorpType()
+    this.provincecity()
+    this.callruleGet()
+    this.corpListAll()
   },
   computed: {},
   methods: {

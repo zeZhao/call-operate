@@ -176,6 +176,9 @@ export default {
     this.getSysMenuList();
     // this.sysRoleMenuList()
   },
+  activated(){
+    this.getSysMenuList();
+  },
   computed: {},
   methods: {
     getSysMenuList() {

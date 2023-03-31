@@ -73,6 +73,9 @@ export default {
   mounted() {
     this.queryCorpByCorpType()
   },
+  activated(){
+    this.queryCorpByCorpType()
+  },
   computed: {},
   methods: {
     //获取公司下拉

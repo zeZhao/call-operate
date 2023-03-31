@@ -287,6 +287,10 @@ export default {
     this.queryCorpByCorpType();
     this.listScene();
   },
+  activated(){
+    this.queryCorpByCorpType();
+    this.listScene();
+  },
   computed: {},
   methods: {
     // // 获取满意度流程
