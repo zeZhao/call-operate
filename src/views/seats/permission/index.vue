@@ -17,6 +17,13 @@
       <el-table-column prop="corpName" label="商家名称" />
       <el-table-column prop="roleName" label="角色名称" />
       <el-table-column prop="remarks" label="描述" />
+      <el-table-column prop="status" label="坐席类型">
+        <template slot-scope="{ row }">
+          <span v-if="row.roleType == 0">企业管理员</span>
+          <span v-if="row.roleType == 1">普通坐席</span>
+          <span v-if="row.roleType == 2">班长坐席</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="status" label="状态">
         <template slot-scope="{ row }">
           <span v-if="row.status == 0">禁用</span>
@@ -272,7 +279,7 @@ export default {
           if (resOk) {
             this.jurisdictionVisible = false;
             this.roleId = "";
-            // this.$message.s
+            this.$message.success('操作成功！')
           }
         });
     },
