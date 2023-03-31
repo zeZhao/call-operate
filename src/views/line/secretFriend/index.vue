@@ -126,8 +126,7 @@ export default {
           type: "select",
           label: "供应商名称",
           key: "corpId",
-          optionData: [
-          ],
+          optionData: [],
         },
         {
           type: "select",
@@ -141,7 +140,12 @@ export default {
             { key: 4, value: "国际" },
           ],
         },
-        { type: "select", label: "商家名称", key: "corpUserId",optionData:[] },
+        {
+          type: "select",
+          label: "商家名称",
+          key: "corpUserId",
+          optionData: [],
+        },
         {
           type: "select",
           label: "号码状态",
@@ -156,12 +160,16 @@ export default {
           type: "select",
           label: "线路名称",
           key: "lineId",
-          optionData: [
-          ],
+          optionData: [],
         },
         { type: "input", label: "号码", key: "operaNumber" },
-        { type: "select", label: "商户账号", key: "userId",optionData:[] },
-        { type: "select", label: "号码归属地区", key: "privince",optionData:[] },
+        { type: "select", label: "商户账号", key: "userId", optionData: [] },
+        {
+          type: "select",
+          label: "号码归属地区",
+          key: "privince",
+          optionData: [],
+        },
         // {
         //   type: "daterange",
         //   label: "开户时间",
@@ -208,7 +216,7 @@ export default {
           key: "lineType",
           colSpan: 12,
           disabled: true,
-          defaultValue:"",
+          defaultValue: "",
           optionData: [
             { key: 0, value: "直连" },
             { key: 1, value: "第三方" },
@@ -220,7 +228,7 @@ export default {
           key: "privince",
           colSpan: 12,
           disabled: false,
-          defaultValue:"",
+          defaultValue: "",
           optionData: [],
         },
         {
@@ -229,7 +237,7 @@ export default {
           key: "operaId",
           colSpan: 12,
           disabled: false,
-          defaultValue:"",
+          defaultValue: "",
           optionData: [
             // { key: 0, value: "非法" },
             { key: 1, value: "移动" },
@@ -393,7 +401,7 @@ export default {
     this.linecfgList();
     this.listAll();
   },
-  activated(){
+  activated() {
     this.queryCorpByCorpType();
     this.getUser();
     this.provincecity();
@@ -402,7 +410,6 @@ export default {
   },
   computed: {},
   methods: {
-
     /* -------------------------分配号码操作处理------------------------- */
     /* 
     获取分配号码流程名称数据
@@ -453,24 +460,23 @@ export default {
     // 获取分配号码商家账号下拉数据
     listAll(corpId) {
       this.$http.corpUser.list({ enablePage: false, corpId }).then((res) => {
-        if(corpId){
+        if (corpId) {
           this._setDefaultValue(
-          this.allocationConfig,
-          res.data.records,
-          "userId",
-          "userId",
-          "userName"
-        );
-        }else{
+            this.allocationConfig,
+            res.data.records,
+            "userId",
+            "userId",
+            "userName"
+          );
+        } else {
           this._setDefaultValue(
-          this.searchFormConfig,
-          res.data.records,
-          "userId",
-          "userId",
-          "userName"
-        );
+            this.searchFormConfig,
+            res.data.records,
+            "userId",
+            "userId",
+            "userName"
+          );
         }
-        
       });
     },
     // 分配号码下拉操作处理
@@ -491,6 +497,27 @@ export default {
           );
 
           this._deleteDefaultValue(this.allocationConfig, "userId");
+          this._deleteDefaultValue(this.allocationConfig, "sceneId");
+        }
+      }
+      if (item.key === "userId") {
+        let routeType = this._getFormKeyData(
+          this.allocationConfig,
+          "routeType"
+        );
+        if (val) {
+          if (routeType) {
+            this._deleteDefaultValue(this.allocationConfig, "sceneId");
+            this.listScene(corpId, val);
+          }
+        } else {
+          this._setDefaultValue(
+            this.allocationConfig,
+            [],
+            "sceneId",
+            "sceneId",
+            "sceneName"
+          );
           this._deleteDefaultValue(this.allocationConfig, "sceneId");
         }
       }
@@ -573,9 +600,32 @@ export default {
             this.listAll(row.corpUserId);
             if (row.routeType && row.routeType !== "-") {
               this.listScene(row.corpUserId, row.routeType);
+            } else {
+              this._setDefaultValue(
+                this.allocationConfig,
+                [],
+                "sceneId",
+                "sceneId",
+                "sceneName"
+              );
             }
+          } else {
+            this._setDefaultValue(
+              this.allocationConfig,
+              [],
+              "userId",
+              "userId",
+              "userName"
+            );
+            this._setDefaultValue(
+              this.allocationConfig,
+              [],
+              "sceneId",
+              "sceneId",
+              "sceneName"
+            );
           }
-          this.linecfgList(row.supplyId)
+          this.linecfgList(row.supplyId);
 
           this.allocationConfig.forEach((item) => {
             for (let key in row) {
@@ -640,7 +690,6 @@ export default {
 
     /* ------------------新增号码操作处理-------------- */
 
-
     //新增号码获取供应商公司下拉
     queryCorpByCorpType() {
       this.$http.select.queryCorpByCorpType({ corpType: 2 }).then((res) => {
@@ -683,31 +732,30 @@ export default {
     linecfgList(supplyId) {
       this.$http.select.linecfgList({ supplyId }).then((res) => {
         this.lineList = res.data;
-        if(supplyId){
+        if (supplyId) {
           this._setDefaultValue(
-          this.formConfig,
-          res.data,
-          "lineId",
-          "lineId",
-          "lineName"
-        );
-        this._setDefaultValue(
-          this.allocationConfig,
-          res.data,
-          "lineId",
-          "lineId",
-          "lineName"
-        );
-        }else{
+            this.formConfig,
+            res.data,
+            "lineId",
+            "lineId",
+            "lineName"
+          );
           this._setDefaultValue(
-          this.searchFormConfig,
-          res.data,
-          "lineId",
-          "lineId",
-          "lineName"
-        );
+            this.allocationConfig,
+            res.data,
+            "lineId",
+            "lineId",
+            "lineName"
+          );
+        } else {
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data,
+            "lineId",
+            "lineId",
+            "lineName"
+          );
         }
-        
       });
     },
     /**
@@ -724,7 +772,6 @@ export default {
       this._setDisabledShow(this.formConfig, "operaId", false);
       setTimeout(() => {
         this.$refs.formItem.resetForm();
-        
       }, 0);
     },
 
@@ -771,15 +818,15 @@ export default {
             const { lineType, operaId, province } = line;
             this.formConfig.forEach((item) => {
               if (item.key === "lineType") {
-                this.$set(item,'defaultValue',lineType)
+                this.$set(item, "defaultValue", lineType);
                 item.defaultValue = lineType;
               }
               if (item.key === "privince") {
-                this.$set(item,'defaultValue',province)
+                this.$set(item, "defaultValue", province);
                 item.defaultValue = province;
               }
               if (item.key === "operaId") {
-                this.$set(item,'defaultValue',operaId)
+                this.$set(item, "defaultValue", operaId);
                 item.defaultValue = operaId;
               }
             });

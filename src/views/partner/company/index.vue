@@ -276,6 +276,11 @@ export default {
         this.$refs.formItem.resetForm();
       }, 0);
       this._setDisplayShow(this.formConfig,'concurrency',true)
+      this.formConfig.forEach(item=>{
+        if(item.key === 'corpType'){
+          item.disabled = false
+        }
+      })
     },
     /**
      * 编辑表单
@@ -299,6 +304,7 @@ export default {
           this.$set(item, "defaultValue", "");
         }
         if(item.key === 'corpType'){
+          item.disabled = true
           if(item.defaultValue === 0){
           this._setDisplayShow(this.formConfig,'concurrency',false)
           this._setDisplayShow(this.formConfig,'callbackUrl',false)
