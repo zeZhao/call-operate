@@ -127,6 +127,7 @@
           :current-page="page"
           style="float: right;margin-right:30px"
           @current-change="pagingChange"
+          @size-change="handleSizeChange"
         ></el-pagination>
       </div>
 
@@ -530,6 +531,10 @@ export default {
      */
     pagingChange(val) {
       this.page = val;
+      this.List();
+    },
+    handleSizeChange(val) {
+      this.size = val;
       this.List();
     },
     selectClientId(val) {

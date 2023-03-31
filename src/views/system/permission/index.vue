@@ -176,40 +176,73 @@ export default {
     this.getSysMenuList();
     // this.sysRoleMenuList()
   },
+  activated(){
+    this.getSysMenuList();
+  },
   computed: {},
   methods: {
     getSysMenuList() {
       this.$http.sysRole.sysMenuList().then((res) => {
         this.treeData = res.data;
-        console.log(res);
       });
     },
     sysRoleMenuList(roleId) {
       this.defaultCheckedList = [];
+      let checkedList = []
       this.$http.sysRole.sysRoleMenuList({ roleId }).then((res) => {
-        this.defaultCheckedList = [];
-        let arr = [];
-        res.data.forEach((item) => {
-          arr.push(item.menuId);
-        });
+        if(res.state === '200'){
+            res.data.forEach(item=>{
+              if(item.childMenu && item.childMenu.length > 0){
+                item.childMenu.forEach((i) => {
+                  if (i.ifChecked == 1) {
+                    checkedList.push(i.menuId);
+                  }
+                });
+              }else{
+                if (item.ifChecked == 1) {
+                  checkedList.push(item.menuId);
+                }
+              }
+            })
+          }
         this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys(arr);
-          this.defaultCheckedList = arr;
+          this.$refs.tree.setCheckedKeys(checkedList);
+          this.defaultCheckedList = checkedList;
         });
+        // let arr = [];
+        // this.treeDataTranslate(res.data)
+        // this.$nextTick(() => {
+        //   // this.$refs.tree.setCheckedKeys(arr);
+        //   this.defaultCheckedList = arr;
+        // });
+        console.log(this.defaultCheckedList,'====this.defaultCheckedList')
       });
+    },
+    treeDataTranslate(res) {
+      
+      res.forEach((item, index) => {
+        if (item.ifChecked == 1) {
+          this.$nextTick(()=>{
+            this.defaultCheckedList.push(item.menuId)
+          })
+        }
+        if (item.childMenu) {
+          this.treeDataTranslate(item.childMenu)
+        }
+      })
     },
     jurisdictionBtn(row) {
       const { roleId } = row;
       this.roleId = roleId;
       this.jurisdictionVisible = true;
-      // console.log(row, "====");
-
       this.sysRoleMenuList(roleId);
     },
     submitTree() {
-      let arr = this.$refs.tree.getCheckedKeys();
+      let checkedKeys = this.$refs.tree.getCheckedKeys();
+      let halfCheckedKeys = this.$refs.tree.getHalfCheckedKeys();
+      let menuId = checkedKeys.concat(halfCheckedKeys)
       let sysRoleMenu = [];
-      arr.forEach((item) => {
+      menuId.forEach((item) => {
         sysRoleMenu.push({ roleId: this.roleId, menuId: item });
       });
       this.$http.sysRole.sysRoleMenuSave([...sysRoleMenu]).then((res) => {

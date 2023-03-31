@@ -17,6 +17,13 @@
       <el-table-column prop="corpName" label="商家名称" />
       <el-table-column prop="roleName" label="角色名称" />
       <el-table-column prop="remarks" label="描述" />
+      <el-table-column prop="status" label="坐席类型">
+        <template slot-scope="{ row }">
+          <span v-if="row.roleType == 0">企业管理员</span>
+          <span v-if="row.roleType == 1">普通坐席</span>
+          <span v-if="row.roleType == 2">班长坐席</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="status" label="状态">
         <template slot-scope="{ row }">
           <span v-if="row.status == 0">禁用</span>
@@ -133,7 +140,7 @@ export default {
         {
           type: "select",
           label: "商户名称",
-          key: "corpId",
+          key: "userId",
           defaultValue: "",
           optionData: [],
         },
@@ -142,6 +149,17 @@ export default {
           label: "角色名称",
           key: "roleName",
           defaultValue: "",
+        },
+        {
+          type: "radio",
+          label: "坐席类型",
+          key: "roleType",
+          defaultValue: "",
+          optionData: [
+            { key: 0, value: "企业管理员" },
+            { key: 1, value: "普通坐席" },
+            { key: 2, value: "班长坐席" },
+          ],
         },
         {
           type: "select",
@@ -170,7 +188,8 @@ export default {
         label: "name",
       },
       roleId: "",
-      corpId: "",
+      userId: "",
+      userList:[]
     };
   },
   created() {},
@@ -186,10 +205,11 @@ export default {
     //获取公司下拉
     queryCorpByCorpType() {
       this.$http.select.userListAll({}).then((res) => {
+        this.userList = res.data.records
         this._setDefaultValue(
           this.formConfig,
           res.data.records,
-          "corpId",
+          "userId",
           "userId",
           "userName"
         );
@@ -232,11 +252,6 @@ export default {
             }
           }
         });
-        // this.defaultCheckedList = [];
-        // let arr = [];
-        // res.data.forEach((item) => {
-        //   arr.push(item.menuId);
-        // });
         this.$nextTick(() => {
           this.$refs.tree.setCheckedKeys(checkedList);
           this.defaultCheckedList = checkedList;
@@ -244,36 +259,44 @@ export default {
       });
     },
     jurisdictionBtn(row) {
-      const { roleId, corpId } = row;
+      const { roleId, userId } = row;
       this.roleId = roleId;
-      this.corpId = corpId;
+      this.userId = userId;
       this.jurisdictionVisible = true;
       // console.log(row, "====");
 
       this.sysRoleMenuList(roleId);
     },
     submitTree() {
-      // console.log(this.$refs.tree);
-      // console.log(this.$refs.tree.getCheckedKeys());
       let arr = this.$refs.tree.getCheckedKeys();
-      // let sysRoleMenu = [];
-      // arr.forEach((item) => {
-      //   sysRoleMenu.push({ roleId: this.roleId,corpId:this.corpId, menuId: item });
-      // });
-      // console.log({ sysRoleMenu }, ";;;;;;;");
       this.$http.role
         .permissionsPost({
           roleId: this.roleId,
-          corpId: this.corpId,
+          userId: this.userId,
           menuIdList: arr,
         })
         .then((res) => {
           if (resOk) {
             this.jurisdictionVisible = false;
             this.roleId = "";
-            // this.$message.s
+            this.$message.success('操作成功！')
           }
         });
+    },
+    /**
+     * 提交表单前调整表单内数据
+     * @param formData
+     * @private
+     */
+    _mxArrangeSubmitData(formData) {
+      const {userId} = formData
+      this.userList.forEach(item=>{
+        if(item.userId == userId){
+          formData.corpId = item.corpId
+        }
+      })
+      console.log(formData,'=================')
+      return formData;
     },
   },
   watch: {},
