@@ -135,7 +135,7 @@ export default {
         {
           type: "select",
           label: "座席分配策略",
-          key: "taskType",
+          key: "attendPolicy",
           optionData: [
             { key: 0, value: "随机" },
             { key: 1, value: "轮选" },
@@ -149,10 +149,10 @@ export default {
         {
           type: "select",
           label: "状态",
-          key: "state",
+          key: "status",
           optionData: [
-            { key: 3, value: "有效" },
-            { key: 4, value: "停用" },
+            { key: 1, value: "有效" },
+            { key: 0, value: "停用" },
           ],
         },
         // {

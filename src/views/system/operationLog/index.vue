@@ -79,8 +79,8 @@ export default {
           key: "serverType",
           optionData: [
             { key: "1", value: "运营端" },
-            { key: "2", value: "商户端" },
-            { key: "3", value: "代理商端" },
+            // { key: "2", value: "商户端" },
+            // { key: "3", value: "代理商端" },
           ],
         },
         {

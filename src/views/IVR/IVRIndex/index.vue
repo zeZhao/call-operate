@@ -186,13 +186,13 @@
                 size="small"
                 >{{ row.status === 1 ? "停用" : "启用" }}</el-button
               >
-              <el-divider direction="vertical"></el-divider>
-              <el-button
+              <!-- <el-divider direction="vertical"></el-divider> -->
+              <!-- <el-button
                 @click="NewlyEdit($index, row, '复制')"
                 type="text"
                 size="small"
                 >复制</el-button
-              >
+              > -->
 
               <el-divider direction="vertical"></el-divider>
               <!-- <el-button
