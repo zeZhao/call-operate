@@ -20,12 +20,31 @@
       <el-table-column prop="failDesc" label="失败原因" show-overflow-tooltip />
       <el-table-column prop="orgFileName" label="原始导入文件" show-overflow-tooltip/>
       <el-table-column prop="orgRecordCount" label="原始记录数" />
+      <el-table-column prop="voicePrepareCount" label="数据准备数" />
+      <el-table-column prop="prepareState" label="准备状态" >
+        <template slot-scope="{row}">
+          <span v-if="row.prepareState == 0">等待准备</span>  
+          <span v-if="row.prepareState == 1">正在准备</span>  
+          <span v-if="row.prepareState == 2">准备完成</span>  
+          <span v-if="row.prepareState == 9">准备失败</span>  
+        </template>
+      </el-table-column>
       <el-table-column prop="importState" label="导入状态" >
         <template slot-scope="{row}">
           <span v-if="row.importState == 0">等待导入</span>  
           <span v-if="row.importState == 1">正在导入</span>  
           <span v-if="row.importState == 2">导入成功</span>  
           <span v-if="row.importState == 9">导入失败</span>  
+        </template>
+      </el-table-column>
+      <el-table-column prop="prepareStartTime" label="准备开始时间" >
+        <template slot-scope="{row}">
+          <span>{{row.prepareStartTime | dateTime}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="prepareEndTime" label="准备完成时间" >
+        <template slot-scope="{row}">
+          <span>{{row.prepareEndTime | dateTime}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="startTime" label="导入开始时间" >
