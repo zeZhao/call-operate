@@ -62,7 +62,7 @@
           <span>{{row.uploadTime | dateTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="创建人" />
+      <!-- <el-table-column prop="createBy" label="创建人" /> -->
       <el-table-column prop="successCount" label="成功记录数" />
       <el-table-column prop="failCount" label="失败记录数" />
       <el-table-column prop="ignoreCount" label="忽略记录数" />
