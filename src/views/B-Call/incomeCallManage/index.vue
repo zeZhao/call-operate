@@ -143,7 +143,6 @@
             align="center"
             prop="corpName"
             label="商户名称"
-            min-width="150"
             :show-overflow-tooltip="true"
           ></el-table-column>
           <el-table-column
@@ -263,7 +262,7 @@
             min-width="60"
             :show-overflow-tooltip="true"
           ></el-table-column> -->
-          <el-table-column align="center" label="操作" min-width="200">
+          <el-table-column align="center" label="操作" min-width="270">
             <template slot-scope="scope">
               <el-button
                 type="text"
@@ -286,10 +285,11 @@
                 size="small"
                 >编辑</el-button
               >
-              <el-divider direction="vertical"></el-divider>
+              <el-divider direction="vertical" v-if="scope.row.status == 1 || scope.row.status == '1'"></el-divider>
               <el-button
                 type="text"
                 size="small"
+                v-if="scope.row.status == 1 || scope.row.status == '1'"
                 @click="del(scope.$index, scope.row)"
                 >删除</el-button
               >
@@ -299,6 +299,13 @@
                 size="small"
                 @click="ImportFile(scope.$index, scope.row)"
                 >追加</el-button
+              >
+              <el-divider direction="vertical"></el-divider>
+              <el-button
+                type="text"
+                size="small"
+                @click="clearData(scope.row)"
+                >清空数据</el-button
               >
             </template>
           </el-table-column>
@@ -901,6 +908,22 @@ export default {
     ImportFile(index, row) {
       this.isImport = true;
       this.rowData = row;
+    },
+
+    // 清空数据
+    clearData(row){
+      var data = {
+          data: { taskId: row.taskId},
+          version: "1.0",
+        };
+      this.$http.outbound.clearData(data).then(res=>{
+        if (res.state === "0000") {
+          this.$message.success('操作成功')
+          console.log(res);
+        } else {
+          this.$message.error(res.msg);
+        }
+      })
     },
     /*
    限制上传类型

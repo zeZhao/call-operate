@@ -86,7 +86,7 @@
       <el-table-column prop="supplyCost" label="供应商费用" />
       <el-table-column prop="supplyPeriod" label="供应商计费周期" />
       <el-table-column prop="supplySetMeal" label="供应商套餐扣除时长" />
-      <el-table-column prop="dataTag" label="标签" />
+      <!-- <el-table-column prop="dataTag" label="标签" /> -->
       <el-table-column prop="recordFile" label="录音" >
         <template slot-scope="{row}">
           <a :href="origin + row.recordFile" target="_blank" rel="noopener noreferrer">录音</a>

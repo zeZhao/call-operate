@@ -760,7 +760,10 @@ export default {
     downloadTemplate(params) {
       return request("/call/campaign/downloadTemplate", 'get', params,true);
     },
-
+    //任务管理 清空数据
+    clearData(params) {
+      return request("/callTask/clearData", 'post', params);
+    },
     //任务管理 添加
     addCampaign(params) {
       return request("/call/campaign/addCampaign", 'post', params);

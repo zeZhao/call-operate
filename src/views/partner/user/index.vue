@@ -299,7 +299,7 @@ export default {
           isShow:true
         },
         {
-          type: "input",
+          type: "inputNum",
           label: "金额",
           key: "amount",
           defaultValue: "",
