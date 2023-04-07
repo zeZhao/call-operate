@@ -916,8 +916,8 @@ export default {
           data: { taskId: row.taskId},
           version: "1.0",
         };
-      this.$http.outbound.clearData(data).then(res=>{
-        if (res.state === "0000") {
+      this.$http.outbound.clearData({ taskId: row.taskId}).then(res=>{
+        if (res.state === "200") {
           this.$message.success('操作成功')
           console.log(res);
         } else {
