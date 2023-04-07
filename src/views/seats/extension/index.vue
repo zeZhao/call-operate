@@ -257,7 +257,7 @@ export default {
           type: "checkbox",
           label: "",
           key: "isBatchcaller",
-          defaultValue: "",
+          defaultValue: "0",
           rules: [],
           optionData: [{ key: 1, value: "作为批量外呼主叫" }],
           colSpan: 12,
@@ -400,7 +400,6 @@ export default {
         this._setDisplayShow(this.formConfig, "status", true);
         this._setDisplayShow(this.formConfig, "ext", true);
         this._setDisplayShow(this.formConfig, "attendId", true);
-        this._setDisplayShow(this.formConfig, "isBatchcaller", false);
         this._setDisplayShow(this.formConfig, "autogeneration", false);
         this._setDisplayShow(this.formConfig, "extNum", false);
         this._setDisplayShow(this.formConfig, "pwdType", false);
@@ -417,17 +416,22 @@ export default {
           if (item.key === key && row[key] !== "-") {
             this.$set(item, "defaultValue", row[key]);
           }
+          if(item.key === 'isBatchcaller'){
+            item.defaultValue = [row['isBatchcaller']]
+          }
         }
         if (!Object.keys(row).includes(item.key)) {
           this.$set(item, "defaultValue", "");
         }
+        // if(item.key === 'isBatchcaller'){
+        //   item.defaultValue = 
+        // }
       });
       this._setDisplayShow(this.formConfig, "extNum", true);
       this._setDisplayShow(this.formConfig, "pwdType", true);
       this._setDisplayShow(this.formConfig, "autogeneration", true);
       this._setDisplayShow(this.formConfig, "jobNumberStart", true);
       this._setDisplayShow(this.formConfig, "attendRoleId", true);
-      this._setDisplayShow(this.formConfig, "isBatchcaller", true);
       this._setDisplayShow(this.formConfig, "pwd", false);
       this._setDisplayShow(this.formConfig, "status", false);
       this._setDisplayShow(this.formConfig, "ext", false);
