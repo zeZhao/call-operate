@@ -521,9 +521,9 @@
             <p style="margin-bottom: 10px">
               请按照数据模板的格式准备导入数据，模板中的表头名称不可更改，表头行不能删除
             </p>
-            <el-button type="primary" size="mini" @click="ExDownload"
+            <!-- <el-button type="primary" size="mini" @click="ExDownload"
               >下载xls/xlsx模板</el-button
-            >
+            > -->
             <el-button type="primary" size="mini" @click="PPTDownload"
               >下载csv模板</el-button
             >
