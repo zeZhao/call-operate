@@ -265,7 +265,7 @@ export default {
         },
         {
           type: "checkbox",
-          label: "number",
+          label: "",
           key: "autogeneration",
           defaultValue: "",
           rules: [],
