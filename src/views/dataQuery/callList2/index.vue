@@ -184,7 +184,7 @@ export default {
       searchFormConfig: [
         { type: "input", label: "主叫", key: "callerId" },
         { type: "input", label: "被叫", key: "calledId" },
-        { type: "input", label: "座席姓名", key: "attendName" },
+        { type: "input", label: "坐席姓名", key: "attendName" },
         { type: "input", label: "工号", key: "jobNumber" },
         { type: "select", label: "商家账户", key: "userId", optionData:[] },
         { type: "select", label: "供应商账户", key: "supplyId", optionData:[] },

@@ -23,7 +23,7 @@
           <span v-if="row.extType == 1">SIP电话</span>
         </template>
       </el-table-column>
-      <el-table-column prop="attendName" label="绑定座席" />
+      <el-table-column prop="attendName" label="绑定坐席" />
       <el-table-column prop="caller" label="外呼主叫" />
       <el-table-column prop="lineName" label="外呼线路" />
       <el-table-column prop="extName" label="分机昵称" />
@@ -133,7 +133,7 @@ export default {
         },
         {
           type: "select",
-          label: "绑定座席",
+          label: "绑定坐席",
           key: "attendId",
           optionData: [],
         },
@@ -268,7 +268,7 @@ export default {
           key: "autogeneration",
           defaultValue: "",
           rules: [],
-          optionData: [{ key: 1, value: "自动生成并绑定座席" }],
+          optionData: [{ key: 1, value: "自动生成并绑定坐席" }],
           colSpan: 12,
         },
         {
@@ -283,7 +283,7 @@ export default {
 
         {
           type: "input",
-          label: "座席起始工号",
+          label: "坐席起始工号",
           key: "jobNumberStart",
           defaultValue: "",
           isShow: true,

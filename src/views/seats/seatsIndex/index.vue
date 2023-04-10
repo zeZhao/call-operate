@@ -16,9 +16,9 @@
       <el-table-column label="序号" type="index" align="center" />
       <el-table-column prop="userName" label="商家账号" />
       <el-table-column prop="shortName" label="商家简称" />
-      <el-table-column prop="attendName" label="座席姓名" />
+      <el-table-column prop="attendName" label="坐席姓名" />
       <el-table-column prop="jobNumber" label="工号" />
-      <el-table-column prop="pwd" label="座席密码" />
+      <el-table-column prop="pwd" label="坐席密码" />
       <el-table-column prop="roleName" label="角色" />
       <el-table-column prop="skillGroupName" label="归属技能组" />
       <el-table-column prop="roleType" label="坐席类型">
@@ -112,7 +112,7 @@ export default {
       // 搜索框配置
       searchFormConfig: [
         { type: "select", label: "商家账号", key: "userName",optionData:[] },
-        { type: "input", label: "座席名称", key: "attendName" },
+        { type: "input", label: "坐席名称", key: "attendName" },
         { type: "inputNum", label: "工号", key: "jobNumber" },
         {
           type: "select",
@@ -164,7 +164,7 @@ export default {
         },
         {
           type: "input",
-          label: "座席姓名",
+          label: "坐席姓名",
           key: "attendName",
           defaultValue: "",
         },
@@ -189,7 +189,7 @@ export default {
         },
         {
           type: "select",
-          label: "座席角色",
+          label: "坐席角色",
           key: "attendroleId",
           defaultValue: "",
           optionData: [
