@@ -235,6 +235,20 @@
                 >
               </el-checkbox-group>
             </template>
+            <template v-if="item.type === 'check'">
+              <el-checkbox
+                v-model="formData[item.key]"
+                :false-label="item.checkLabel[0]"
+                :true-label="item.checkLabel[1]"
+                :checked="item.checked"
+                @change="
+                  (val) => {
+                    onChange(val, item);
+                  }
+                "
+                >{{ item.value }}</el-checkbox
+              >
+            </template>
 
             <!--单选框-->
             <template v-if="item.type === 'radio'">
@@ -768,8 +782,8 @@ export default {
             item.defaultValue = null;
             item.defaultFileList = [];
           } else if (type === "fileUpload") {
-            item.defaultValue = ""
-            this.$refs.fileUpload[0].value = ''
+            item.defaultValue = "";
+            this.$refs.fileUpload[0].value = "";
           } else {
             item.defaultValue = null;
             this.formData[key] = null;
