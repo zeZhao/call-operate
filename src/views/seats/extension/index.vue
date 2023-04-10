@@ -254,17 +254,18 @@ export default {
           colSpan: 12,
         },
         {
-          type: "checkbox",
-          label: "",
+          type: "check",
+          checkLabel: [0,1],
           key: "isBatchcaller",
-          defaultValue: "0",
+          defaultValue: 0,
           rules: [],
-          optionData: [{ key: 1, value: "作为批量外呼主叫" }],
+          value:"作为批量外呼主叫",
+          // optionData: [{ key: 1, value: "作为批量外呼主叫" }],
           colSpan: 12,
         },
         {
           type: "checkbox",
-          label: "",
+          label: "number",
           key: "autogeneration",
           defaultValue: "",
           rules: [],
@@ -417,7 +418,13 @@ export default {
             this.$set(item, "defaultValue", row[key]);
           }
           if(item.key === 'isBatchcaller'){
-            item.defaultValue = [row['isBatchcaller']]
+            console.log(row['isBatchcaller'])
+            // item.defaultValue = [row['isBatchcaller']]
+          }
+          if(row['isBatchcaller'] == 1){
+            this._setDisplayShow(this.formConfig, "extName", false);
+          }else{
+            this._setDisplayShow(this.formConfig, "extName", true);
           }
         }
         if (!Object.keys(row).includes(item.key)) {
@@ -435,7 +442,7 @@ export default {
       this._setDisplayShow(this.formConfig, "pwd", false);
       this._setDisplayShow(this.formConfig, "status", false);
       this._setDisplayShow(this.formConfig, "ext", false);
-      this._setDisplayShow(this.formConfig, "extName", false);
+      
       this._setDisplayShow(this.formConfig, "attendId", false);
 
       setTimeout(() => {
@@ -482,6 +489,7 @@ export default {
         }
       }
       if (key === "isBatchcaller") {
+        console.log(val,'================isBatchcaller')
         if (val == 1) {
           this._setDisplayShow(this.formConfig, "extName", false);
         } else {
@@ -500,7 +508,11 @@ export default {
     },
     _mxArrangeSubmitData(formData) {
       let form = Object.assign({}, formData);
-      form.isBatchcaller = formData.isBatchcaller[0];
+      if(formData.isBatchcaller){
+        form.isBatchcaller = 1
+      }else{
+        form.isBatchcaller = 0
+      }
       let userId = form.userId;
       if (userId) {
         this.userList.forEach((item) => {
