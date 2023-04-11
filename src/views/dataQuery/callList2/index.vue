@@ -88,20 +88,11 @@
       <el-table-column prop="supplySetMeal" label="供应商套餐扣除时长" />
       <!-- <el-table-column prop="dataTag" label="标签" /> -->
       <el-table-column prop="recordFile" label="录音" >
-        <template slot-scope="{row}">
-          <a :href="origin + row.recordFile" target="_blank" rel="noopener noreferrer">录音</a>
+        <template slot-scope="{ row }">
+          <el-button type="text" @click="look(row)">查看录音</el-button>
+          <!-- <a :href="origin + row.recordFile" target="_blank" rel="noopener noreferrer">录音</a> -->
         </template>
       </el-table-column>
-      <!-- <el-table-column label="操作" width="100" fixed="right">
-        <template slot-scope="scope">
-          <el-button
-            @click="dialogue(scope.index, scope.row)"
-            type="text"
-            size="small"
-            >通话详情</el-button
-          >
-        </template>
-      </el-table-column> -->
     </el-table>
     <Page
       :pageObj="pageObj"
@@ -112,62 +103,18 @@
       :title="title"
       :visible.sync="isDetails"
       width="50%"
-      top="30px"
+      top="150px"
       :destroy-on-close="true"
     >
       <div class="audition">
-        <div v-if="auditionUrl" class="audio-con">
+        <div class="audio-con">
           <audio :src="auditionUrl" controls ref="myAudio"></audio>
         </div>
         <div v-if="!auditionUrl" class="audio-con"></div>
-        <el-button
-          type="primary"
-          @click="Audition(rowData.recordFile)"
-          style="height: 40px"
-        >
+        <el-button type="primary" @click="Audition()" style="height: 40px">
           完整录音试听
           <i class="el-icon-headset el-icon--right"></i>
         </el-button>
-      </div>
-      <div class="conversation">
-        <ul v-for="(item, index) in detailsData" :key="index">
-          <li>
-            <div class="date">
-              <span class="img_logo">
-                <img src="../../../assets/images/robot.png" alt />
-              </span>
-              <span>
-                机器人：{{ item.robotSpeechTime }}
-                <i
-                  class="el-icon-service"
-                  @click="Audition(item.branchAudio)"
-                ></i>
-              </span>
-            </div>
-
-            <span class="content">{{ item.robotSpeechText }}</span>
-          </li>
-          <li class="liRight">
-            <!-- 不可以删 -->
-            <div></div>
-            <div v-show="item.custSpeechText">
-              <div class="date">
-                <span>
-                  客户：{{ item.custSpeechTime }}
-                  <i
-                    class="el-icon-service"
-                    @click="Audition(item.replyAudio)"
-                  ></i>
-                </span>
-                <span class="img_logo">
-                  <img src="../../../assets/images/client.png" alt />
-                </span>
-              </div>
-
-              <div class="content cur">{{ item.custSpeechText }}</div>
-            </div>
-          </li>
-        </ul>
       </div>
     </el-dialog>
   </div>
@@ -245,6 +192,13 @@ export default {
         this._setDefaultValue(this.searchFormConfig,res.data.records,'agentId','agentId','userName')
       })
     },
+    look(row) {
+      this.$nextTick(() => {
+        this.auditionUrl = this.origin + row.recordFile;
+      });
+
+      this.isDetails = true;
+    },
     /*
       试听
      */
@@ -260,37 +214,6 @@ export default {
           audio.play();
         }, 200);
       }
-    },
-    /*
-      对话详情
-     */
-    dialogue(index, row) {
-      const self = this;
-
-      self.rowData = row;
-      this.auditionUrl = row.recordFile;
-      self.title =
-        "电话:" + self.rowData.calledId + "   时间:" + new Date(self.rowData.startTime).Format("yyyy-MM-dd hh:mm:ss");
-      this.$http.dataquery.voicetalkAiList(row.dataId).then(res => {
-        if (res.state == "200") {
-          if (res.data.length == 0) {
-            self.$notify({
-              title: "提示",
-              message: "暂无对话详情"
-            });
-            return;
-          }
-          self.isDetails = true;
-          res.data.forEach(val => {
-            val.robotSpeechTime = new Date(val.robotSpeechTime).Format("yyyy-MM-dd hh:mm:ss");
-            val.custSpeechTime = new Date(val.custSpeechTime).Format("yyyy-MM-dd hh:mm:ss");
-            // val.custSpeechTime = datetime(val.custSpeechTime);
-          });
-          self.detailsData = res.data;
-        } else {
-          self.$message.error(res.msg);
-        }
-      });
     },
   },
   watch: {},
