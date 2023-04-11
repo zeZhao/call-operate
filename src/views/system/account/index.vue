@@ -171,9 +171,17 @@ export default {
   methods: {
     getRoleLlist() {
       this.$http.sysUser.sysRoleLlist({ current: 1, size: 999 }).then((res) => {
+        let arr = []
+        if(res.state == 200){
+          res.data.records.forEach(item=>{
+            if(item.status === 1){
+              arr.push(item)
+            }
+          })
+        }
         this._setDefaultValue(
           this.formConfig,
-          res.data.records,
+          arr,
           "roleId",
           "roleId",
           "roleName"
