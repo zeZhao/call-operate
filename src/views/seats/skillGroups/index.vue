@@ -94,6 +94,7 @@
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
         @selectChange="selectChange"
+        @transferChange="transferChange"
         :isSubmitBtn="true"
       >
         <!-- <template v-slot:custom="{ formData }">
@@ -344,6 +345,9 @@ export default {
           "corpName"
         );
       });
+    },
+    transferChange(data){
+      this._setDefaultValue(this.formConfig, [], "attendIdList", data.current);
     },
     //设置穿梭框数据
     setAttendIdList(data) {
