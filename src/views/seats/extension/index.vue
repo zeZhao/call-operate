@@ -35,8 +35,8 @@
       </el-table-column>
       <el-table-column prop="isRecording" label="是否录音">
         <template slot-scope="{ row }">
-          <span v-if="row.status == 0">否</span>
-          <span v-if="row.status == 1">是</span>
+          <span v-if="row.isRecording == 0">否</span>
+          <span v-if="row.isRecording == 1">是</span>
         </template>
       </el-table-column>
       <el-table-column prop="status" label="状态">
