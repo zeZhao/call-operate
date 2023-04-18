@@ -40,9 +40,17 @@ pipeline {
 				//   ${MAVEN_HOME}/mvn clean package -Dmaven.${BRANCH}.skip=true -U -P${BRANCH}
 				// """
 				//前端npm/yarn 构建(将java构建注释、修改下面npm 构建参数)
-				sh """
-                    npm run build:${BRANCH}
-                """
+				// sh """
+                //     npm run build:${BRANCH}
+                // """
+                sh """
+				pwd
+				/usr/local/node-v14.15.1/bin/npm install --unsafe-perm
+				
+				echo "npm install"
+				/usr/local/node-v14.15.1/bin/npm run build:${BRANCH}
+				
+				"""
 				
 				//前端npm/yarn 构建(将java构建注释、修改下面yarn 构建参数)
 				// yarn build:${BRANCH}
