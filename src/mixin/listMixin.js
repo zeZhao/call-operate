@@ -611,9 +611,6 @@ export default {
               item.optionData.push(obj)
             });
           } else if (item.type === 'input' || item.type === 'transfer') {
-            if (item.type === 'transfer'){
-              console.log(optionKey,'=====穿梭框值')
-            }
             this.$nextTick(() => {
               this.$set(item, 'defaultValue', optionKey)
             })
