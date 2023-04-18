@@ -13,7 +13,7 @@
       :height="tableHeight"
     >
       <!-- <el-table-column label="序号" type="index" align="center" /> -->
-      <el-table-column prop="corpName" label="商户名称" />
+      <el-table-column prop="corpName" label="企业名称" />
       <el-table-column prop="skillGroupName" label="技能组名称" />
       <!-- <el-table-column prop="ivrId" label="技能组流程" >
         <template slot-scope="{row}">
@@ -119,7 +119,7 @@ export default {
       rightDefaultCheckedList: [],
       // 搜索框配置
       searchFormConfig: [
-        { type: "select", label: "商户名称", key: "corpId", optionData: [] },
+        { type: "select", label: "企业名称", key: "corpId", optionData: [] },
         // {
         //   type: "select",
         //   label: "技能组流程",
@@ -191,7 +191,7 @@ export default {
       formConfig: [
         {
           type: "select",
-          label: "商户公司",
+          label: "企业名称",
           key: "corpId",
           defaultValue: "",
           optionData: [],
@@ -433,6 +433,7 @@ export default {
       this.setAttendIdList([]);
       this.attendSkillGroupList = [];
       this._setDefaultValue(this.formConfig, [], "attendIdList", []);
+      this._setDisabledShow(this.formConfig,'corpId',false)
       setTimeout(() => {
         this.$refs.formItem.resetForm();
       }, 0);
@@ -461,6 +462,7 @@ export default {
           this.$set(item, "defaultValue", "");
         }
         if (item.key === "corpId") {
+          item.disabled = true
           this.listScene(item.defaultValue);
           await this.getListAttendAll(item.defaultValue);
         }
