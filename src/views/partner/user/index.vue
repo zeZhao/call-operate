@@ -36,7 +36,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="开户时间"  width="150"/>
-      <el-table-column label="操作" width="130">
+      <el-table-column label="操作" width="160">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'userId')"
@@ -47,6 +47,7 @@
           <el-button @click="recharge(scope.row)" type="text" size="small"
             >充值
           </el-button>
+          <el-button type="text" size="small" @click="updateSecretKey(scope.row)">查看密钥</el-button>
           <!-- <el-button
             @click="
               _mxDeleteItem('templateId', scope.row.templateId, false, true)
@@ -210,6 +211,22 @@ export default {
           colSpan:12
         },
         {
+          type: "input",
+          label: "回调路径",
+          key: "callbackUrl",
+          defaultValue: "",
+          colSpan:12
+        },
+        {
+          type: "radio",
+          label: "是否回调",
+          key: "callbackType",
+          defaultValue: "",
+          optionData:[{key:1,value:'是'},{key:0,value:'否'}],
+          colSpan:12
+        },
+        
+        {
           type: "select",
           label: "通话套餐",
           key: "comboId",
@@ -356,6 +373,27 @@ export default {
   },
   computed: {},
   methods: {
+    updateSecretKey(row){
+      console.log(row)
+       this.$confirm(`${row.secretKey?row.secretKey:'暂无密钥'}`, '密钥', {
+          distinguishCancelAndClose: true,
+          confirmButtonText: '更新密钥',
+          cancelButtonText: '取消'
+        })
+          .then(() => {
+            this.$http.corp.updateSecretKey({corpId:row.corpId}).then(res=>{
+              if(resOk(res)){
+                this.$message.success('更新成功')
+                this._mxGetList();
+              }else{
+                this.$message.error('更新失败')
+              }
+            })
+          })
+          .catch(()=>{
+            console.log(1)
+          })
+    },
     //获取公司下拉
     queryCorpByCorpType(){
       this.$http.select.queryCorpByCorpType({corpType:0}).then(res=>{
