@@ -381,7 +381,7 @@ export default {
           cancelButtonText: '取消'
         })
           .then(() => {
-            this.$http.corp.updateSecretKey({corpId:row.corpId}).then(res=>{
+            this.$http.corp.updateSecretKey({userId:row.userId}).then(res=>{
               if(resOk(res)){
                 this.$message.success('更新成功')
                 this._mxGetList();

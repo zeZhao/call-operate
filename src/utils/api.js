@@ -170,7 +170,7 @@ export default {
     },
     //删除
     updateSecretKey(data) {
-      return request('/corp/updateSecretKey', 'get', data)
+      return request('/corpUser/updateSecretKey', 'get', data)
     },
   },
   //商家
