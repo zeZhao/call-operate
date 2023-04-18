@@ -14,6 +14,7 @@
       :height="tableHeight"
     >
       <el-table-column label="序号" type="index" align="center" />
+      <el-table-column prop="corpName" label="企业名称" />
       <el-table-column prop="userName" label="商家账户" />
       <el-table-column prop="ext" label="分机号" />
       <el-table-column prop="pwd" label="分机密码" />
@@ -156,6 +157,13 @@ export default {
       id: "",
       // 表单配置
       formConfig: [
+        {
+          type: "select",
+          label: "企业名称",
+          key: "corpId",
+          defaultValue: "",
+          optionData: [],
+        },
         {
           type: "select",
           label: "商家名称",
@@ -310,32 +318,53 @@ export default {
     this.queryCorpByCorpType();
     this.linecfgList();
     this.listAllAttend();
+    this.getCorpList();
   },
   activated() {
     this.queryCorpByCorpType();
     this.linecfgList();
     this.listAllAttend();
+    this.getCorpList();
   },
   computed: {},
   methods: {
+    //获取公司下拉
+    // corpType（0:商家,1:代理商,2:供应商）
+    getCorpList(corpType) {
+      this.$http.select.queryCorpByCorpType({ corpType:"" }).then((res) => {
+        this._setDefaultValue(
+            this.formConfig,
+            res.data.records,
+            "corpId",
+            "corpId",
+            "corpName"
+          );
+        
+      });
+    },
     //获取商家账户下拉
-    queryCorpByCorpType() {
-      this.$http.select.userListAll({}).then((res) => {
+    queryCorpByCorpType(corpId) {
+      this.$http.select.userListAll({corpId}).then((res) => {
         this.userList = res.data.records;
-        this._setDefaultValue(
-          this.formConfig,
-          res.data.records,
-          "userId",
-          "userId",
-          "userName"
-        );
-        this._setDefaultValue(
-          this.searchFormConfig,
-          res.data.records,
-          "userName",
-          "userName",
-          "userName"
-        );
+        if(corpId){
+          this._setDefaultValue(
+            this.formConfig,
+            res.data.records,
+            "userId",
+            "userId",
+            "userName"
+          );
+        }else{
+          this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "userName",
+            "userName",
+            "userName"
+          );
+        }
+        
+        
       });
     },
     //获取线路下拉
@@ -452,6 +481,27 @@ export default {
     },
     selectChange({ val, item }) {
       const {key} = item
+      if(key === 'corpId'){
+        if(val){
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "userId",
+            "userId",
+            "userName"
+          );
+          this.queryCorpByCorpType(val)
+        }else{
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "userId",
+            "userId",
+            "userName"
+          );
+
+        }
+      }
       if (key === "userId") {
         if (val) {
           this._setDefaultValue(
