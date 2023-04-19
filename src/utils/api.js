@@ -170,7 +170,7 @@ export default {
     },
     //删除
     updateSecretKey(data) {
-      return request('/corp/updateSecretKey', 'get', data)
+      return request('/corpUser/updateSecretKey', 'get', data)
     },
   },
   //商家
@@ -760,7 +760,10 @@ export default {
     downloadTemplate(params) {
       return request("/call/campaign/downloadTemplate", 'get', params,true);
     },
-
+    //任务管理 清空数据
+    clearData(params) {
+      return request("/callTask/clearData", 'get', params);
+    },
     //任务管理 添加
     addCampaign(params) {
       return request("/call/campaign/addCampaign", 'post', params);

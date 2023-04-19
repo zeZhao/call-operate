@@ -23,11 +23,11 @@
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="cardno" label="银行账户" />
       <el-table-column prop="address" label="地址" />
-      <el-table-column prop="secretKey" label="密钥" />
+      <!-- <el-table-column prop="secretKey" label="密钥" /> -->
       <!-- <el-table-column prop="corpId" label="状态" /> -->
       <el-table-column prop="createTime" label="开户时间" width="150" />
       <el-table-column prop="remarks" label="备注" />
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="80">
         <template slot-scope="scope">
           <el-button
             @click="_mxEdit(scope.row, 'corpId')"
@@ -43,7 +43,7 @@
             size="small"
             >删除
           </el-button> -->
-          <el-button type="text" size="small" @click="updateSecretKey(scope.row)">更新密钥</el-button>
+          <!-- <el-button type="text" size="small" @click="updateSecretKey(scope.row)">更新密钥</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -191,23 +191,7 @@ export default {
           defaultValue: "",
           colSpan:12
         },
-        {
-          type: "input",
-          label: "回调路径",
-          key: "callbackUrl",
-          defaultValue: "",
-          isShow: true,
-          colSpan:12
-        },
-        {
-          type: "radio",
-          label: "是否回调",
-          key: "callbackType",
-          defaultValue: "",
-          optionData:[{key:1,value:'是'},{key:0,value:'否'}],
-          isShow: true,
-          colSpan:12
-        },
+        
         {
           type: "input",
           label: "地址",
@@ -230,34 +214,17 @@ export default {
   mounted() {},
   computed: {},
   methods: {
-    updateSecretKey(row){
-      console.log(row)
-       this.$confirm(`${row.secretKey?row.secretKey:'暂无密钥'}`, '密钥', {
-          distinguishCancelAndClose: true,
-          confirmButtonText: '更新密钥',
-          cancelButtonText: '取消'
-        })
-          .then(() => {
-            this.$http.corp.updateSecretKey({corpId:row.corpId}).then(res=>{
-              if(resOk(res)){
-                this.$message.success('更新成功')
-                this._mxGetList();
-              }else{
-                this.$message.error('更新失败')
-              }
-            })
-          })
-    },
+    
     selectChange({ val, item }){
       if(item.key === 'corpType'){
         if(val === 0){
           this._setDisplayShow(this.formConfig,'concurrency',false)
-          this._setDisplayShow(this.formConfig,'callbackUrl',false)
-          this._setDisplayShow(this.formConfig,'callbackType',false)
+          // this._setDisplayShow(this.formConfig,'callbackUrl',false)
+          // this._setDisplayShow(this.formConfig,'callbackType',false)
         }else{
           this._setDisplayShow(this.formConfig,'concurrency',true)
-          this._setDisplayShow(this.formConfig,'callbackUrl',true)
-          this._setDisplayShow(this.formConfig,'callbackType',true)
+          // this._setDisplayShow(this.formConfig,'callbackUrl',true)
+          // this._setDisplayShow(this.formConfig,'callbackType',true)
         }
         
       }
@@ -307,12 +274,12 @@ export default {
           item.disabled = true
           if(item.defaultValue === 0){
           this._setDisplayShow(this.formConfig,'concurrency',false)
-          this._setDisplayShow(this.formConfig,'callbackUrl',false)
-          this._setDisplayShow(this.formConfig,'callbackType',false)
+          // this._setDisplayShow(this.formConfig,'callbackUrl',false)
+          // this._setDisplayShow(this.formConfig,'callbackType',false)
           }else{
             this._setDisplayShow(this.formConfig,'concurrency',true)
-            this._setDisplayShow(this.formConfig,'callbackUrl',true)
-          this._setDisplayShow(this.formConfig,'callbackType',true)
+            // this._setDisplayShow(this.formConfig,'callbackUrl',true)
+          // this._setDisplayShow(this.formConfig,'callbackType',true)
           }
         }
       });

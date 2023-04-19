@@ -235,6 +235,20 @@
                 >
               </el-checkbox-group>
             </template>
+            <template v-if="item.type === 'check'">
+              <el-checkbox
+                v-model="formData[item.key]"
+                :false-label="item.checkLabel[0]"
+                :true-label="item.checkLabel[1]"
+                :checked="item.checked"
+                @change="
+                  (val) => {
+                    onChange(val, item);
+                  }
+                "
+                >{{ item.value }}</el-checkbox
+              >
+            </template>
 
             <!--单选框-->
             <template v-if="item.type === 'radio'">
@@ -528,6 +542,11 @@
                 :titles="item.titles"
                 :left-default-checked="item.leftDefaultChecked"
                 :right-default-checked="item.rightDefaultChecked"
+                @change="
+                  (current, direction, movingData) => {
+                    transferChange(item, current, direction, movingData);
+                  }
+                "
               ></el-transfer>
             </template>
             <p v-if="item.tip" class="tip">{{ item.tip }}</p>
@@ -675,8 +694,11 @@ export default {
     //  select 事件
     onChange(val, item) {
       this._setDefaultVal(val, item);
-      console.log(33333);
       this.$emit("onChange", { val, item });
+    },
+    //穿梭框change事件
+    transferChange(item, current, direction, movingData) {
+      this.$emit("transferChange", { item, current, direction, movingData });
     },
     // 选择组件
     chooses(item) {
@@ -717,10 +739,6 @@ export default {
       const form = {};
       this.formConfig.forEach((item) => {
         const { key, type } = item;
-        if(key === 'lineType'){
-          // debugger
-          console.log(item.defaultValue,'=======jichubiaodan')
-        }
         form[key] = item.defaultValue;
 
         if (type === "selects") {
@@ -772,8 +790,8 @@ export default {
             item.defaultValue = null;
             item.defaultFileList = [];
           } else if (type === "fileUpload") {
-            item.defaultValue = ""
-            this.$refs.fileUpload[0].value = ''
+            item.defaultValue = "";
+            this.$refs.fileUpload[0].value = "";
           } else {
             item.defaultValue = null;
             this.formData[key] = null;

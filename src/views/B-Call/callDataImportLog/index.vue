@@ -43,10 +43,29 @@
           <span>{{row.uploadTime | dateTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createBy" label="创建人" />
+      <!-- <el-table-column prop="createBy" label="创建人" /> -->
       <el-table-column prop="successCount" label="成功记录数" />
       <el-table-column prop="failCount" label="失败记录数" />
       <el-table-column prop="ignoreCount" label="忽略记录数" />
+      <el-table-column prop="voicePrepareCount" label="数据准备数" />
+      <el-table-column prop="prepareState" label="准备状态" >
+        <template slot-scope="{row}">
+          <span v-if="row.prepareState == 0">等待准备</span>  
+          <span v-if="row.prepareState == 1">正在准备</span>  
+          <span v-if="row.prepareState == 2">准备完成</span>  
+          <span v-if="row.prepareState == 9">准备失败</span>  
+        </template>
+      </el-table-column>
+      <el-table-column prop="prepareStartTime" label="准备开始时间" >
+        <template slot-scope="{row}">
+          <span>{{row.prepareStartTime | dateTime}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="prepareEndTime" label="准备完成时间" >
+        <template slot-scope="{row}">
+          <span>{{row.prepareEndTime | dateTime}}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <Page
       :pageObj="pageObj"

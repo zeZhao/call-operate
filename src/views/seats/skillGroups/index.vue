@@ -13,7 +13,7 @@
       :height="tableHeight"
     >
       <!-- <el-table-column label="序号" type="index" align="center" /> -->
-      <el-table-column prop="corpName" label="商户名称" />
+      <el-table-column prop="corpName" label="企业名称" />
       <el-table-column prop="skillGroupName" label="技能组名称" />
       <!-- <el-table-column prop="ivrId" label="技能组流程" >
         <template slot-scope="{row}">
@@ -21,8 +21,8 @@
           <span v-if="row.taskType === 2">呼通后转人工</span>
         </template>
       </el-table-column> -->
-      <el-table-column prop="attendCount" label="座席数量" />
-      <el-table-column prop="attendPolicy" label="座席分配策略">
+      <el-table-column prop="attendCount" label="坐席数量" />
+      <el-table-column prop="attendPolicy" label="坐席分配策略">
         <template slot-scope="{ row }">
           <span v-if="row.attendPolicy === 0">随机</span>
           <span v-if="row.attendPolicy === 1">轮选</span>
@@ -94,6 +94,7 @@
         @submit="_mxHandleSubmit"
         @cancel="_mxCancel"
         @selectChange="selectChange"
+        @transferChange="transferChange"
         :isSubmitBtn="true"
       >
         <!-- <template v-slot:custom="{ formData }">
@@ -118,7 +119,7 @@ export default {
       rightDefaultCheckedList: [],
       // 搜索框配置
       searchFormConfig: [
-        { type: "select", label: "商户名称", key: "corpId", optionData: [] },
+        { type: "select", label: "企业名称", key: "corpId", optionData: [] },
         // {
         //   type: "select",
         //   label: "技能组流程",
@@ -134,7 +135,7 @@ export default {
         { type: "input", label: "技能组名称", key: "skillGroupName" },
         {
           type: "select",
-          label: "座席分配策略",
+          label: "坐席分配策略",
           key: "attendPolicy",
           optionData: [
             { key: 0, value: "随机" },
@@ -190,7 +191,7 @@ export default {
       formConfig: [
         {
           type: "select",
-          label: "商户公司",
+          label: "企业名称",
           key: "corpId",
           defaultValue: "",
           optionData: [],
@@ -213,7 +214,7 @@ export default {
         // },
         {
           type: "select",
-          label: "座席分配策略",
+          label: "坐席分配策略",
           key: "attendPolicy",
           colSpan: 12,
           optionData: [
@@ -265,7 +266,7 @@ export default {
           key: "attendIdList",
           data: [],
           defaultValue: [],
-          titles: ["待关联座席", "已关联座席"],
+          titles: ["待关联坐席", "已关联坐席"],
           leftDefaultCheckedList: this.leftDefaultCheckedList,
           rightDefaultCheckedList: this.rightDefaultCheckedList,
           rules: [],
@@ -344,6 +345,9 @@ export default {
           "corpName"
         );
       });
+    },
+    transferChange(data){
+      this._setDefaultValue(this.formConfig, [], "attendIdList", data.current);
     },
     //设置穿梭框数据
     setAttendIdList(data) {
@@ -429,6 +433,7 @@ export default {
       this.setAttendIdList([]);
       this.attendSkillGroupList = [];
       this._setDefaultValue(this.formConfig, [], "attendIdList", []);
+      this._setDisabledShow(this.formConfig,'corpId',false)
       setTimeout(() => {
         this.$refs.formItem.resetForm();
       }, 0);
@@ -457,6 +462,7 @@ export default {
           this.$set(item, "defaultValue", "");
         }
         if (item.key === "corpId") {
+          item.disabled = true
           this.listScene(item.defaultValue);
           await this.getListAttendAll(item.defaultValue);
         }
@@ -474,4 +480,21 @@ export default {
   watch: {},
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+::v-deep .el-transfer{
+  margin-left: -80px;
+  display: flex;
+  width: calc(100% + 80px);
+  .el-transfer-panel{
+    width: 45% !important
+  }
+  .el-transfer__buttons{
+    width: 10%;
+    padding: 100px 10px;
+    text-align: center;
+    .el-transfer__button{
+      margin-left: 0px;
+    }
+  }
+}
+</style>
