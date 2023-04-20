@@ -139,8 +139,8 @@ export default {
       formConfig: [
         {
           type: "select",
-          label: "商户名称",
-          key: "userId",
+          label: "企业名称",
+          key: "corpId",
           defaultValue: "",
           optionData: [],
         },
@@ -188,31 +188,32 @@ export default {
         label: "name",
       },
       roleId: "",
-      userId: "",
+      corpId: "",
       userList:[]
     };
   },
   created() {},
   mounted() {
     // this.getSysMenuList();
-    this.queryCorpByCorpType();
+    this.getCorpList();
   },
   activated(){
-    this.queryCorpByCorpType();
+    this.getCorpList();
   },
   computed: {},
   methods: {
     //获取公司下拉
-    queryCorpByCorpType() {
-      this.$http.select.userListAll({}).then((res) => {
-        this.userList = res.data.records
+    // corpType（0:商家,1:代理商,2:供应商）
+    getCorpList(corpType) {
+      this.$http.select.queryCorpByCorpType({ corpType:"" }).then((res) => {
         this._setDefaultValue(
-          this.formConfig,
-          res.data.records,
-          "userId",
-          "userId",
-          "userName"
-        );
+            this.formConfig,
+            res.data.records,
+            "corpId",
+            "corpId",
+            "corpName"
+          );
+        
       });
     },
     getSysMenuList() {
@@ -259,9 +260,9 @@ export default {
       });
     },
     jurisdictionBtn(row) {
-      const { roleId, userId } = row;
+      const { roleId, corpId } = row;
       this.roleId = roleId;
-      this.userId = userId;
+      this.corpId = corpId;
       this.jurisdictionVisible = true;
       // console.log(row, "====");
 
@@ -272,14 +273,16 @@ export default {
       this.$http.role
         .permissionsPost({
           roleId: this.roleId,
-          userId: this.userId,
+          corpId: this.corpId,
           menuIdList: arr,
         })
         .then((res) => {
-          if (resOk) {
+          if (res.state === '200') {
             this.jurisdictionVisible = false;
             this.roleId = "";
             this.$message.success('操作成功！')
+          }else{
+            this.$message.error(res.msg)
           }
         });
     },
@@ -289,13 +292,13 @@ export default {
      * @private
      */
     _mxArrangeSubmitData(formData) {
-      const {userId} = formData
-      this.userList.forEach(item=>{
-        if(item.userId == userId){
-          formData.corpId = item.corpId
-        }
-      })
-      console.log(formData,'=================')
+      // const {userId} = formData
+      // this.userList.forEach(item=>{
+      //   if(item.userId == userId){
+      //     formData.corpId = item.corpId
+      //   }
+      // })
+      // console.log(formData,'=================')
       return formData;
     },
   },

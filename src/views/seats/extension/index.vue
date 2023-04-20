@@ -97,7 +97,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "select", label: "商家账号", key: "userName",optionData:[] },
+        { type: "select", label: "公司名称", key: "corpId",optionData:[] },
         { type: "input", label: "分机号", key: "ext" },
         {
           type: "select",
@@ -339,7 +339,13 @@ export default {
             "corpId",
             "corpName"
           );
-        
+        this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "corpId",
+            "corpId",
+            "corpName"
+          );
       });
     },
     //获取商家账户下拉
@@ -499,6 +505,7 @@ export default {
             "userId",
             "userName"
           );
+          this._deleteDefaultValue(this.formConfig, "userId");
 
         }
       }
