@@ -116,7 +116,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "select", label: "商家账号", key: "userName",optionData:[] },
+        { type: "select", label: "企业名称", key: "corpId",optionData:[] },
         { type: "input", label: "坐席名称", key: "attendName" },
         { type: "inputNum", label: "工号", key: "jobNumber" },
         {
@@ -163,7 +163,7 @@ export default {
         {
           type: "select",
           label: "企业名称",
-          key: "userId",
+          key: "corpId",
           defaultValue: "",
           optionData: [],
         },
@@ -239,20 +239,40 @@ export default {
   },
   created() {},
   mounted() {
-    this.queryCorpByCorpType();
+    this.getCorpList();
     this.getRoleList();
     this.skillGroupListAll();
   },
   activated() {
-    this.queryCorpByCorpType();
+    this.getCorpList();
     this.getRoleList();
     this.skillGroupListAll();
   },
   computed: {},
   methods: {
+    //获取公司下拉
+    // corpType（0:商家,1:代理商,2:供应商）
+    getCorpList(corpType) {
+      this.$http.select.queryCorpByCorpType({ corpType:"" }).then((res) => {
+        this._setDefaultValue(
+            this.formConfig,
+            res.data.records,
+            "corpId",
+            "corpId",
+            "corpName"
+          );
+        this._setDefaultValue(
+            this.searchFormConfig,
+            res.data.records,
+            "corpId",
+            "corpId",
+            "corpName"
+          );
+      });
+    },
     selectChange({ val, item }) {
       const {key} = item
-      if (key === "userId") {
+      if (key === "corpId") {
         if (val) {
           this._setDefaultValue(
             this.formConfig,
@@ -293,29 +313,29 @@ export default {
       })
     },
     //获取商家账户下拉
-    queryCorpByCorpType() {
-      this.$http.select.userListAll({ corpType: 0 }).then((res) => {
-        this.userList = res.data.records;
-        this._setDefaultValue(
-          this.formConfig,
-          res.data.records,
-          "userId",
-          "userId",
-          "userName"
-        );
-        this._setDefaultValue(
-          this.searchFormConfig,
-          res.data.records,
-          "userName",
-          "userName",
-          "userName"
-        );
-      });
-    },
+    // queryCorpByCorpType() {
+    //   this.$http.select.userListAll({ corpType: 0 }).then((res) => {
+    //     this.userList = res.data.records;
+    //     this._setDefaultValue(
+    //       this.formConfig,
+    //       res.data.records,
+    //       "userId",
+    //       "userId",
+    //       "userName"
+    //     );
+    //     this._setDefaultValue(
+    //       this.searchFormConfig,
+    //       res.data.records,
+    //       "userName",
+    //       "userName",
+    //       "userName"
+    //     );
+    //   });
+    // },
     //获取坐席角色
-    getRoleList(userId) {
-      this.$http.role.list({ enablePage: false, userId}).then((res) => {
-        if(userId){
+    getRoleList(corpId) {
+      this.$http.role.list({ enablePage: false, corpId}).then((res) => {
+        if(corpId){
           this._setDefaultValue(
           this.formConfig,
           res.data.list,
@@ -336,18 +356,18 @@ export default {
         
       });
     },
-    _mxArrangeSubmitData(formData) {
-      let form = Object.assign({}, formData);
-      let userId = form.userId;
-      if (userId) {
-        this.userList.forEach((item) => {
-          if (item.userId === userId) {
-            form.corpId = item.corpId;
-          }
-        });
-      }
-      return form;
-    },
+    // _mxArrangeSubmitData(formData) {  
+    //   // let form = Object.assign({}, formData);
+    //   // let userId = form.userId;
+    //   // if (userId) {
+    //   //   this.userList.forEach((item) => {
+    //   //     if (item.userId === userId) {
+    //   //       form.corpId = item.corpId;
+    //   //     }
+    //   //   });
+    //   // }
+    //   return form;
+    // },
     /**
      * 编辑表单
      * @param row  当前行数据
@@ -369,7 +389,7 @@ export default {
         if (!Object.keys(row).includes(item.key)) {
           this.$set(item, "defaultValue", "");
         }
-        if(item.key === 'userId'){
+        if(item.key === 'corpId'){
           this.getRoleList(item.defaultValue);
         }
       });
