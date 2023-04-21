@@ -413,8 +413,8 @@ export default {
       });
     },
     //获取角色权限下拉
-    getRoleList(userId) {
-      this.$http.role.list({ enablePage: false, userId }).then((res) => {
+    getRoleList(corpId) {
+      this.$http.role.list({ enablePage: false, corpId }).then((res) => {
         this._setDefaultValue(
           this.formConfig,
           res.data.list,
@@ -462,6 +462,10 @@ export default {
             this._setDisplayShow(this.formConfig, "extName", true);
           }
         }
+        if(item.key === 'corpId'){
+          this.queryCorpByCorpType(item.defaultValue)
+          this.getRoleList(item.defaultValue)
+        }
         if (!Object.keys(row).includes(item.key)) {
           this.$set(item, "defaultValue", "");
         }
@@ -496,7 +500,17 @@ export default {
             "userId",
             "userName"
           );
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "attendRoleId",
+            "roleId",
+            "roleName"
+          );
+          this._deleteDefaultValue(this.formConfig, "userId");
+          this._deleteDefaultValue(this.formConfig, "attendRoleId");
           this.queryCorpByCorpType(val)
+          this.getRoleList(val);
         }else{
           this._setDefaultValue(
             this.formConfig,
@@ -506,11 +520,6 @@ export default {
             "userName"
           );
           this._deleteDefaultValue(this.formConfig, "userId");
-
-        }
-      }
-      if (key === "userId") {
-        if (val) {
           this._setDefaultValue(
             this.formConfig,
             [],
@@ -518,20 +527,7 @@ export default {
             "roleId",
             "roleName"
           );
-          this.getRoleList(val);
-          // this.userList.forEach((item) => {
-          //   if (item.userId === val) {
-          //     this.getRoleList(item.corpId);
-          //   }
-          // });
-        } else {
-          this._setDefaultValue(
-            this.formConfig,
-            [],
-            "attendRoleId",
-            "roleId",
-            "roleName"
-          );
+          this._deleteDefaultValue(this.formConfig, "attendRoleId");
         }
       }
     },

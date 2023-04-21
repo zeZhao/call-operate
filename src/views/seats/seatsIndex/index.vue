@@ -166,6 +166,7 @@ export default {
           key: "corpId",
           defaultValue: "",
           optionData: [],
+          disabled:false
         },
         {
           type: "input",
@@ -391,6 +392,7 @@ export default {
         }
         if(item.key === 'corpId'){
           this.getRoleList(item.defaultValue);
+          item.disabled = true
         }
       });
       setTimeout(() => {
