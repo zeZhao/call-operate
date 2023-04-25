@@ -205,7 +205,7 @@ export default {
     //获取公司下拉
     // corpType（0:商家,1:代理商,2:供应商）
     getCorpList(corpType) {
-      this.$http.select.queryCorpByCorpType({ corpType:"" }).then((res) => {
+      this.$http.select.queryCorpByCorpType({ corpType:"0" }).then((res) => {
         this._setDefaultValue(
             this.formConfig,
             res.data.records,
