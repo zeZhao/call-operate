@@ -484,9 +484,9 @@ export default {
       if (item.key === "corpUserId") {
         if (val) {
           this.listAll(val);
-          // this.listScene(val);
+          this.listScene(val);
           this._deleteDefaultValue(this.allocationConfig, "userId");
-          // this._deleteDefaultValue(this.allocationConfig, "sceneId");
+          this._deleteDefaultValue(this.allocationConfig, "sceneId");
         } else {
           this._setDefaultValue(
             this.allocationConfig,
@@ -495,22 +495,6 @@ export default {
             "supplyId",
             "userName"
           );
-
-          this._deleteDefaultValue(this.allocationConfig, "userId");
-          this._deleteDefaultValue(this.allocationConfig, "sceneId");
-        }
-      }
-      if (item.key === "userId") {
-        let routeType = this._getFormKeyData(
-          this.allocationConfig,
-          "routeType"
-        );
-        if (val) {
-          if (routeType) {
-            this._deleteDefaultValue(this.allocationConfig, "sceneId");
-            this.listScene(corpId, val);
-          }
-        } else {
           this._setDefaultValue(
             this.allocationConfig,
             [],
@@ -518,9 +502,32 @@ export default {
             "sceneId",
             "sceneName"
           );
+
+          this._deleteDefaultValue(this.allocationConfig, "userId");
           this._deleteDefaultValue(this.allocationConfig, "sceneId");
         }
       }
+      // if (item.key === "userId") {
+      //   let routeType = this._getFormKeyData(
+      //     this.allocationConfig,
+      //     "routeType"
+      //   );
+      //   if (val) {
+      //     if (routeType) {
+      //       this._deleteDefaultValue(this.allocationConfig, "sceneId");
+      //       this.listScene(corpId, val);
+      //     }
+      //   } else {
+      //     this._setDefaultValue(
+      //       this.allocationConfig,
+      //       [],
+      //       "sceneId",
+      //       "sceneId",
+      //       "sceneName"
+      //     );
+      //     this._deleteDefaultValue(this.allocationConfig, "sceneId");
+      //   }
+      // }
       if (item.key === "routeType") {
         let corpId = this._getFormKeyData(this.allocationConfig, "corpUserId");
         if (corpId) {
@@ -596,6 +603,7 @@ export default {
         setTimeout(() => {
           this.$refs.allocationForm.resetForm();
           let row = this.multipleSelection[0];
+          console.log(row,'=====row')
           if (row.corpUserId && row.corpUserId !== "-") {
             this.listAll(row.corpUserId);
             if (row.routeType && row.routeType !== "-") {
@@ -610,20 +618,22 @@ export default {
               );
             }
           } else {
-            this._setDefaultValue(
-              this.allocationConfig,
-              [],
-              "userId",
-              "userId",
-              "userName"
-            );
-            this._setDefaultValue(
-              this.allocationConfig,
-              [],
-              "sceneId",
-              "sceneId",
-              "sceneName"
-            );
+            // this._setDefaultValue(
+            //   this.allocationConfig,
+            //   [],
+            //   "userId",
+            //   "userId",
+            //   "userName"
+            // );
+            // this._setDefaultValue(
+            //   this.allocationConfig,
+            //   [],
+            //   "sceneId",
+            //   "sceneId",
+            //   "sceneName"
+            // );
+            this._deleteDefaultValue(this.allocationConfig, "userId");
+            this._deleteDefaultValue(this.allocationConfig, "sceneId");
           }
           this.linecfgList(row.supplyId);
 
@@ -639,6 +649,9 @@ export default {
             if (item.key === "weekDays" && row["weekDays"] !== "-") {
               console.log(row["weekDays"], "======weekDays");
               this.$set(item, "defaultValue", JSON.parse(row["weekDays"]));
+            }
+            if (item.key === "userId" && row["userId"] === 0) {
+              this.$set(item, "defaultValue", '');
             }
             if (
               item.key === "dates" &&
