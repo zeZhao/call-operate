@@ -97,7 +97,7 @@ export default {
     return {
       // 搜索框配置
       searchFormConfig: [
-        { type: "select", label: "公司名称", key: "corpId",optionData:[] },
+        { type: "select", label: "公司名称", key: "corpId", optionData: [] },
         { type: "input", label: "分机号", key: "ext" },
         {
           type: "select",
@@ -193,7 +193,7 @@ export default {
           label: "分机号",
           key: "ext",
           isShow: true,
-          disabled:true,
+          disabled: true,
           defaultValue: "",
         },
         {
@@ -263,11 +263,11 @@ export default {
         },
         {
           type: "check",
-          checkLabel: [0,1],
+          checkLabel: [0, 1],
           key: "isBatchcaller",
           defaultValue: 0,
           rules: [],
-          value:"作为批量外呼主叫",
+          value: "作为批量外呼主叫",
           // optionData: [{ key: 1, value: "作为批量外呼主叫" }],
           colSpan: 12,
         },
@@ -317,13 +317,13 @@ export default {
   mounted() {
     this.queryCorpByCorpType();
     this.linecfgList();
-    this.listAllAttend();
+    // this.listAllAttend();
     this.getCorpList();
   },
   activated() {
     this.queryCorpByCorpType();
     this.linecfgList();
-    this.listAllAttend();
+    // this.listAllAttend();
     this.getCorpList();
   },
   computed: {},
@@ -331,28 +331,28 @@ export default {
     //获取公司下拉
     // corpType（0:商家,1:代理商,2:供应商）
     getCorpList(corpType) {
-      this.$http.select.queryCorpByCorpType({ corpType:"0" }).then((res) => {
+      this.$http.select.queryCorpByCorpType({ corpType: "0" }).then((res) => {
         this._setDefaultValue(
-            this.formConfig,
-            res.data.records,
-            "corpId",
-            "corpId",
-            "corpName"
-          );
+          this.formConfig,
+          res.data.records,
+          "corpId",
+          "corpId",
+          "corpName"
+        );
         this._setDefaultValue(
-            this.searchFormConfig,
-            res.data.records,
-            "corpId",
-            "corpId",
-            "corpName"
-          );
+          this.searchFormConfig,
+          res.data.records,
+          "corpId",
+          "corpId",
+          "corpName"
+        );
       });
     },
     //获取商家账户下拉
     queryCorpByCorpType(corpId) {
-      this.$http.select.userListAll({corpId}).then((res) => {
+      this.$http.select.userListAll({ corpId }).then((res) => {
         this.userList = res.data.records;
-        if(corpId){
+        if (corpId) {
           this._setDefaultValue(
             this.formConfig,
             res.data.records,
@@ -360,7 +360,7 @@ export default {
             "userId",
             "userName"
           );
-        }else{
+        } else {
           this._setDefaultValue(
             this.searchFormConfig,
             res.data.records,
@@ -369,8 +369,6 @@ export default {
             "userName"
           );
         }
-        
-        
       });
     },
     //获取线路下拉
@@ -393,8 +391,8 @@ export default {
       });
     },
     //获取坐席下拉
-    listAllAttend() {
-      this.$http.select.attendlistAll().then((res) => {
+    listAllAttend(corpId) {
+      this.$http.select.attendlistAll({corpId}).then((res) => {
         this._setDefaultValue(
           this.formConfig,
           res.data,
@@ -442,7 +440,7 @@ export default {
       }, 0);
     },
     _mxEdit(row, ID) {
-      this.listAllAttend();
+      
       row = this._mxArrangeEditData(row);
       this.id = row[ID];
       this.editId = ID;
@@ -452,25 +450,26 @@ export default {
           if (item.key === key && row[key] !== "-") {
             this.$set(item, "defaultValue", row[key]);
           }
-          if(item.key === 'isBatchcaller'){
-            console.log(row['isBatchcaller'])
+          if (item.key === "isBatchcaller") {
+            console.log(row["isBatchcaller"]);
             // item.defaultValue = [row['isBatchcaller']]
           }
-          if(row['isBatchcaller'] == 1){
+          if (row["isBatchcaller"] == 1) {
             this._setDisplayShow(this.formConfig, "extName", false);
-          }else{
+          } else {
             this._setDisplayShow(this.formConfig, "extName", true);
           }
         }
-        if(item.key === 'corpId'){
-          this.queryCorpByCorpType(item.defaultValue)
-          this.getRoleList(item.defaultValue)
+        if (item.key === "corpId") {
+          this.queryCorpByCorpType(item.defaultValue);
+          this.getRoleList(item.defaultValue);
+          this.listAllAttend(item.defaultValue);
         }
         if (!Object.keys(row).includes(item.key)) {
           this.$set(item, "defaultValue", "");
         }
         // if(item.key === 'isBatchcaller'){
-        //   item.defaultValue = 
+        //   item.defaultValue =
         // }
       });
       this._setDisplayShow(this.formConfig, "extNum", true);
@@ -481,7 +480,7 @@ export default {
       this._setDisplayShow(this.formConfig, "pwd", false);
       this._setDisplayShow(this.formConfig, "status", false);
       this._setDisplayShow(this.formConfig, "ext", false);
-      
+
       this._setDisplayShow(this.formConfig, "attendId", false);
 
       setTimeout(() => {
@@ -490,9 +489,9 @@ export default {
       this.addChannel = true;
     },
     selectChange({ val, item }) {
-      const {key} = item
-      if(key === 'corpId'){
-        if(val){
+      const { key } = item;
+      if (key === "corpId") {
+        if (val) {
           this._setDefaultValue(
             this.formConfig,
             [],
@@ -507,11 +506,20 @@ export default {
             "roleId",
             "roleName"
           );
+          this._setDefaultValue(
+            this.formConfig,
+            [],
+            "attendId",
+            "attendId",
+            "attendName"
+          );
           this._deleteDefaultValue(this.formConfig, "userId");
           this._deleteDefaultValue(this.formConfig, "attendRoleId");
-          this.queryCorpByCorpType(val)
+          this._deleteDefaultValue(this.formConfig, "attendId");
+          this.queryCorpByCorpType(val);
           this.getRoleList(val);
-        }else{
+          this.listAllAttend(val);
+        } else {
           this._setDefaultValue(
             this.formConfig,
             [],
@@ -555,7 +563,7 @@ export default {
         }
       }
       if (key === "isBatchcaller") {
-        console.log(val,'================isBatchcaller')
+        console.log(val, "================isBatchcaller");
         if (val == 1) {
           this._setDisplayShow(this.formConfig, "extName", false);
         } else {
@@ -574,10 +582,10 @@ export default {
     },
     _mxArrangeSubmitData(formData) {
       let form = Object.assign({}, formData);
-      if(formData.isBatchcaller){
-        form.isBatchcaller = 1
-      }else{
-        form.isBatchcaller = 0
+      if (formData.isBatchcaller) {
+        form.isBatchcaller = 1;
+      } else {
+        form.isBatchcaller = 0;
       }
       let userId = form.userId;
       if (userId) {
