@@ -137,6 +137,7 @@
             label-position="top"
             label-width="90px"
             class="demo-form-inline"
+            :disabled="!isShowAdd"
             size="small"
           >
             <el-divider></el-divider>
@@ -194,6 +195,7 @@
                   v-if="columnList.length !== 1"
                 ></i>
                 <i
+                  v-if="isShowAdd"
                   class="el-icon-circle-plus"
                   style="font-size:20px"
                   @click="addQuery()"
@@ -241,6 +243,7 @@ export default {
     return {
       loading: true,
       SubmitLoading: false,
+      isShowAdd: true,
       title: "",
       styleObj: {
         background: "#eeeeee",
@@ -466,6 +469,7 @@ export default {
       this.sceneId = row.sceneId;
       this.clientId = row.clientId;
       if (title == "编辑") {
+        this.isShowAdd = false
         this.RuleForm = {
           clientId: row.clientId,
           tableName: row.clientTableCnName,
@@ -473,6 +477,7 @@ export default {
         };
         this.columnList = row.columnList
       } else if (title == "新增") {
+        this.isShowAdd = true
         this.RuleForm = {
           clientId: "",
           tableName: "",

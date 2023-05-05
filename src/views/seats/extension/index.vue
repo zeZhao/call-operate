@@ -530,6 +530,19 @@ export default {
           this._deleteDefaultValue(this.formConfig, "attendRoleId");
         }
       }
+      // if(val === 'userId'){
+      //   if(val){
+      //     // attendId
+      //     this._setDefaultValue(
+      //       this.formConfig,
+      //       [],
+      //       "attendId",
+      //       "roleId",
+      //       "roleName"
+      //     );
+      //     this._deleteDefaultValue(this.formConfig, "attendId");
+      //   }
+      // }
     },
     onChange({ val, item }) {
       const { key } = item;

@@ -482,9 +482,10 @@ export default {
     // 分配号码下拉操作处理
     selectChange({ val, item }) {
       if (item.key === "corpUserId") {
+        let routeType = this._getFormKeyData(this.allocationConfig, "routeType");
         if (val) {
           this.listAll(val);
-          this.listScene(val);
+          this.listScene(val,routeType);
           this._deleteDefaultValue(this.allocationConfig, "userId");
           this._deleteDefaultValue(this.allocationConfig, "sceneId");
         } else {
