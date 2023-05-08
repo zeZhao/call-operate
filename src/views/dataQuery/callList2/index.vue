@@ -72,7 +72,7 @@
           <audio :src="auditionUrl" controls ref="myAudio"></audio>
         </div>
         <div v-if="!auditionUrl" class="audio-con"></div>
-        <el-button type="primary" @click="Audition()" style="height: 40px">
+        <el-button type="primary" @click="Audition(auditionUrl)" style="height: 40px">
           完整录音试听
           <i class="el-icon-headset el-icon--right"></i>
         </el-button>
