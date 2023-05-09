@@ -271,8 +271,16 @@ export default {
         {
           type: "select",
           label: "供应商公司",
+          key: "supplyName",
+          disabled: true,
+          optionData: [],
+        },
+        {
+          type: "select",
+          label: "供应商公司",
           key: "supplyId",
           disabled: true,
+          isShow:true,
           optionData: [],
         },
         {
