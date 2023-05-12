@@ -369,6 +369,14 @@ export default {
     //   // }
     //   return form;
     // },
+    _mxCreate() {
+      this.addChannel = true;
+      this.formTit = "新增";
+      setTimeout(() => {
+        this.$refs.formItem.resetForm();
+        this._setDisabledShow(this.formConfig,'corpId',false)
+      }, 0);
+    },
     /**
      * 编辑表单
      * @param row  当前行数据
