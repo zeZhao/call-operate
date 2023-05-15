@@ -390,6 +390,56 @@ const constRouterList = [
       
     ]
   },
+  {
+    path: '/dataStatistics',
+    name: 'dataStatistics',
+    component: Layout,
+    meta: {
+      title: '数据统计',
+    },
+    children: [
+      {
+        path: '/dataStatistics/trafficCondition',
+        name: 'trafficCondition',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataStatistics/trafficCondition/index.vue'),
+        meta: {
+          title: '每日话务情况',
+        },
+      },
+      {
+        path: '/dataStatistics/trafficAnalyse',
+        name: 'trafficAnalyse',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataStatistics/trafficAnalyse/index.vue'),
+        meta: {
+          title: '分时话务分析',
+        },
+      },
+      {
+        path: '/dataStatistics/trafficStatistics',
+        name: 'trafficStatistics',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataStatistics/trafficStatistics/index.vue'),
+        meta: {
+          title: '技能组话务统计',
+        },
+      },
+      {
+        path: '/dataStatistics/seatTrafficStatistics',
+        name: 'seatTrafficStatistics',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataStatistics/seatTrafficStatistics/index.vue'),
+        meta: {
+          title: '坐席话务统计',
+        },
+      },
+      {
+        path: '/dataStatistics/trafficChargeStatistics',
+        name: 'trafficChargeStatistics',
+        component: () => import(/* webpackChunkName: "about" */ '@/views/dataStatistics/trafficChargeStatistics/index.vue'),
+        meta: {
+          title: '话务费用统计',
+        },
+      },
+    ]
+  },
   
   
 ]
