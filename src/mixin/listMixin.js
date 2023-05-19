@@ -128,8 +128,8 @@ async function queryData() {
 
   this.$http[namespace][list](params).then(res => {
     this.loading = false;
-
     if (resOk(res)) {
+      
       let list = [];
       //兼容性处理
       if (res.data.list) {
@@ -154,7 +154,7 @@ async function queryData() {
     } else if (res.code === 500 || res.code === "500") {
       this.$message.error(res.data || res.msg || "获取数据失败");
     } else {
-      this.$message.error(res.data || res.msg || "获取数据失败");
+      this.$message.error(res.msg || res.data || "获取数据失败");
     }
 
     this.tableDoLayout();

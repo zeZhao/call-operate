@@ -62,7 +62,7 @@ class callPlugin {
         const {
           state
         } = res
-        if (state === '200' || state === 200 || res.data) {
+        if (state === '200' || state === 200 || Object.keys(res.data).length !== 0 ) {
           if (state === 9000 || state === '9000') {
             return false
           }
