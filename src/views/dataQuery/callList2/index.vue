@@ -41,9 +41,8 @@
       </el-table-column>
       <el-table-column prop="isConnected" label="呼叫结果" >
         <template slot-scope="{row}">
-          <span v-if="row.isConnected == 1">失败</span>
-          <span v-else-if="row.isConnected == 2">成功</span>
-          <span v-else>失败</span>
+          <span v-if="row.isConnected == 0">失败</span>
+          <span v-else-if="row.isConnected == 1">成功</span>
         </template>
       </el-table-column>
       <el-table-column prop="satisfaction" label="满意度" />
