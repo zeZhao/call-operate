@@ -91,6 +91,13 @@ class callPlugin {
         return '-'
       }
     })
+    Vue.filter('Date', function (value) {
+      if(value && value !== null && value !== '-'){
+        return new Date(value).Format("yyyy-MM-dd")
+      }else{
+        return '-'
+      }
+    })
   }
 
   /*------------------添加vue实例方法------------------*/
